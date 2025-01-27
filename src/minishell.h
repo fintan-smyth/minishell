@@ -13,12 +13,12 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include "../libft/libft.h"
 # include <linux/limits.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <errno.h>
 # include <sys/wait.h>
-# include "../libft/libft.h"
 
 typedef struct s_env
 {
