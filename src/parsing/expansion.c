@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 18:45:57 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/29 19:51:38 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/01/29 20:24:35 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,21 +35,16 @@ char	*extend_line(char *line, char *extra)
 	return (out);
 }
 
-void	expand_token(t_list *token, t_term *term)
+void	expand_var_inplace(char **line, char *varp, t_term *term)
 {
-	char	*varp;
+	char	*expanded;
 	char	*env_name;
 	char	*env_var;
-	char	*expanded;
 	int		i;
 
-	if (*(char *)token->content == '\'')
-		return ;
-	varp = ft_strchr((char *)token->content, '$');
-	if (varp == NULL)
-		return ;
 	*varp = 0;
-	expanded = ft_strdup((char *)token->content);
+	expanded = NULL;
+	expanded = ft_strdup(*line);
 	varp++;
 	i = 0;
 	while (valid_var_chr(varp[i]))
@@ -60,8 +55,35 @@ void	expand_token(t_list *token, t_term *term)
 		expanded = extend_line(expanded, env_var);
 	expanded = extend_line(expanded, &varp[i]);
 	free(env_name);
-	free(token->content);
-	token->content = expanded;
+	free(*line);
+	*line = expanded;
+}
+
+void	expand_token(t_list *token, t_term *term)
+{
+	char	*varp;
+	int		i;
+	int		quoting;
+
+	i = 0;
+	quoting = 0;
+	while (((char *)token->content)[i])
+	{
+		if (((char *)token->content)[i] == '$' && quoting != SINGLE)
+		{
+			varp = &((char *)token->content)[i];
+			expand_var_inplace((char **)&token->content, varp, term);
+		}
+		else if (((char *)token->content)[i] == '\'' && quoting == NONE)
+			quoting = SINGLE;
+		else if (((char *)token->content)[i] == '\'' && quoting == SINGLE)
+			quoting = NONE;
+		else if (((char *)token->content)[i] == '\"' && quoting == NONE)
+			quoting = DOUBLE;
+		else if (((char *)token->content)[i] == '\"' && quoting == DOUBLE)
+			quoting = NONE;
+		i++;
+	}
 }
 
 void	expand_token_list(t_list *tokens, t_term *term)
@@ -71,7 +93,7 @@ void	expand_token_list(t_list *tokens, t_term *term)
 	current = tokens;
 	while (current != NULL)
 	{
-		while (ft_strchr((char *)current->content, '$'))
+		// while (ft_strchr((char *)current->content, '$'))
 			expand_token(current, term);
 		current = current->next;
 	}
