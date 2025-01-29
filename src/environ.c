@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:45:55 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/27 16:41:12 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/01/29 19:34:10 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,12 @@ t_list	*getenv_node(t_list *env_list, char *name)
 char	*getenv_list(t_list *env_list, char *name)
 {
 	t_env	*env;
+	t_list	*node;
 
-	env = (t_env *)(getenv_node(env_list, name)->content);
+	node = getenv_node(env_list, name);
+	if (node == NULL)
+		return (NULL);
+	env = (t_env *)(node->content);
 	if (env == NULL)
 		return (NULL);
 	return (env->var);

@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 13:39:32 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/27 18:31:48 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/01/29 19:21:56 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,13 @@ char	*getenv_list(t_list *env_list, char *name);
 void	init_env_list(t_term *term, char *name);
 void	env_list_add(t_list **lst, char *name, char *var);
 char	*construct_envp_line(char *name, char *env);
-char	**construct_envp(t_list *env_list);
+char	**construct_envp(t_list *list);
+
+//Parsing
+t_list	*tokenise(char *line);
+void	**lst_to_arr(t_list *list);
+void	print_tokens(t_list *tokens);
+// void	expand_token(t_list *token, t_term *term);
+void	expand_token_list(t_list *tokens, t_term *term);
 
 #endif

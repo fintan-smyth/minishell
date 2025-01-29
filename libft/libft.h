@@ -6,7 +6,7 @@
 /*   By: fsmyth <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 12:19:13 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/22 15:51:46 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/01/29 15:38:53 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ char	*ft_substr(const char *s, unsigned int start, size_t len);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strtrim(char const *s1, char const *set);
 char	**ft_split(char const *s, char c);
-void	free_split(char ***strings);
 char	*ft_itoa(int n);
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 void	ft_striteri(char *s, void (*f)(unsigned int, char *));
@@ -87,5 +86,9 @@ char	*get_next_line(int fd);
 //	ft_printf
 
 int		ft_printf(const char *format, ...);
+
+// My own
+void	free_split(char ***strings);
+char	*ft_strndup(const char *s, size_t n);
 
 #endif

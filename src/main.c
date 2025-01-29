@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 13:50:15 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/27 16:41:34 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/01/29 19:21:43 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void	cleanup(t_term *term)
 int	main(int argc, char **argv)
 {
 	t_term	*term;
+	t_list	*tokens;
 	char	*line;
 	char	**args;
 
@@ -76,9 +77,15 @@ int	main(int argc, char **argv)
 	line = readline(get_prompt(term, getenv_list(term->env_list, "HOME")));
 	while (line != NULL)
 	{
-		args = ft_split(line, ' ');
+		tokens = tokenise(line);
+		print_tokens(tokens);
+		expand_token_list(tokens, term);
+		print_tokens(tokens);
+		args = (char **)lst_to_arr(tokens);
 		handle_args(term, count_args(args), args);
-		free_split(&args);
+		ft_lstclear(&tokens, free);
+		free(args);
+		free(line);
 		line = readline(get_prompt(term, getenv_list(term->env_list, "HOME")));
 	}
 	cleanup(term);

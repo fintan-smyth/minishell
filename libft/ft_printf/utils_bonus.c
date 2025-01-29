@@ -1,28 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   utils_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fsmyth <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 20:27:32 by fsmyth            #+#    #+#             */
-/*   Updated: 2024/12/07 19:36:46 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/01/29 15:49:03 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft.h"
 #include "ft_printf_bonus.h"
 
-char	*ft_strndup(const char *str, size_t n)
-{
-	char	*out;
-
-	out = malloc(n + 1);
-	if (out == NULL)
-		return (NULL);
-	ft_strlcpy(out, str, n + 1);
-	return (out);
-}
+// char	*ft_strndup(const char *str, size_t n)
+// {
+// 	char	*out;
+//
+// 	out = malloc(n + 1);
+// 	if (out == NULL)
+// 		return (NULL);
+// 	ft_strlcpy(out, str, n + 1);
+// 	return (out);
+// }
 
 char	*ft_join_or_start(char *s1, char *s2)
 {

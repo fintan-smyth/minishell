@@ -6,13 +6,11 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 16:39:24 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/27 18:23:25 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/01/29 16:59:53 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <linux/limits.h>
-#include <unistd.h>
 
 int	count_args(char **args)
 {

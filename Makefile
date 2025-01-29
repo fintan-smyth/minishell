@@ -16,6 +16,8 @@ SRC = $(SRC_DIR)/main.c \
 	  $(SRC_DIR)/builtins/env.c \
 	  $(SRC_DIR)/builtins/pwd.c \
 	  $(SRC_DIR)/builtins/echo.c \
+	  $(SRC_DIR)/parsing/tokenise.c \
+	  $(SRC_DIR)/parsing/expansion.c \
 
 OBJ = $(patsubst $(SRC_DIR)/%,$(BUILD_DIR)/%,$(SRC:.c=.o))
 
@@ -40,6 +42,7 @@ $(LIBFT):
 
 $(BUILD_DIR):
 	mkdir -p $@/builtins
+	mkdir -p $@/parsing
 
 clean:
 	rm -rf ./build/
