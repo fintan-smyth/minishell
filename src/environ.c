@@ -116,7 +116,10 @@ void	env_list_add(t_list **lst, char *name, char *var)
 
 	env = ft_calloc(1, sizeof(*env));
 	env->name = ft_strdup(name);
-	env->var = ft_strdup(var);
+	if (var != NULL)
+		env->var = ft_strdup(var);
+	else
+		env->var = NULL;
 	ft_lstadd_back(lst, ft_lstnew(env));
 }
 
@@ -128,6 +131,7 @@ void	init_env_list(t_term *term, char *name)
 	env_list_add(&term->env_list, "TERM", getenv("TERM"));
 	env_list_add(&term->env_list, "USER", getenv("USER"));
 	env_list_add(&term->env_list, "PATH", getenv("PATH"));
+	// env_list_add(&term->env_list, "TEST", getenv("TEST"));
 	env_list_add(&term->env_list, "PWD", term->cwd);
 	env_list_add(&term->env_list, "OLDPWD", term->cwd);
 	shell = get_shell(term, name);

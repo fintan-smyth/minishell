@@ -12,23 +12,41 @@
 
 #include "parsing.h"
 
-void	strip_quotes(char **token)
+void	apply_quoting(char *quote, int *quoting, int mode)
 {
-	char	*stripped;
-	int		i;
-
-	i = 0;
-	stripped = ft_strdup(*token);
+	*quoting = mode;
+	ft_memmove(quote, quote + 1, ft_strlen(quote));
 }
 
-// void	apply_quoting(char c, int *quoting)
-// {
-// 	if (c == '\'' && *quoting == NONE)
-// 		*quoting = SINGLE;
-// 	else if (c == '\'' && *quoting == SINGLE)
-// 		*quoting = NONE;
-// 	else if (c == '\"' && *quoting == NONE)
-// 		*quoting = DOUBLE;
-// 	else if (c == '\"' && *quoting == DOUBLE)
-// 		*quoting = NONE;
-// }
+void	strip_quotes_token(char *token)
+{
+	int	i;
+	int	quoting;
+
+	i = 0;
+	quoting = 0;
+	while (token[i])
+	{
+		if (token[i] == '\'' && quoting == NONE)
+			apply_quoting(&token[i], &quoting, SINGLE);
+		if (token[i] == '\'' && quoting == SINGLE)
+			apply_quoting(&token[i], &quoting, NONE);
+		if (token[i] == '\"' && quoting == NONE)
+			apply_quoting(&token[i], &quoting, DOUBLE);
+		if (token[i] == '\"' && quoting == DOUBLE)
+			apply_quoting(&token[i], &quoting, NONE);
+		i++;
+	}
+}
+
+void	strip_quotes(t_list *tokens)
+{
+	t_list	*current;
+
+	current = tokens;
+	while (current != NULL)
+	{
+		strip_quotes_token((char *)current->content);
+		current = current->next;
+	}
+}

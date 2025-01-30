@@ -78,15 +78,16 @@ int	main(int argc, char **argv)
 	line = readline(get_prompt(term, getenv_list(term->env_list, "HOME")));
 	while (line != NULL)
 	{
-		// expand_token(&line, term);
-		// ft_printf("\e[1;32m\nExpanded\n\e[m");
-		// ft_printf("line:\t<%s>\n", line);
 		tokens = tokenise(line);
 		ft_printf("\e[1;33mTokenised\n\e[m");
 		print_tokens(tokens);
 		expand_token_list(tokens, term);
 		ft_printf("\e[1;32m\nExpanded\n\e[m");
 		print_tokens(tokens);
+		strip_quotes(tokens);
+		ft_printf("\e[1;35m\nStripped\n\e[m");
+		print_tokens(tokens);
+		ft_printf("\n");
 		args = (char **)lst_to_arr(tokens);
 		handle_args(term, count_args(args), args);
 		ft_lstclear(&tokens, free);

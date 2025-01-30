@@ -59,27 +59,6 @@ void	expand_var_inplace(char **line, char *varp, t_term *term)
 	*line = expanded;
 }
 
-void	apply_quoting(char *quote, int *quoting, int mode)
-{
-	*quoting = mode;
-	ft_memmove(quote, quote + 1, ft_strlen(quote) + 1);
-}
-
-void	retokenise(t_list *token)
-{
-	t_list	*current;
-	int		i;
-	char	*line;
-
-	i = 0;
-	current = token;
-	line = (char *)current->content;
-	while (line[i])
-	{
-		if ()
-	}
-}
-
 void	expand_token(char **token, t_term *term)
 {
 	char	*varp;
@@ -96,14 +75,57 @@ void	expand_token(char **token, t_term *term)
 			expand_var_inplace(token, varp, term);
 		}
 		else if ((*token)[i] == '\'' && quoting == NONE)
-			apply_quoting(&(*token)[i], &quoting, SINGLE);
+			quoting = SINGLE;
 		else if ((*token)[i] == '\'' && quoting == SINGLE)
-			apply_quoting(&(*token)[i], &quoting, NONE);
+			quoting = NONE;
 		else if ((*token)[i] == '\"' && quoting == NONE)
-			apply_quoting(&(*token)[i], &quoting, DOUBLE);
+			quoting = DOUBLE;
 		else if ((*token)[i] == '\"' && quoting == DOUBLE)
-			apply_quoting(&(*token)[i], &quoting, NONE);
+			quoting = NONE;
 		i++;
+	}
+}
+
+void	delimit_retoken(t_list **next_token, char *start)
+{
+	t_list	*new_token;
+
+	new_token = ft_lstnew(ft_strdup(start));
+	ft_lstadd_front(next_token, new_token);
+}
+
+void	retokenise(t_list *token)
+{
+	t_list	*current;
+	int		i;
+	char	*line;
+	int		quoting;
+	char	q_char;
+
+	current = token;
+	line = (char *)current->content;
+	i = ft_strlen(line) - 1;
+	quoting = 0;
+	q_char = 0;
+	while (i >= 0)
+	{
+		if (quoting)
+		{
+			if (line[i] == q_char)
+				quoting = 0;
+		}
+		else if (line[i] == ' ')
+		{
+			line[i] = 0;
+			if (line[i + 1] != 0)
+				delimit_retoken(&token->next, &line[i + 1]);
+		}
+		else if (line[i] == '\'' || line[i] == '\"')
+		{
+			quoting = 1;
+			q_char = line[i];
+		}
+		i--;
 	}
 }
 
@@ -115,6 +137,7 @@ void	expand_token_list(t_list *tokens, t_term *term)
 	while (current != NULL)
 	{
 		expand_token((char **)&current->content, term);
+		retokenise(current);
 		current = current->next;
 	}
 }
