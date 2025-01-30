@@ -6,14 +6,14 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 14:32:29 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/29 20:19:46 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/01/30 01:16:57 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSING_H
 # define PARSING_H
 
-# include "../../libft/libft.h"
+# include "../minishell.h"
 
 typedef struct s_cmd
 {
@@ -35,5 +35,11 @@ enum
 	SINGLE,
 	DOUBLE,
 };
+
+t_list	*tokenise(char *line);
+void	**lst_to_arr(t_list *list);
+void	print_tokens(t_list *tokens);
+void	expand_token(char **token, t_term *term);
+void	expand_token_list(t_list *tokens, t_term *term);
 
 #endif // PARSING_H

@@ -54,8 +54,6 @@ void	delimit_token(t_list **tokens, char **lp, int *i)
 {
 	t_list	*new_token;
 
-	// if ((*lp)[*i] == ' ')
-	// 	n--;
 	new_token = ft_lstnew(ft_strndup(*lp, *i));
 	ft_lstadd_back(tokens, new_token);
 	*lp += *i;
@@ -77,6 +75,8 @@ t_list	*tokenise(char *line)
 	tokens = NULL;
 	while (lp[++i])
 	{
+		// if (ft_lstsize(tokens) == 2)
+		// 	ft_lstadd_front(&tokens->next, ft_lstnew(ft_strdup("ADDED FRONT")));
 		// if (tokens != NULL)
 		// {
 		// 	ft_printf("<%s>\t<%s>\t<%5d>\n", lp, (char *)(ft_lstlast(tokens)->content), ft_lstsize(tokens));
@@ -90,10 +90,7 @@ t_list	*tokenise(char *line)
 		else if (i != 0 && is_op(lp[i - 1]))
 		{
 			if (!matches_prev_op(lp[i], lp[i - 1]))
-			{
 				delimit_token(&tokens, &lp, &i);
-				// continue ;
-			}
 		}
 		else if (lp[i] == '\'' || lp[i] == '\"')
 		{

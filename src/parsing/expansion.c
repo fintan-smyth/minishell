@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 18:45:57 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/29 20:24:35 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/01/30 01:56:48 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,28 @@ void	expand_var_inplace(char **line, char *varp, t_term *term)
 	*line = expanded;
 }
 
-void	expand_token(t_list *token, t_term *term)
+void	apply_quoting(char *quote, int *quoting, int mode)
+{
+	*quoting = mode;
+	ft_memmove(quote, quote + 1, ft_strlen(quote) + 1);
+}
+
+void	retokenise(t_list *token)
+{
+	t_list	*current;
+	int		i;
+	char	*line;
+
+	i = 0;
+	current = token;
+	line = (char *)current->content;
+	while (line[i])
+	{
+		if ()
+	}
+}
+
+void	expand_token(char **token, t_term *term)
 {
 	char	*varp;
 	int		i;
@@ -67,21 +88,21 @@ void	expand_token(t_list *token, t_term *term)
 
 	i = 0;
 	quoting = 0;
-	while (((char *)token->content)[i])
+	while ((*token)[i])
 	{
-		if (((char *)token->content)[i] == '$' && quoting != SINGLE)
+		if ((*token)[i] == '$' && quoting != SINGLE)
 		{
-			varp = &((char *)token->content)[i];
-			expand_var_inplace((char **)&token->content, varp, term);
+			varp = &(*token)[i];
+			expand_var_inplace(token, varp, term);
 		}
-		else if (((char *)token->content)[i] == '\'' && quoting == NONE)
-			quoting = SINGLE;
-		else if (((char *)token->content)[i] == '\'' && quoting == SINGLE)
-			quoting = NONE;
-		else if (((char *)token->content)[i] == '\"' && quoting == NONE)
-			quoting = DOUBLE;
-		else if (((char *)token->content)[i] == '\"' && quoting == DOUBLE)
-			quoting = NONE;
+		else if ((*token)[i] == '\'' && quoting == NONE)
+			apply_quoting(&(*token)[i], &quoting, SINGLE);
+		else if ((*token)[i] == '\'' && quoting == SINGLE)
+			apply_quoting(&(*token)[i], &quoting, NONE);
+		else if ((*token)[i] == '\"' && quoting == NONE)
+			apply_quoting(&(*token)[i], &quoting, DOUBLE);
+		else if ((*token)[i] == '\"' && quoting == DOUBLE)
+			apply_quoting(&(*token)[i], &quoting, NONE);
 		i++;
 	}
 }
@@ -93,8 +114,7 @@ void	expand_token_list(t_list *tokens, t_term *term)
 	current = tokens;
 	while (current != NULL)
 	{
-		// while (ft_strchr((char *)current->content, '$'))
-			expand_token(current, term);
+		expand_token((char **)&current->content, term);
 		current = current->next;
 	}
 }

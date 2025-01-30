@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "parsing/parsing.h"
 
 int	check_in_home(char *path, char *home)
 {
@@ -77,9 +78,14 @@ int	main(int argc, char **argv)
 	line = readline(get_prompt(term, getenv_list(term->env_list, "HOME")));
 	while (line != NULL)
 	{
+		// expand_token(&line, term);
+		// ft_printf("\e[1;32m\nExpanded\n\e[m");
+		// ft_printf("line:\t<%s>\n", line);
 		tokens = tokenise(line);
+		ft_printf("\e[1;33mTokenised\n\e[m");
 		print_tokens(tokens);
 		expand_token_list(tokens, term);
+		ft_printf("\e[1;32m\nExpanded\n\e[m");
 		print_tokens(tokens);
 		args = (char **)lst_to_arr(tokens);
 		handle_args(term, count_args(args), args);

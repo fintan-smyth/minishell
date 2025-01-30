@@ -68,11 +68,4 @@ void	env_list_add(t_list **lst, char *name, char *var);
 char	*construct_envp_line(char *name, char *env);
 char	**construct_envp(t_list *list);
 
-//Parsing
-t_list	*tokenise(char *line);
-void	**lst_to_arr(t_list *list);
-void	print_tokens(t_list *tokens);
-// void	expand_token(t_list *token, t_term *term);
-void	expand_token_list(t_list *tokens, t_term *term);
-
 #endif
