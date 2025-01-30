@@ -1,19 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/23 16:24:44 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/30 19:04:52 by fsmyth           ###   ########.fr       */
+/*   Created: 2025/01/30 19:00:13 by fsmyth            #+#    #+#             */
+/*   Updated: 2025/01/30 19:05:05 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
-#include "../parsing/parsing.h"
+#ifndef BULTINS_H
+# define BULTINS_H
 
-void	pwd(t_term *term, t_cmd *cmd)
-{
-	ft_putendl_fd(term->cwd, cmd->fd_out);
-}
+# include "../minishell.h"
+# include "../parsing/parsing.h"
+
+void	echo(int argc, char **argv);
+void	cd(t_term *term, int argc, char **args);
+void	pwd(t_term *term, t_cmd *cmd);
+void	env(char **envp);
+void	export_env(t_term *term, int argc, char **argv);
+void	unset_env(t_term *term, int argc, char **argv);
+
+#endif // BUILTINS_H

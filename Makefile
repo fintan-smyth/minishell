@@ -20,6 +20,7 @@ SRC = $(SRC_DIR)/main.c \
 	  $(SRC_DIR)/parsing/expansion.c \
 	  $(SRC_DIR)/parsing/strip_quotes.c \
 	  $(SRC_DIR)/parsing/commands.c \
+	  $(SRC_DIR)/parsing/redirection.c \
 
 OBJ = $(patsubst $(SRC_DIR)/%,$(BUILD_DIR)/%,$(SRC:.c=.o))
 

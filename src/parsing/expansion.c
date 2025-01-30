@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 18:45:57 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/30 01:56:48 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/01/30 17:31:39 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,29 +69,29 @@ void	expand_token(char **token, t_term *term)
 	quoting = 0;
 	while ((*token)[i])
 	{
-		if ((*token)[i] == '$' && quoting != SINGLE)
+		if ((*token)[i] == '$' && quoting != Q_SINGLE)
 		{
 			varp = &(*token)[i];
 			expand_var_inplace(token, varp, term);
 		}
-		else if ((*token)[i] == '\'' && quoting == NONE)
-			quoting = SINGLE;
-		else if ((*token)[i] == '\'' && quoting == SINGLE)
-			quoting = NONE;
-		else if ((*token)[i] == '\"' && quoting == NONE)
-			quoting = DOUBLE;
-		else if ((*token)[i] == '\"' && quoting == DOUBLE)
-			quoting = NONE;
+		else if ((*token)[i] == '\'' && quoting == Q_NONE)
+			quoting = Q_SINGLE;
+		else if ((*token)[i] == '\'' && quoting == Q_SINGLE)
+			quoting = Q_NONE;
+		else if ((*token)[i] == '\"' && quoting == Q_NONE)
+			quoting = Q_DOUBLE;
+		else if ((*token)[i] == '\"' && quoting == Q_DOUBLE)
+			quoting = Q_NONE;
 		i++;
 	}
 }
 
-void	delimit_retoken(t_list **next_token, char *start)
+void	delimit_retoken(t_list **next, char *start)
 {
-	t_list	*new_token;
+	t_list	*new;
 
-	new_token = ft_lstnew(ft_strdup(start));
-	ft_lstadd_front(next_token, new_token);
+	new = ft_lstnew(ft_strdup(start));
+	ft_lstadd_front(next, new);
 }
 
 void	retokenise(t_list *token)

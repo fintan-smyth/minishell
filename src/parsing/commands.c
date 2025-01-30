@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:18:36 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/30 16:56:10 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/01/30 19:17:21 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_cmd	*construct_cmd(t_list *tokens)
 	cmd = ft_calloc(1, sizeof(*cmd));
 	cmd->tokens = tokens;
 	cmd->fd_out = 1;
-	cmd->sep = END;
+	cmd->sep = OP_END;
 	return (cmd);
 }
 
@@ -29,11 +29,11 @@ int	is_cmd_sep(t_list *token)
 
 	text = (char *)token->content;
 	if (ft_strncmp(text, "|", 2) == 0)
-		return (PIPE);
+		return (OP_PIPE);
 	if (ft_strncmp(text, "||", 3) == 0)
-		return (OR);
+		return (OP_OR);
 	if (ft_strncmp(text, "&&", 3) == 0)
-		return (AND);
+		return (OP_AND);
 	return (0);
 }
 
@@ -43,6 +43,11 @@ void	free_cmd(void *cmd)
 
 	cmdp = (t_cmd *)cmd;
 	ft_lstclear(&cmdp->tokens, free);
+	free(cmdp->argv);
+	if (cmdp->fd_in > 2)
+		close(cmdp->fd_in);
+	if (cmdp->fd_out > 2)
+		close(cmdp->fd_out);
 	free(cmd);
 }
 
@@ -68,8 +73,10 @@ t_list	*split_commands(t_list *tokens)
 			current_tkn->next = NULL;
 			current_tkn = cmd->tokens;
 		}
-		else
-			current_tkn = current_tkn->next;
+		else if (is_redirect(current_tkn))
+			encode_redirect(current_tkn);
+		// else
+		current_tkn = current_tkn->next;
 	}
 	return (cmd_list);
 }

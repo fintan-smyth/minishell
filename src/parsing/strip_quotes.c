@@ -6,7 +6,7 @@
 /*   By: fsmyth <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 01:04:09 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/30 16:46:47 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/01/30 17:31:39 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,14 @@ void	strip_quotes_token(char *token)
 	quoting = 0;
 	while (token[i])
 	{
-		if (token[i] == '\'' && quoting == NONE)
-			apply_quoting(&token[i], &quoting, SINGLE);
-		if (token[i] == '\'' && quoting == SINGLE)
-			apply_quoting(&token[i], &quoting, NONE);
-		if (token[i] == '\"' && quoting == NONE)
-			apply_quoting(&token[i], &quoting, DOUBLE);
-		if (token[i] == '\"' && quoting == DOUBLE)
-			apply_quoting(&token[i], &quoting, NONE);
+		if (token[i] == '\'' && quoting == Q_NONE)
+			apply_quoting(&token[i], &quoting, Q_SINGLE);
+		if (token[i] == '\'' && quoting == Q_SINGLE)
+			apply_quoting(&token[i], &quoting, Q_NONE);
+		if (token[i] == '\"' && quoting == Q_NONE)
+			apply_quoting(&token[i], &quoting, Q_DOUBLE);
+		if (token[i] == '\"' && quoting == Q_DOUBLE)
+			apply_quoting(&token[i], &quoting, Q_NONE);
 		i++;
 	}
 }

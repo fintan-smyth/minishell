@@ -6,13 +6,15 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 13:50:15 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/30 15:52:13 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/01/30 19:07:50 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "parsing/parsing.h"
 #include <readline/history.h>
+
+void	exec_cmd(t_term *term, t_cmd *cmd);
 
 int	check_in_home(char *path, char *home)
 {
@@ -95,7 +97,6 @@ int	main(int argc, char **argv)
 	t_list	*cmd_list;
 	t_list	*current_cmd;
 	char	*line;
-	char	**args;
 
 	(void)argc;
 	term = ft_calloc(1, sizeof(*term));
@@ -125,10 +126,13 @@ int	main(int argc, char **argv)
 			strip_quotes(&tokens);
 			ft_printf("\e[1;35m\nStripped\n\e[m");
 			print_tokens(tokens);
-			ft_printf("\n");
-			args = (char **)lst_to_arr(tokens);
-			handle_args(term, count_args(args), args);
-			free(args);
+			apply_redirection((t_cmd *)current_cmd->content);
+			ft_printf("\e[1;35m\nRedirected\n\e[m");
+			print_tokens(tokens);
+			ft_printf("fd_out\t%d\nfd_in:\t%d\nerr:\t%d\n\n", ((t_cmd *)current_cmd->content)->fd_out, ((t_cmd *)current_cmd->content)->fd_in, ((t_cmd *)current_cmd->content)->error);
+			((t_cmd *)current_cmd->content)->argv = (char **)lst_to_arr(tokens);
+			((t_cmd *)current_cmd->content)->argc = count_args(((t_cmd *)current_cmd->content)->argv);
+			exec_cmd(term, (t_cmd *)current_cmd->content);
 			current_cmd = current_cmd->next;
 		}
 		add_history(line);

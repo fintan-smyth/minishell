@@ -6,11 +6,13 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 16:39:24 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/30 14:43:50 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/01/30 19:05:52 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "parsing/parsing.h"
+#include "builtins/builtins.h"
 #include <sys/stat.h>
 
 int	count_args(char **args)
@@ -52,47 +54,47 @@ int	search_path(t_term *term, char *cmd, char *cmd_path)
 	return (0);
 }
 
-int	handle_builtins(t_term *term, int argc, char **argv)
+int	handle_builtins(t_term *term, t_cmd *cmd)
 {
-	if (!ft_strncmp(argv[0], "cd", 3))
-		cd(term, argc, argv);
-	else if (!ft_strncmp(argv[0], "pwd", 4))
-		pwd(term);
-	else if (!ft_strncmp(argv[0], "env", 4))
+	if (!ft_strncmp(cmd->argv[0], "cd", 3))
+		cd(term, cmd->argc, cmd->argv);
+	else if (!ft_strncmp(cmd->argv[0], "pwd", 4))
+		pwd(term, cmd);
+	else if (!ft_strncmp(cmd->argv[0], "env", 4))
 		env(construct_envp(term->env_list));
-	else if (!ft_strncmp(argv[0], "export", 7))
-		export_env(term, argc, argv);
-	else if (!ft_strncmp(argv[0], "unset", 6))
-		unset_env(term, argc, argv);
-	else if (!ft_strncmp(argv[0], "echo", 5))
-		echo(argc, argv);
+	else if (!ft_strncmp(cmd->argv[0], "export", 7))
+		export_env(term, cmd->argc, cmd->argv);
+	else if (!ft_strncmp(cmd->argv[0], "unset", 6))
+		unset_env(term, cmd->argc, cmd->argv);
+	else if (!ft_strncmp(cmd->argv[0], "echo", 5))
+		echo(cmd->argc, cmd->argv);
 	else
 		return (0);
 	return (1);
 }
 
-void	handle_args(t_term *term, int argc, char **argv)
+void	exec_cmd(t_term *term, t_cmd *cmd)
 {
 	pid_t	child;
 	int		status;
 	char	cmd_path[PATH_MAX];
 
-	if (argv[0] == NULL)
+	if (cmd->argv[0] == NULL)
 		return ;
-	else if (!handle_builtins(term, argc, argv))
+	else if (!handle_builtins(term, cmd))
 	{
-		if (search_path(term, argv[0], cmd_path) == 0)
+		if (search_path(term, cmd->argv[0], cmd_path) == 0)
 		{
 			child = fork();
 			if (child > 0)
 				waitpid(child, &status, 0);
 			else
 			{
-				execve(cmd_path, argv, construct_envp(term->env_list));
+				execve(cmd_path, cmd->argv, construct_envp(term->env_list));
 				exit(EXIT_FAILURE);
 			}
 		}
 		else
-			ft_printf("%s: command not found\n", argv[0]);
+			ft_printf("%s: command not found\n", cmd->argv[0]);
 	}
 }

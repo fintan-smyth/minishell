@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 13:39:32 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/29 19:21:56 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/01/30 19:01:57 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,17 +47,8 @@ void	cleanup(t_term *term);
 void	get_entries(t_term *term);
 void	print_entries(t_term *term);
 
-//Builtins
-void	echo(int argc, char **argv);
-void	cd(t_term *term, int argc, char **args);
-void	pwd(t_term *term);
-void	env(char **envp);
-void	export_env(t_term *term, int argc, char **argv);
-void	unset_env(t_term *term, int argc, char **argv);
-
 //Args
 int		count_args(char **args);
-void	handle_args(t_term *term, int argc, char **argv);
 
 //Env
 void	free_env(void *env);
