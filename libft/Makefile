@@ -39,6 +39,8 @@ SRC = ft_isalpha.c \
 	  ft_putstr_fd.c \
 	  ft_putendl_fd.c \
 	  ft_putnbr_fd.c \
+	  ft_iswhitespace.c \
+	  ft_strwhitespace.c \
 	  get_next_line_bonus.c\
 	  ft_printf/format_char_bonus.c \
 	  ft_printf/format_hex_bonus.c \

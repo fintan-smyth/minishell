@@ -6,7 +6,7 @@
 /*   By: fsmyth <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 12:19:13 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/29 15:38:53 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/01/30 13:59:25 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,5 +90,7 @@ int		ft_printf(const char *format, ...);
 // My own
 void	free_split(char ***strings);
 char	*ft_strndup(const char *s, size_t n);
+int		ft_iswhitespace(char c);
+int		ft_strwhitespace(char *str);
 
 #endif

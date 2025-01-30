@@ -41,6 +41,6 @@ void	**lst_to_arr(t_list *list);
 void	print_tokens(t_list *tokens);
 void	expand_token(char **token, t_term *term);
 void	expand_token_list(t_list *tokens, t_term *term);
-void	strip_quotes(t_list *tokens);
+void	strip_quotes(t_list **tokens);
 
 #endif // PARSING_H

@@ -6,7 +6,7 @@
 /*   By: fsmyth <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 01:04:09 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/30 01:16:46 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/01/30 14:09:56 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,32 @@ void	strip_quotes_token(char *token)
 	}
 }
 
-void	strip_quotes(t_list *tokens)
+void	strip_quotes(t_list **tokens)
 {
 	t_list	*current;
+	t_list	*next;
 
-	current = tokens;
+	current = *tokens;
 	while (current != NULL)
 	{
 		strip_quotes_token((char *)current->content);
+		current = current->next;
+	}
+	current = *tokens;
+	while (ft_strwhitespace((char *)current->content))
+	{
+		*tokens = current->next;
+		ft_lstdelone(current, free);
+		current = *tokens;
+	}
+	while (current->next != NULL)
+	{
+		if (ft_strwhitespace((char *)current->next->content))
+		{
+			next = current->next->next;
+			ft_lstdelone(current->next, free);
+			current->next = next;
+		}
 		current = current->next;
 	}
 }

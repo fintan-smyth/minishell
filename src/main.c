@@ -84,7 +84,7 @@ int	main(int argc, char **argv)
 		expand_token_list(tokens, term);
 		ft_printf("\e[1;32m\nExpanded\n\e[m");
 		print_tokens(tokens);
-		strip_quotes(tokens);
+		strip_quotes(&tokens);
 		ft_printf("\e[1;35m\nStripped\n\e[m");
 		print_tokens(tokens);
 		ft_printf("\n");
