@@ -6,7 +6,7 @@
 /*   By: fsmyth <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 01:04:09 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/30 14:09:56 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/01/30 14:21:52 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,17 +39,11 @@ void	strip_quotes_token(char *token)
 	}
 }
 
-void	strip_quotes(t_list **tokens)
+void	strip_ws_nodes(t_list **tokens)
 {
-	t_list	*current;
+	t_list *current;
 	t_list	*next;
 
-	current = *tokens;
-	while (current != NULL)
-	{
-		strip_quotes_token((char *)current->content);
-		current = current->next;
-	}
 	current = *tokens;
 	while (ft_strwhitespace((char *)current->content))
 	{
@@ -67,4 +61,17 @@ void	strip_quotes(t_list **tokens)
 		}
 		current = current->next;
 	}
+}
+
+void	strip_quotes(t_list **tokens)
+{
+	t_list	*current;
+
+	current = *tokens;
+	while (current != NULL)
+	{
+		strip_quotes_token((char *)current->content);
+		current = current->next;
+	}
+	strip_ws_nodes(tokens);
 }
