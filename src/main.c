@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 13:50:15 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/30 15:01:07 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/01/30 15:52:13 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,8 @@ int	main(int argc, char **argv)
 {
 	t_term	*term;
 	t_list	*tokens;
+	t_list	*cmd_list;
+	t_list	*current_cmd;
 	char	*line;
 	char	**args;
 
@@ -110,21 +112,28 @@ int	main(int argc, char **argv)
 			continue ;
 		}
 		tokens = tokenise(line);
-		// ft_printf("\e[1;33mTokenised\n\e[m");
-		// print_tokens(tokens);
-		expand_token_list(tokens, term);
-		// ft_printf("\e[1;32m\nExpanded\n\e[m");
-		// print_tokens(tokens);
-		strip_quotes(&tokens);
-		// ft_printf("\e[1;35m\nStripped\n\e[m");
-		// print_tokens(tokens);
-		// ft_printf("\n");
-		args = (char **)lst_to_arr(tokens);
-		handle_args(term, count_args(args), args);
-		ft_lstclear(&tokens, free);
-		free(args);
+		cmd_list = split_commands(tokens);
+		current_cmd = cmd_list;
+		while (current_cmd != NULL)
+		{
+			tokens = ((t_cmd *)current_cmd->content)->tokens;
+			ft_printf("\e[1;33mTokenised\n\e[m");
+			print_tokens(tokens);
+			expand_token_list(tokens, term);
+			ft_printf("\e[1;32m\nExpanded\n\e[m");
+			print_tokens(tokens);
+			strip_quotes(&tokens);
+			ft_printf("\e[1;35m\nStripped\n\e[m");
+			print_tokens(tokens);
+			ft_printf("\n");
+			args = (char **)lst_to_arr(tokens);
+			handle_args(term, count_args(args), args);
+			free(args);
+			current_cmd = current_cmd->next;
+		}
 		add_history(line);
 		free(line);
+		ft_lstclear(&cmd_list, free_cmd);
 		line = readline(get_prompt2(term, getenv_list(term->env_list, "HOME")));
 	}
 	cleanup(term);

@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 14:32:29 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/30 01:16:57 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/01/30 16:10:04 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,14 @@
 typedef struct s_cmd
 {
 	t_list	*tokens;
-	int		type;
+	int		sep;
+	int		fd_in;
+	int		fd_out;
 }	t_cmd;
 
 enum
 {
-	COMMAND = 0,
+	END = 0,
 	PIPE = 1,
 	AND = 2,
 	OR = 3,
@@ -42,5 +44,8 @@ void	print_tokens(t_list *tokens);
 void	expand_token(char **token, t_term *term);
 void	expand_token_list(t_list *tokens, t_term *term);
 void	strip_quotes(t_list **tokens);
+void	free_cmd(void *cmd);
+int		is_cmd_sep(t_list *token);
+t_list	*split_commands(t_list *tokens);
 
 #endif // PARSING_H

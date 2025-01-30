@@ -6,7 +6,7 @@
 /*   By: fsmyth <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 01:04:09 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/30 14:21:52 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/01/30 16:46:47 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	strip_quotes_token(char *token)
 	}
 }
 
-void	strip_ws_nodes(t_list **tokens)
+void	strip_excess_nodes(t_list **tokens)
 {
 	t_list *current;
 	t_list	*next;
@@ -51,13 +51,18 @@ void	strip_ws_nodes(t_list **tokens)
 		ft_lstdelone(current, free);
 		current = *tokens;
 	}
-	while (current->next != NULL)
+	while (current != NULL && current->next != NULL)
 	{
 		if (ft_strwhitespace((char *)current->next->content))
 		{
 			next = current->next->next;
 			ft_lstdelone(current->next, free);
 			current->next = next;
+		}
+		else if (is_cmd_sep(current->next))
+		{
+			ft_lstdelone(current->next, free);
+			current->next = NULL;
 		}
 		current = current->next;
 	}
@@ -73,5 +78,5 @@ void	strip_quotes(t_list **tokens)
 		strip_quotes_token((char *)current->content);
 		current = current->next;
 	}
-	strip_ws_nodes(tokens);
+	strip_excess_nodes(tokens);
 }
