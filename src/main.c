@@ -6,12 +6,13 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 13:50:15 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/29 19:21:43 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/01/30 15:01:07 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "parsing/parsing.h"
+#include <readline/history.h>
 
 int	check_in_home(char *path, char *home)
 {
@@ -55,6 +56,30 @@ char	*get_prompt(t_term *term, char *home)
 	return (term->prompt);
 }
 
+char	*get_prompt2(t_term *term, char *home)
+{
+	size_t	prompt_size;
+	char	*path;
+
+	free(term->prompt);
+	prompt_size = ft_strlen(term->cwd) + 200;
+	term->prompt = ft_calloc(prompt_size, 1);
+	ft_strlcat(term->prompt, "\e[36m", prompt_size);
+	ft_strlcat(term->prompt, getenv_list(term->env_list, "USER"), prompt_size);
+	ft_strlcat(term->prompt, "\e[31m@minishell\e[m:\e[1;34m ", prompt_size);
+	if (check_in_home(term->cwd, home))
+	{
+		ft_strlcat(term->prompt, "~", prompt_size);
+		path = ft_substr(term->cwd, ft_strlen(home), PATH_MAX);
+		ft_strlcat(term->prompt, path, prompt_size);
+		free(path);
+	}
+	else
+		ft_strlcat(term->prompt, term->cwd, prompt_size);
+	ft_strlcat(term->prompt, "\e[1;32m > \e[m", prompt_size);
+	return (term->prompt);
+}
+
 void	cleanup(t_term *term)
 {
 	ft_lstclear(&term->entries, free);
@@ -75,25 +100,32 @@ int	main(int argc, char **argv)
 	getcwd(term->cwd, PATH_MAX);
 	init_env_list(term, argv[0]);
 	get_entries(term);
-	line = readline(get_prompt(term, getenv_list(term->env_list, "HOME")));
+	line = readline(get_prompt2(term, getenv_list(term->env_list, "HOME")));
 	while (line != NULL)
 	{
+		if (*line == 0)
+		{
+			free(line);
+			line = readline(get_prompt2(term, getenv_list(term->env_list, "HOME")));
+			continue ;
+		}
 		tokens = tokenise(line);
-		ft_printf("\e[1;33mTokenised\n\e[m");
-		print_tokens(tokens);
+		// ft_printf("\e[1;33mTokenised\n\e[m");
+		// print_tokens(tokens);
 		expand_token_list(tokens, term);
-		ft_printf("\e[1;32m\nExpanded\n\e[m");
-		print_tokens(tokens);
+		// ft_printf("\e[1;32m\nExpanded\n\e[m");
+		// print_tokens(tokens);
 		strip_quotes(&tokens);
-		ft_printf("\e[1;35m\nStripped\n\e[m");
-		print_tokens(tokens);
-		ft_printf("\n");
+		// ft_printf("\e[1;35m\nStripped\n\e[m");
+		// print_tokens(tokens);
+		// ft_printf("\n");
 		args = (char **)lst_to_arr(tokens);
 		handle_args(term, count_args(args), args);
 		ft_lstclear(&tokens, free);
 		free(args);
+		add_history(line);
 		free(line);
-		line = readline(get_prompt(term, getenv_list(term->env_list, "HOME")));
+		line = readline(get_prompt2(term, getenv_list(term->env_list, "HOME")));
 	}
 	cleanup(term);
 }
