@@ -25,18 +25,18 @@ t_list *parse_line(char *line, t_term *term)
 	while (current != NULL)
 	{
 		tokens = ((t_cmd *)current->content)->tokens;
-		ft_printf("\e[1;33mTokenised\n\e[m");
-		print_tokens(tokens);
+		// ft_printf("\e[1;33mTokenised\n\e[m");
+		// print_tokens(tokens);
 		expand_token_list(tokens, term);
-		ft_printf("\e[1;32m\nExpanded\n\e[m");
-		print_tokens(tokens);
+		// ft_printf("\e[1;32m\nExpanded\n\e[m");
+		// print_tokens(tokens);
 		strip_quotes(&tokens);
-		ft_printf("\e[1;35m\nStripped\n\e[m");
-		print_tokens(tokens);
+		// ft_printf("\e[1;35m\nStripped\n\e[m");
+		// print_tokens(tokens);
 		apply_redirection((t_cmd *)current->content);
-		ft_printf("\e[1;35m\nRedirected\n\e[m");
-		print_tokens(tokens);
-		ft_printf("fd_out\t%d\nfd_in:\t%d\nerr:\t%d\n\n", ((t_cmd *)current->content)->fd_out, ((t_cmd *)current->content)->fd_in, ((t_cmd *)current->content)->error);
+		// ft_printf("\e[1;35m\nRedirected\n\e[m");
+		// print_tokens(tokens);
+		// ft_printf("fd_out\t%d\nfd_in:\t%d\nerr:\t%d\n\n", ((t_cmd *)current->content)->fd_out, ((t_cmd *)current->content)->fd_in, ((t_cmd *)current->content)->error);
 		((t_cmd *)current->content)->argv = (char **)lst_to_arr(tokens);
 		((t_cmd *)current->content)->argc = count_args(((t_cmd *)current->content)->argv);
 		current = current->next;
