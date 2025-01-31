@@ -88,7 +88,7 @@ void	exec_cmd(t_term *term, t_cmd *cmd)
 			child = fork();
 			if (child > 0)
 			{
-				if (cmd->fd_in == (cmd->pipe)[0])
+				if ((cmd->pipe)[0] > 0)
 				{
 					close((cmd->pipe)[0]);
 					close((cmd->pipe)[1]);
