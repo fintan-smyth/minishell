@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 17:19:48 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/30 19:13:49 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/01/31 00:16:38 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,50 +39,81 @@ void	encode_redirect(t_list *token)
 	*(char *)token->content = mode;
 }
 
-void	redirect_out(t_cmd *cmd, t_list *rd_token, int mode)
+void	redirect_out(t_cmd *cmd, t_list **rd_token, t_list *prev, int mode)
 {
 	int		fd;
 	int		fmode;
-	t_list	*prev;
 
-	if (rd_token->next == NULL)
+	if ((*rd_token)->next == NULL || is_redirect((*rd_token)->next))
 	{
 		cmd->error = 1;
 		return ;
 	}
+	fmode = O_WRONLY | O_CREAT;
 	if (mode == RD_APP)
-		fmode = O_APPEND;
+		fmode |= O_APPEND;
 	else
-		fmode = O_WRONLY;
-	fd = open((char *)rd_token->next->content, (fmode | O_CREAT));
-	ft_printf("fd: %d\n", fd);
+		fmode |= O_TRUNC;
+	fd = open((char *)(*rd_token)->next->content, fmode, 0644);
+	if (fd < 0)
+	{
+		cmd->error = 2;
+		return ;
+	}
+	if (cmd->fd_out > 2)
+		close(cmd->fd_out);
 	cmd->fd_out = fd;
-	prev = cmd->tokens;
-	while (prev->next != rd_token)
-		prev = prev->next;
-	prev->next = NULL;
-	ft_lstdelone(rd_token->next, free);
-	ft_lstdelone(rd_token, free);
+	ft_lstdel_next(prev, free);
+	ft_lstdel_next(prev, free);
+	*rd_token = NULL;
+}
+
+void	redirect_in(t_cmd *cmd, t_list **rd_token, t_list *prev)
+{
+	int		fd;
+
+	if ((*rd_token)->next == NULL || is_redirect((*rd_token)->next))
+	{
+		cmd->error = 1;
+		return ;
+	}
+	fd = open((char *)(*rd_token)->next->content, O_RDONLY);
+	if (fd < 0)
+	{
+		cmd->error = 2;
+		return ;
+	}
+	if (cmd->fd_in > 2)
+		close(cmd->fd_in);
+	cmd->fd_in = fd;
+	ft_lstdel_next(prev, free);
+	ft_lstdel_next(prev, free);
+	*rd_token = NULL;
 }
 
 void	apply_redirection(t_cmd *cmd)
 {
 	t_list	*current;
+	t_list	*prev;
 	int		mode;
 
 	current = cmd->tokens;
+	prev = NULL;
 	while (current != NULL)
 	{
 		mode = *(char *)current->content;
 		if (mode == RD_IN)
-			;
+			redirect_in(cmd, &current, prev);
 		else if (mode == RD_OUT || mode == RD_APP)
+			redirect_out(cmd, &current, prev, mode);
+		// else if (mode == RD_HERED)
+		// 	;
+		if (current == NULL)
+			current = prev->next;
+		else
 		{
-			redirect_out(cmd, current, mode);
-			break ;
+			prev = current;
+			current = current->next;
 		}
-		else if (mode == RD_HERED)
-			;
-		current = current->next;
 	}
 }

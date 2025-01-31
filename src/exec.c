@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 16:39:24 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/30 19:05:52 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/01/31 00:05:59 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,8 @@ void	exec_cmd(t_term *term, t_cmd *cmd)
 				waitpid(child, &status, 0);
 			else
 			{
+				dup2(cmd->fd_in, 0);
+				dup2(cmd->fd_out, 1);
 				execve(cmd_path, cmd->argv, construct_envp(term->env_list));
 				exit(EXIT_FAILURE);
 			}

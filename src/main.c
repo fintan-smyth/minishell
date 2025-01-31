@@ -6,13 +6,14 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 13:50:15 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/30 19:07:50 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/01/31 00:23:44 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "parsing/parsing.h"
 #include <readline/history.h>
+#include <readline/readline.h>
 
 void	exec_cmd(t_term *term, t_cmd *cmd);
 
@@ -86,6 +87,7 @@ void	cleanup(t_term *term)
 {
 	ft_lstclear(&term->entries, free);
 	ft_lstclear(&term->env_list, free_env);
+	rl_clear_history();
 	free(term->prompt);
 	free(term);
 }
