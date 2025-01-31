@@ -49,7 +49,6 @@ enum
 	RD_OUT = 2,
 	RD_APP = 3,
 	RD_HRD = 4,
-
 };
 
 t_list	*tokenise(char *line);
