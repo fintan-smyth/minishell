@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 16:39:24 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/31 00:05:59 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/01/31 00:40:54 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,18 +56,18 @@ int	search_path(t_term *term, char *cmd, char *cmd_path)
 
 int	handle_builtins(t_term *term, t_cmd *cmd)
 {
-	if (!ft_strncmp(cmd->argv[0], "cd", 3))
-		cd(term, cmd->argc, cmd->argv);
-	else if (!ft_strncmp(cmd->argv[0], "pwd", 4))
+	if (!ft_strncmp((cmd->argv)[0], "cd", 3))
+		cd(term, cmd);
+	else if (!ft_strncmp((cmd->argv)[0], "pwd", 4))
 		pwd(term, cmd);
-	else if (!ft_strncmp(cmd->argv[0], "env", 4))
+	else if (!ft_strncmp((cmd->argv)[0], "env", 4))
 		env(construct_envp(term->env_list));
-	else if (!ft_strncmp(cmd->argv[0], "export", 7))
+	else if (!ft_strncmp((cmd->argv)[0], "export", 7))
 		export_env(term, cmd->argc, cmd->argv);
-	else if (!ft_strncmp(cmd->argv[0], "unset", 6))
+	else if (!ft_strncmp((cmd->argv)[0], "unset", 6))
 		unset_env(term, cmd->argc, cmd->argv);
-	else if (!ft_strncmp(cmd->argv[0], "echo", 5))
-		echo(cmd->argc, cmd->argv);
+	else if (!ft_strncmp((cmd->argv)[0], "echo", 5))
+		echo(cmd);
 	else
 		return (0);
 	return (1);
@@ -79,11 +79,11 @@ void	exec_cmd(t_term *term, t_cmd *cmd)
 	int		status;
 	char	cmd_path[PATH_MAX];
 
-	if (cmd->argv[0] == NULL)
+	if ((cmd->argv)[0] == NULL)
 		return ;
 	else if (!handle_builtins(term, cmd))
 	{
-		if (search_path(term, cmd->argv[0], cmd_path) == 0)
+		if (search_path(term, (cmd->argv)[0], cmd_path) == 0)
 		{
 			child = fork();
 			if (child > 0)
@@ -97,6 +97,6 @@ void	exec_cmd(t_term *term, t_cmd *cmd)
 			}
 		}
 		else
-			ft_printf("%s: command not found\n", cmd->argv[0]);
+			ft_printf("%s: command not found\n", (cmd->argv)[0]);
 	}
 }

@@ -6,11 +6,12 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:20:50 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/27 16:41:15 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/01/31 00:42:13 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+#include "../parsing/parsing.h"
 
 void	update_wd(t_term *term)
 {
@@ -25,30 +26,33 @@ void	update_wd(t_term *term)
 	pwd->var = ft_strdup(term->cwd);
 }
 
-void	cd(t_term *term, int argc, char **args)
+void	cd(t_term *term, t_cmd *cmd)
 {
 	char	*path;
 	int		revert;
 
 	revert = 0;
-	if (args[1] == NULL)
+	if ((cmd->argv)[1] == NULL)
 		path = getenv_list(term->env_list, "HOME");
-	else if (ft_strncmp(args[1], "-", 2) == 0)
+	else if (ft_strncmp((cmd->argv)[1], "-", 2) == 0)
 	{
 		revert = 1;
 		path = getenv_list(term->env_list, "OLDPWD");
 	}
 	else
-		path = args[1];
-	if (argc > 2)
-		ft_printf("\e[32mminishell: \e[35mcd: \e[mtoo many arguments\n", path);
+		path = (cmd->argv)[1];
+	if (cmd->argc > 2)
+		ft_putendl_fd("\e[32mminishell: \e[35mcd: \e[mtoo many arguments", 2);
 	else if (chdir(path) != 0)
-		ft_printf("\e[32mminishell: \e[35mcd: \e[m%s", strerror(errno));
+	{
+		ft_putstr_fd("\e[32mminishell: \e[35mcd: \e[m", 2);
+		ft_putendl_fd(strerror(errno), 2);
+	}
 	else
 	{
 		update_wd(term);
 		if (revert == 1)
-			ft_printf("%s\n", term->cwd);
+			ft_putendl_fd(term->cwd, cmd->fd_out);
 		get_entries(term);
 	}
 }
