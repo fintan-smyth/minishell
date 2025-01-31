@@ -122,7 +122,16 @@ void	print_tokens(t_list *tokens)
 	current = tokens;
 	while (current != NULL)
 	{
-		ft_printf("token:\t<%s>\n", (char *)current->content);
+		if (*(char *)current->content == RD_IN)
+			ft_printf("token:\t\e[7;35mRD_IN  <\e[m\n");
+		else if (*(char *)current->content == RD_OUT)
+			ft_printf("token:\t\e[7;32mRD_OUT >\e[m\n");
+		else if (*(char *)current->content == RD_APP)
+			ft_printf("token:\t\e[7;36mRD_APP >>\e[m\n");
+		else if (*(char *)current->content == RD_HRD)
+			ft_printf("token:\t\e[7;31mRD_HRD >>\e[m\n");
+		else
+			ft_printf("token:\t<%s>\n", (char *)current->content);
 		current = current->next;
 	}
 }
