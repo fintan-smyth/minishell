@@ -35,31 +35,31 @@ int	check_in_home(char *path, char *home)
 	return (free(terminated), 0);
 }
 
+// char	*get_prompt(t_term *term, char *home)
+// {
+// 	size_t	prompt_size;
+// 	char	*path;
+//
+// 	free(term->prompt);
+// 	prompt_size = ft_strlen(term->cwd) + 200;
+// 	term->prompt = ft_calloc(prompt_size, 1);
+// 	ft_strlcat(term->prompt, "\n╭─\e[36m ", prompt_size);
+// 	ft_strlcat(term->prompt, getenv_list(term->env_list, "USER"), prompt_size);
+// 	ft_strlcat(term->prompt, "\e[31m@minishell\e[m:\e[1;34m ", prompt_size);
+// 	if (check_in_home(term->cwd, home))
+// 	{
+// 		ft_strlcat(term->prompt, "~", prompt_size);
+// 		path = ft_substr(term->cwd, ft_strlen(home), PATH_MAX);
+// 		ft_strlcat(term->prompt, path, prompt_size);
+// 		free(path);
+// 	}
+// 	else
+// 		ft_strlcat(term->prompt, term->cwd, prompt_size);
+// 	ft_strlcat(term->prompt, "\e[m\n╰─\e[1;32m> \e[m", prompt_size);
+// 	return (term->prompt);
+// }
+
 char	*get_prompt(t_term *term, char *home)
-{
-	size_t	prompt_size;
-	char	*path;
-
-	free(term->prompt);
-	prompt_size = ft_strlen(term->cwd) + 200;
-	term->prompt = ft_calloc(prompt_size, 1);
-	ft_strlcat(term->prompt, "\n╭─\e[36m ", prompt_size);
-	ft_strlcat(term->prompt, getenv_list(term->env_list, "USER"), prompt_size);
-	ft_strlcat(term->prompt, "\e[31m@minishell\e[m:\e[1;34m ", prompt_size);
-	if (check_in_home(term->cwd, home))
-	{
-		ft_strlcat(term->prompt, "~", prompt_size);
-		path = ft_substr(term->cwd, ft_strlen(home), PATH_MAX);
-		ft_strlcat(term->prompt, path, prompt_size);
-		free(path);
-	}
-	else
-		ft_strlcat(term->prompt, term->cwd, prompt_size);
-	ft_strlcat(term->prompt, "\e[m\n╰─\e[1;32m> \e[m", prompt_size);
-	return (term->prompt);
-}
-
-char	*get_prompt2(t_term *term, char *home)
 {
 	size_t	prompt_size;
 	char	*path;
@@ -104,13 +104,13 @@ int	main(int argc, char **argv)
 	getcwd(term->cwd, PATH_MAX);
 	init_env_list(term, argv[0]);
 	get_entries(term);
-	line = readline(get_prompt2(term, getenv_list(term->env_list, "HOME")));
+	line = readline(get_prompt(term, getenv_list(term->env_list, "HOME")));
 	while (line != NULL)
 	{
 		if (*line == 0)
 		{
 			free(line);
-			line = readline(get_prompt2(term, getenv_list(term->env_list, "HOME")));
+			line = readline(get_prompt(term, getenv_list(term->env_list, "HOME")));
 			continue ;
 		}
 		cmd_list = parse_line(line, term);
@@ -124,7 +124,7 @@ int	main(int argc, char **argv)
 		add_history(line);
 		free(line);
 		ft_lstclear(&cmd_list, free_cmd);
-		line = readline(get_prompt2(term, getenv_list(term->env_list, "HOME")));
+		line = readline(get_prompt(term, getenv_list(term->env_list, "HOME")));
 	}
 	cleanup(term);
 }
