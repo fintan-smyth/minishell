@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 13:50:15 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/31 00:53:08 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/01/31 14:47:48 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,6 @@ void	cleanup(t_term *term)
 int	main(int argc, char **argv)
 {
 	t_term	*term;
-	t_list	*tokens;
 	t_list	*cmd_list;
 	t_list	*current_cmd;
 	char	*line;
@@ -114,26 +113,11 @@ int	main(int argc, char **argv)
 			line = readline(get_prompt2(term, getenv_list(term->env_list, "HOME")));
 			continue ;
 		}
-		tokens = tokenise(line);
-		cmd_list = split_commands(tokens);
+		cmd_list = parse_line(line, term);
+		connect_pipes(cmd_list);
 		current_cmd = cmd_list;
 		while (current_cmd != NULL)
 		{
-			tokens = ((t_cmd *)current_cmd->content)->tokens;
-			// ft_printf("\e[1;33mTokenised\n\e[m");
-			// print_tokens(tokens);
-			expand_token_list(tokens, term);
-			// ft_printf("\e[1;32m\nExpanded\n\e[m");
-			// print_tokens(tokens);
-			strip_quotes(&tokens);
-			// ft_printf("\e[1;35m\nStripped\n\e[m");
-			// print_tokens(tokens);
-			apply_redirection((t_cmd *)current_cmd->content);
-			// ft_printf("\e[1;35m\nRedirected\n\e[m");
-			// print_tokens(tokens);
-			// ft_printf("fd_out\t%d\nfd_in:\t%d\nerr:\t%d\n\n", ((t_cmd *)current_cmd->content)->fd_out, ((t_cmd *)current_cmd->content)->fd_in, ((t_cmd *)current_cmd->content)->error);
-			((t_cmd *)current_cmd->content)->argv = (char **)lst_to_arr(tokens);
-			((t_cmd *)current_cmd->content)->argc = count_args(((t_cmd *)current_cmd->content)->argv);
 			exec_cmd(term, (t_cmd *)current_cmd->content);
 			current_cmd = current_cmd->next;
 		}

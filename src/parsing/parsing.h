@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 14:32:29 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/30 17:31:39 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/01/31 14:47:29 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ typedef struct s_cmd
 	int		sep;
 	int		fd_in;
 	int		fd_out;
+	int		pipe[2];
 	int		error;
 }	t_cmd;
 
@@ -47,7 +48,7 @@ enum
 	RD_IN = 1,
 	RD_OUT = 2,
 	RD_APP = 3,
-	RD_HERED = 4,
+	RD_HRD = 4,
 
 };
 
@@ -63,5 +64,7 @@ t_list	*split_commands(t_list *tokens);
 int		is_redirect(t_list *token);
 void	encode_redirect(t_list *token);
 void	apply_redirection(t_cmd *cmd);
+t_list 	*parse_line(char *line, t_term *term);
+void	connect_pipes(t_list *cmd_list);
 
 #endif // PARSING_H

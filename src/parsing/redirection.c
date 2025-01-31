@@ -25,7 +25,7 @@ int	is_redirect(t_list *token)
 	if (ft_strncmp(text, ">>", 3) == 0)
 		return (RD_APP);
 	if (ft_strncmp(text, "<<", 3) == 0)
-		return (RD_HERED);
+		return (RD_HRD);
 	return (0);
 }
 
@@ -106,7 +106,7 @@ void	apply_redirection(t_cmd *cmd)
 			redirect_in(cmd, &current, prev);
 		else if (mode == RD_OUT || mode == RD_APP)
 			redirect_out(cmd, &current, prev, mode);
-		// else if (mode == RD_HERED)
+		// else if (mode == RD_HRD)
 		// 	;
 		if (current == NULL)
 			current = prev->next;

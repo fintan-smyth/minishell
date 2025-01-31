@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:18:36 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/30 19:17:21 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/01/31 15:01:03 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ t_cmd	*construct_cmd(t_list *tokens)
 	cmd = ft_calloc(1, sizeof(*cmd));
 	cmd->tokens = tokens;
 	cmd->fd_out = 1;
+	(cmd->pipe)[0] = -1;
+	(cmd->pipe)[1] = -1;
 	cmd->sep = OP_END;
 	return (cmd);
 }
