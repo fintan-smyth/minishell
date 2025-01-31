@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 16:39:24 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/31 00:40:54 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/01/31 15:03:31 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,9 +87,18 @@ void	exec_cmd(t_term *term, t_cmd *cmd)
 		{
 			child = fork();
 			if (child > 0)
+			{
+				if (cmd->fd_in == (cmd->pipe)[0])
+				{
+					close((cmd->pipe)[0]);
+					close((cmd->pipe)[1]);
+				}
 				waitpid(child, &status, 0);
+			}
 			else
 			{
+				if (cmd->fd_in == (cmd->pipe)[0])
+					close((cmd->pipe)[1]);
 				dup2(cmd->fd_in, 0);
 				dup2(cmd->fd_out, 1);
 				execve(cmd_path, cmd->argv, construct_envp(term->env_list));
