@@ -6,12 +6,12 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 19:00:13 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/31 00:41:17 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/01 15:07:14 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BULTINS_H
-# define BULTINS_H
+#ifndef BUILTINS_H
+# define BUILTINS_H
 
 # include "../minishell.h"
 # include "../parsing/parsing.h"
