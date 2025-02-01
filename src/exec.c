@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 16:39:24 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/01 01:28:07 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/01 14:11:51 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,8 @@ void	exec_cmd(t_term *term, t_cmd *cmd)
 				{
 					close((cmd->pipe)[0]);
 					close((cmd->pipe)[1]);
-					cmd->fd_in = 0;
+					if (cmd->fd_in == (cmd->pipe)[0])
+						cmd->fd_in = 0;
 				}
 				if (cmd->sep == OP_PIPE)
 					cmd->fd_out = 1;
