@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:45:55 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/29 19:34:10 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/01 14:26:02 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ void	init_env_list(t_term *term, char *name)
 	env_list_add(&term->env_list, "USER", getenv("USER"));
 	env_list_add(&term->env_list, "PATH", getenv("PATH"));
 	env_list_add(&term->env_list, "TEST", getenv("TEST"));
-	env_list_add(&term->env_list, "MS_PARSE_DEBUG", getenv("MS_PARSE_DEBUG"));
+	env_list_add(&term->env_list, "MS_DEBUG", getenv("MS_DEBUG"));
 	env_list_add(&term->env_list, "PWD", term->cwd);
 	env_list_add(&term->env_list, "OLDPWD", term->cwd);
 	shell = get_shell(term, name);
