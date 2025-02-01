@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 18:45:57 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/30 17:31:39 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/01 13:53:08 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	*extend_line(char *line, char *extra)
 	return (out);
 }
 
-void	expand_var_inplace(char **line, char *varp, t_term *term)
+int	expand_var_inplace(char **line, char *varp, t_term *term)
 {
 	char	*expanded;
 	char	*env_name;
@@ -49,6 +49,11 @@ void	expand_var_inplace(char **line, char *varp, t_term *term)
 	i = 0;
 	while (valid_var_chr(varp[i]))
 		i++;
+	if (i == 0)
+	{
+		free(expanded);
+		return (0);
+	}
 	env_name = ft_strndup(varp, i);
 	env_var = getenv_list(term->env_list, env_name);
 	if (env_var != NULL)
@@ -57,6 +62,7 @@ void	expand_var_inplace(char **line, char *varp, t_term *term)
 	free(env_name);
 	free(*line);
 	*line = expanded;
+	return (1);
 }
 
 void	expand_token(char **token, t_term *term)
@@ -72,7 +78,8 @@ void	expand_token(char **token, t_term *term)
 		if ((*token)[i] == '$' && quoting != Q_SINGLE)
 		{
 			varp = &(*token)[i];
-			expand_var_inplace(token, varp, term);
+			if (!expand_var_inplace(token, varp, term))
+				*varp = '$';
 		}
 		else if ((*token)[i] == '\'' && quoting == Q_NONE)
 			quoting = Q_SINGLE;
@@ -136,6 +143,13 @@ void	expand_token_list(t_list *tokens, t_term *term)
 	current = tokens;
 	while (current != NULL)
 	{
+		if (*(char *)current->content == RD_HRD)
+		{
+			if (current->next == NULL)
+				return ;
+			current = current->next->next;
+			continue ;
+		}
 		expand_token((char **)&current->content, term);
 		retokenise(current);
 		current = current->next;

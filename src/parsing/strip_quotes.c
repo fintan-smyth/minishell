@@ -6,7 +6,7 @@
 /*   By: fsmyth <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 01:04:09 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/30 17:31:39 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/01 13:08:05 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,13 @@ void	strip_quotes(t_list **tokens)
 	current = *tokens;
 	while (current != NULL)
 	{
+		if (*(char *)current->content == RD_HRD)
+		{
+			if (current->next == NULL)
+				return ;
+			current = current->next->next;
+			continue ;
+		}
 		strip_quotes_token((char *)current->content);
 		current = current->next;
 	}

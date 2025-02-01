@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:10:22 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/31 14:32:29 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/01 14:25:47 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	is_debug(t_term *term)
 {
 	char	*debug;
 
-	debug = getenv_list(term->env_list, "MS_PARSE_DEBUG");
+	debug = getenv_list(term->env_list, "MS_DEBUG");
 	if (debug == NULL)
 		return (0);
 	else if (ft_strncmp(debug, "ON", 3) == 0)
@@ -68,7 +68,7 @@ t_list	*parse_line(char *line, t_term *term)
 		strip_quotes(&tokens);
 		if (is_debug(term))
 			print_parse_debug(tokens, (t_cmd *)current->content, "Stripped");
-		apply_redirection((t_cmd *)current->content);
+		apply_redirection((t_cmd *)current->content, term);
 		if (is_debug(term))
 			print_parse_debug(tokens, (t_cmd *)current->content, "Redirected");
 		prepare_args((t_cmd *)current->content);

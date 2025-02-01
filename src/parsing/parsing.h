@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 14:32:29 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/31 14:47:29 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/01 13:50:37 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,15 +54,17 @@ enum
 t_list	*tokenise(char *line);
 void	**lst_to_arr(t_list *list);
 void	print_tokens(t_list *tokens);
+int		expand_var_inplace(char **line, char *varp, t_term *term);
 void	expand_token(char **token, t_term *term);
 void	expand_token_list(t_list *tokens, t_term *term);
+void	strip_quotes_token(char *token);
 void	strip_quotes(t_list **tokens);
 void	free_cmd(void *cmd);
 int		is_cmd_sep(t_list *token);
 t_list	*split_commands(t_list *tokens);
 int		is_redirect(t_list *token);
 void	encode_redirect(t_list *token);
-void	apply_redirection(t_cmd *cmd);
+void	apply_redirection(t_cmd *cmd, t_term *term);
 t_list 	*parse_line(char *line, t_term *term);
 void	connect_pipes(t_list *cmd_list);
 

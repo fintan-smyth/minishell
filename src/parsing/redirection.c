@@ -6,12 +6,13 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 17:19:48 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/31 00:16:38 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/01 14:25:05 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 #include <fcntl.h>
+#include <readline/readline.h>
 
 int	is_redirect(t_list *token)
 {
@@ -91,12 +92,76 @@ void	redirect_in(t_cmd *cmd, t_list **rd_token, t_list *prev)
 	*rd_token = NULL;
 }
 
-void	apply_redirection(t_cmd *cmd)
+t_list	*read_hdoc(char *delim)
+{
+	char	*line;
+	t_list	*hdoc;
+
+	hdoc = NULL;
+	line = readline(">");
+	while (line != NULL && ft_strncmp(line, delim, ft_strlen(delim) + 1))
+	{
+		ft_lstadd_back(&hdoc, ft_lstnew(line));
+		line = readline(">");
+	}
+	if (line == NULL)
+	{
+		ft_putstr_fd("minishell: warning: here-document delimited by end-of-file (wanted ", 2);
+		ft_putstr_fd(delim, 2);
+		ft_putendl_fd(")", 2);
+	}
+	else
+		free(line);
+	return (hdoc);
+}
+
+void	write_hdoc(t_cmd *cmd, t_list *hdoc, t_term *term, int expand)
+{
+	t_list	*current;
+	char	*var;
+
+	pipe(cmd->pipe);
+	cmd->fd_in = cmd->pipe[0];
+	current = hdoc;
+	while (current != NULL)
+	{
+		var = ft_strchr((char *)current->content, '$');
+		if (expand && var)
+			expand_var_inplace((char **)&current->content, var, term);
+		ft_putendl_fd((char *)current->content, cmd->pipe[1]);
+		current = current->next;
+	}
+	// close(cmd->pipe[1]);
+}
+
+void	redirect_hdoc(t_cmd *cmd, t_list **rd_token, t_list *prev, t_term * term)
+{
+	char	*delim;
+	int		expand;
+	t_list	*hdoc;
+
+	expand = 1;
+	delim = (char *)(*rd_token)->next->content;
+	if (ft_strchr(delim, '\"') || ft_strchr(delim, '\''))
+	{
+		expand = 0;
+		strip_quotes_token(delim);
+	}
+	hdoc = read_hdoc(delim);
+	write_hdoc(cmd, hdoc, term, expand);
+	ft_lstclear(&hdoc, free);
+	ft_lstdel_next(prev, free);
+	ft_lstdel_next(prev, free);
+	*rd_token = NULL;
+}
+
+void	apply_redirection(t_cmd *cmd, t_term *term)
 {
 	t_list	*current;
 	t_list	*prev;
 	int		mode;
 
+	(void)term;
 	current = cmd->tokens;
 	prev = NULL;
 	while (current != NULL)
@@ -106,8 +171,10 @@ void	apply_redirection(t_cmd *cmd)
 			redirect_in(cmd, &current, prev);
 		else if (mode == RD_OUT || mode == RD_APP)
 			redirect_out(cmd, &current, prev, mode);
-		// else if (mode == RD_HRD)
-		// 	;
+		else if (mode == RD_HRD)
+		{
+			redirect_hdoc(cmd, &current, prev, term);
+		}
 		if (current == NULL)
 			current = prev->next;
 		else
