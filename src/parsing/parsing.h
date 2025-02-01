@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 14:32:29 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/01 13:50:37 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/01 14:56:26 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ typedef struct s_cmd
 	int		fd_in;
 	int		fd_out;
 	int		pipe[2];
+	int		hdpipe[2];
 	int		error;
 }	t_cmd;
 

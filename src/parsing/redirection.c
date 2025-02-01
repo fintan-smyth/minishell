@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 17:19:48 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/01 14:25:05 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/01 14:59:27 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,18 +120,18 @@ void	write_hdoc(t_cmd *cmd, t_list *hdoc, t_term *term, int expand)
 	t_list	*current;
 	char	*var;
 
-	pipe(cmd->pipe);
-	cmd->fd_in = cmd->pipe[0];
+	pipe(cmd->hdpipe);
+	cmd->fd_in = cmd->hdpipe[0];
 	current = hdoc;
 	while (current != NULL)
 	{
 		var = ft_strchr((char *)current->content, '$');
 		if (expand && var)
 			expand_var_inplace((char **)&current->content, var, term);
-		ft_putendl_fd((char *)current->content, cmd->pipe[1]);
+		ft_putendl_fd((char *)current->content, cmd->hdpipe[1]);
 		current = current->next;
 	}
-	// close(cmd->pipe[1]);
+	close(cmd->hdpipe[1]);
 }
 
 void	redirect_hdoc(t_cmd *cmd, t_list **rd_token, t_list *prev, t_term * term)
