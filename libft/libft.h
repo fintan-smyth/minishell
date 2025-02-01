@@ -6,7 +6,7 @@
 /*   By: fsmyth <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 12:19:13 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/30 23:48:41 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/01 18:58:02 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,5 +93,6 @@ char	*ft_strndup(const char *s, size_t n);
 int		ft_iswhitespace(char c);
 int		ft_strwhitespace(char *str);
 void	ft_lstdel_next(t_list *lst, void (*del)(void *));
+int		ft_match_wc(char *str, char *wc, char wchar);
 
 #endif
