@@ -34,8 +34,11 @@ void	get_entries(t_term *term)
 	dirent = readdir(dir);
 	while (dirent != NULL)
 	{
-		entry = copy_dirent(dirent);
-		ft_lstadd_front(&term->entries, ft_lstnew(entry));
+		if (ft_strncmp(dirent->d_name, ".", 2) && ft_strncmp(dirent->d_name, "..", 3))
+		{
+			entry = copy_dirent(dirent);
+			ft_lstadd_front(&term->entries, ft_lstnew(entry));
+		}
 		dirent = readdir(dir);
 	}
 	closedir(dir);

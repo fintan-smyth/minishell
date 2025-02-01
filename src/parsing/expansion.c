@@ -139,7 +139,9 @@ void	expand_wildcards(char **line, t_term *term)
 	while (entry != NULL)
 	{
 		d_name = ((t_entry *)entry->content)->d_name;
-		if (ft_match_wc(d_name, linecpy, 5))
+		if (*d_name == '.' && *linecpy != '.')
+			;
+		else if (ft_match_wc(d_name, linecpy, 5))
 		{
 			if (expanded != NULL)
 				expanded = extend_line(expanded, " ");
