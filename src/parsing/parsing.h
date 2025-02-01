@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 14:32:29 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/01 14:56:26 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/01 21:10:36 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ enum
 
 enum
 {
-	Q_NONE,
+	Q_NONE = 0,
 	Q_SINGLE,
 	Q_DOUBLE,
 };
@@ -56,7 +56,7 @@ t_list	*tokenise(char *line);
 void	**lst_to_arr(t_list *list);
 void	print_tokens(t_list *tokens);
 int		expand_var_inplace(char **line, char *varp, t_term *term);
-void	expand_token(char **token, t_term *term);
+void	expand_token_var(char **token, t_term *term);
 void	expand_token_list(t_list *tokens, t_term *term);
 void	strip_quotes_token(char *token);
 void	strip_quotes(t_list **tokens);

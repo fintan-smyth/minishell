@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 18:45:57 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/01 13:53:08 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/01 21:35:46 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,10 @@ char	*extend_line(char *line, char *extra)
 {
 	char	*out;
 
+	if (line == NULL && extra == NULL)
+		return (NULL);
 	if (line == NULL)
-		return (extra);
+		return (ft_strdup(extra));
 	if (extra == NULL)
 		return (line);
 	out = ft_strjoin(line, extra);
@@ -43,7 +45,6 @@ int	expand_var_inplace(char **line, char *varp, t_term *term)
 	int		i;
 
 	*varp = 0;
-	expanded = NULL;
 	expanded = ft_strdup(*line);
 	varp++;
 	i = 0;
@@ -65,7 +66,7 @@ int	expand_var_inplace(char **line, char *varp, t_term *term)
 	return (1);
 }
 
-void	expand_token(char **token, t_term *term)
+void	expand_token_var(char **token, t_term *term)
 {
 	char	*varp;
 	int		i;
@@ -91,6 +92,66 @@ void	expand_token(char **token, t_term *term)
 			quoting = Q_NONE;
 		i++;
 	}
+}
+
+int	encode_wildcards(char *token)
+{
+	int		i;
+	int		wild;
+	int		quoting;
+
+	i = 0;
+	quoting = 0;
+	wild = 0;
+	while (token[i])
+	{
+		if (token[i] == '*' && quoting == Q_NONE)
+		{
+			token[i] = 5;
+			wild = 1;
+		}
+		else if (token[i] == '\'' && quoting == Q_NONE)
+			quoting = Q_SINGLE;
+		else if (token[i] == '\'' && quoting == Q_SINGLE)
+			quoting = Q_NONE;
+		else if (token[i] == '\"' && quoting == Q_NONE)
+			quoting = Q_DOUBLE;
+		else if (token[i] == '\"' && quoting == Q_DOUBLE)
+			quoting = Q_NONE;
+		i++;
+	}
+	return (wild);
+}
+
+void	expand_wildcards(char **line, t_term *term)
+{
+	t_list	*entry;
+	char	*linecpy;
+	char	*d_name;
+	char	*expanded;
+
+	expanded = NULL;
+	linecpy = ft_strdup(*line);
+	if (!encode_wildcards(linecpy))
+		return (free(linecpy));
+	strip_quotes_token(linecpy);
+	entry = term->entries;
+	while (entry != NULL)
+	{
+		d_name = ((t_entry *)entry->content)->d_name;
+		if (ft_match_wc(d_name, linecpy, 5))
+		{
+			if (expanded != NULL)
+				expanded = extend_line(expanded, " ");
+			expanded = extend_line(expanded, d_name);
+		}
+		entry = entry->next;
+	}
+	free(linecpy);
+	if (expanded == NULL)
+		return ;
+	free(*line);
+	*line = expanded;
 }
 
 void	delimit_retoken(t_list **next, char *start)
@@ -150,7 +211,9 @@ void	expand_token_list(t_list *tokens, t_term *term)
 			current = current->next->next;
 			continue ;
 		}
-		expand_token((char **)&current->content, term);
+		expand_token_var((char **)&current->content, term);
+		retokenise(current);
+		expand_wildcards((char **)&current->content, term);
 		retokenise(current);
 		current = current->next;
 	}
