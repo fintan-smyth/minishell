@@ -1,4 +1,3 @@
-# https://github.com/JonathanDUFOUR/minishell/blob/master/ignoreliberror
 {
     leak readline
     Memcheck:Leak

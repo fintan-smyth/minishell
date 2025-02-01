@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 14:35:24 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/29 17:55:15 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/01 17:50:29 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ void	print_tokens(t_list *tokens)
 		else if (*(char *)current->content == RD_APP)
 			ft_printf("token:\t\e[7;36mRD_APP >>\e[m\n");
 		else if (*(char *)current->content == RD_HRD)
-			ft_printf("token:\t\e[7;31mRD_HRD >>\e[m\n");
+			ft_printf("token:\t\e[7;31mRD_HRD <<\e[m\n");
 		else
 			ft_printf("token:\t<%s>\n", (char *)current->content);
 		current = current->next;
