@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:18:36 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/31 15:01:03 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/01 14:52:08 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,18 +39,18 @@ int	is_cmd_sep(t_list *token)
 	return (0);
 }
 
-void	free_cmd(void *cmd)
+void	free_cmd(void *cmdptr)
 {
-	t_cmd	*cmdp;
+	t_cmd	*cmd;
 
-	cmdp = (t_cmd *)cmd;
-	ft_lstclear(&cmdp->tokens, free);
-	free(cmdp->argv);
-	if (cmdp->fd_in > 2)
-		close(cmdp->fd_in);
-	if (cmdp->fd_out > 2)
-		close(cmdp->fd_out);
-	free(cmd);
+	cmd = (t_cmd *)cmdptr;
+	ft_lstclear(&cmd->tokens, free);
+	free(cmd->argv);
+	if (cmd->fd_in > 2)
+		close(cmd->fd_in);
+	if (cmd->fd_out > 2)
+		close(cmd->fd_out);
+	free(cmdptr);
 }
 
 t_list	*split_commands(t_list *tokens)
