@@ -52,7 +52,9 @@ SRC = ft_isalpha.c \
 	  ft_printf/format_utils_bonus.c \
 	  ft_printf/parse_format_bonus.c \
 	  ft_printf/utils_bonus.c \
-	  ft_printf/ft_printf_bonus.c
+	  ft_printf/ft_printf_bonus.c \
+	  ft_qsort.c \
+	  ft_strcmp.c \
 
 OBJ = $(SRC:.c=.o)
 
