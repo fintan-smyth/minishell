@@ -85,7 +85,6 @@ char	*get_prompt(t_term *term, char *home)
 
 void	cleanup(t_term *term)
 {
-	ft_lstclear(&term->entries, free);
 	ft_lstclear(&term->env_list, free_env);
 	rl_clear_history();
 	free(term->prompt);
@@ -103,7 +102,7 @@ int	main(int argc, char **argv)
 	term = ft_calloc(1, sizeof(*term));
 	getcwd(term->cwd, PATH_MAX);
 	init_env_list(term, argv[0]);
-	get_entries(term);
+	// get_entries(term);
 	line = readline(get_prompt(term, getenv_list(term->env_list, "HOME")));
 	while (line != NULL)
 	{

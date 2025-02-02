@@ -53,6 +53,6 @@ void	cd(t_term *term, t_cmd *cmd)
 		update_wd(term);
 		if (revert == 1)
 			ft_putendl_fd(term->cwd, cmd->fd_out);
-		get_entries(term);
+		// get_entries(term);
 	}
 }

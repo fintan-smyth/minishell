@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:18:41 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/27 16:41:28 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/02 14:33:14 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,25 +23,28 @@ t_entry	*copy_dirent(struct dirent *dirent)
 	return (entry);
 }
 
-void	get_entries(t_term *term)
+t_list	*get_entries(t_term *term)
 {
-	DIR				*dir;
 	struct dirent	*dirent;
+	DIR				*dir;
+	t_list			*entries;
 	t_entry			*entry;
 
+	entries = NULL;
 	dir = opendir(term->cwd);
-	ft_lstclear(&term->entries, free);
 	dirent = readdir(dir);
 	while (dirent != NULL)
 	{
-		if (ft_strncmp(dirent->d_name, ".", 2) && ft_strncmp(dirent->d_name, "..", 3))
+		if (ft_strncmp(dirent->d_name, ".", 2)
+			&& ft_strncmp(dirent->d_name, "..", 3))
 		{
 			entry = copy_dirent(dirent);
-			ft_lstadd_front(&term->entries, ft_lstnew(entry));
+			ft_lstadd_front(&entries, ft_lstnew(entry));
 		}
 		dirent = readdir(dir);
 	}
 	closedir(dir);
+	return (entries);
 }
 
 char	*get_dname(t_list *node)
@@ -54,11 +57,11 @@ unsigned char	get_dtype(t_list *node)
 	return (((t_entry *)node->content)->d_type);
 }
 
-void	print_entries(t_term *term)
+void	print_entries(t_list *entries)
 {
 	t_list	*current;
 
-	current = term->entries;
+	current = entries;
 	while (current != NULL)
 	{
 		ft_printf("\e[1;3%dm%s\e[m\t", get_dtype(current), get_dname(current));

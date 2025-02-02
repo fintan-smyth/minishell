@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 13:39:32 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/30 19:01:57 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/02 14:32:18 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,15 +37,14 @@ typedef struct s_term
 	char	cwd[PATH_MAX];
 	char	*prompt;
 	t_list	*env_list;
-	t_list	*entries;
 }	t_term;
 
 //Cleanup
 void	cleanup(t_term *term);
 
 //Entries
-void	get_entries(t_term *term);
-void	print_entries(t_term *term);
+t_list	*get_entries(t_term *term);
+void	print_entries(t_list *entries);
 
 //Args
 int		count_args(char **args);
