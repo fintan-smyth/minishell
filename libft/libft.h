@@ -6,7 +6,7 @@
 /*   By: fsmyth <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 12:19:13 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/02 14:38:12 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/02 17:25:16 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ int		ft_iswhitespace(char c);
 int		ft_strwhitespace(char *str);
 void	ft_lstdel_next(t_list *lst, void (*del)(void *));
 int		ft_match_wc(char *str, char *wc, char wchar);
+void	**ft_lst_to_arr(t_list *list);
 void	ft_qsort(void **array, int left, int right,
 			int (*cmp)(void *, void *));
 int		ft_strcmp(char *s1, char *s2);

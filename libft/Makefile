@@ -55,6 +55,7 @@ SRC = ft_isalpha.c \
 	  ft_printf/ft_printf_bonus.c \
 	  ft_qsort.c \
 	  ft_strcmp.c \
+	  ft_lst_to_arr.c \
 
 OBJ = $(SRC:.c=.o)
 
