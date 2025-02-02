@@ -6,53 +6,13 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 16:39:24 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/01 14:11:51 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/02 17:48:17 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include "parsing/parsing.h"
-#include "builtins/builtins.h"
-#include <sys/stat.h>
-
-int	count_args(char **args)
-{
-	int	i;
-
-	i = 0;
-	while (args[i] != NULL)
-		i++;
-	return (i);
-}
-
-int	search_path(t_term *term, char *cmd, char *cmd_path)
-{
-	struct stat *statbuf;
-	char		**paths;
-	int			i;
-
-	i = 0;
-	statbuf = malloc(sizeof(*statbuf));
-	paths = ft_split(getenv_list(term->env_list, "PATH"), ':');
-	ft_bzero(cmd_path, PATH_MAX);
-	ft_strlcat(cmd_path, cmd, PATH_MAX);
-	stat(cmd_path, statbuf);
-	while (access(cmd_path, X_OK) || !(statbuf->st_mode & S_IFREG))
-	{
-		ft_bzero(cmd_path, PATH_MAX);
-		if (paths[i] == NULL)
-			break ;
-		ft_strlcpy(cmd_path, paths[i++], PATH_MAX);
-		ft_strlcat(cmd_path, "/", PATH_MAX);
-		ft_strlcat(cmd_path, cmd, PATH_MAX);
-		stat(cmd_path, statbuf);
-	}
-	free_split(&paths);
-	free(statbuf);
-	if (cmd_path[0] == 0)
-		return (1);
-	return (0);
-}
+#include "../minishell.h"
+#include "../parsing/parsing.h"
+#include "../builtins/builtins.h"
 
 int	handle_builtins(t_term *term, t_cmd *cmd)
 {
@@ -73,6 +33,30 @@ int	handle_builtins(t_term *term, t_cmd *cmd)
 	return (1);
 }
 
+void	handle_parent(t_cmd *cmd, pid_t child, int *status)
+{
+	if ((cmd->pipe)[0] > 0)
+	{
+		close((cmd->pipe)[0]);
+		close((cmd->pipe)[1]);
+		if (cmd->fd_in == (cmd->pipe)[0])
+			cmd->fd_in = 0;
+	}
+	if (cmd->sep == OP_PIPE)
+		cmd->fd_out = 1;
+	waitpid(child, status, 0);
+}
+
+void	handle_child(t_cmd *cmd, t_term *term, char *cmd_path)
+{
+	if (cmd->fd_in == (cmd->pipe)[0])
+		close((cmd->pipe)[1]);
+	dup2(cmd->fd_in, 0);
+	dup2(cmd->fd_out, 1);
+	execve(cmd_path, cmd->argv, construct_envp(term->env_list));
+	exit(EXIT_FAILURE);
+}
+
 void	exec_cmd(t_term *term, t_cmd *cmd)
 {
 	pid_t	child;
@@ -87,29 +71,14 @@ void	exec_cmd(t_term *term, t_cmd *cmd)
 		{
 			child = fork();
 			if (child > 0)
-			{
-				if ((cmd->pipe)[0] > 0)
-				{
-					close((cmd->pipe)[0]);
-					close((cmd->pipe)[1]);
-					if (cmd->fd_in == (cmd->pipe)[0])
-						cmd->fd_in = 0;
-				}
-				if (cmd->sep == OP_PIPE)
-					cmd->fd_out = 1;
-				waitpid(child, &status, 0);
-			}
+				handle_parent(cmd, child, &status);
 			else
-			{
-				if (cmd->fd_in == (cmd->pipe)[0])
-					close((cmd->pipe)[1]);
-				dup2(cmd->fd_in, 0);
-				dup2(cmd->fd_out, 1);
-				execve(cmd_path, cmd->argv, construct_envp(term->env_list));
-				exit(EXIT_FAILURE);
-			}
+				handle_child(cmd, term, cmd_path);
 		}
 		else
-			ft_printf("%s: command not found\n", (cmd->argv)[0]);
+		{
+			ft_putstr_fd(cmd->argv[0], 2);
+			ft_putendl_fd(": command not found", 2);
+		}
 	}
 }

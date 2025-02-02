@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 13:39:32 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/02 14:32:18 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/02 17:47:40 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,12 @@ void	cleanup(t_term *term);
 t_list	*get_entries(t_term *term);
 void	print_entries(t_list *entries);
 
-//Args
+//Input
+char	*get_prompt(t_term *term, char *home);
+
+//Exec
 int		count_args(char **args);
+int		search_path(t_term *term, char *cmd, char *cmd_path);
 
 //Env
 void	free_env(void *env);

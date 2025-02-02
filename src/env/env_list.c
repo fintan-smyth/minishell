@@ -6,55 +6,11 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:45:55 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/01 14:26:02 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/02 17:41:55 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
-void	free_env(void *data)
-{
-	t_env	*env;
-	env = (t_env *)data;
-	free(env->name);
-	free(env->var);
-	free(env);
-}
-
-char	*construct_envp_line(char *name, char *env)
-{
-	size_t	len;
-	char	*line;
-
-	len = ft_strlen(name);
-	len += ft_strlen(env);
-	line = ft_calloc(len + 2, 1);
-	ft_strlcpy(line, name, len + 2);
-	ft_strlcat(line, "=", len + 2);
-	ft_strlcat(line, env, len + 2);
-	return (line);
-}
-
-char	**construct_envp(t_list *env_list)
-{
-	char	**envp;
-	t_list	*current;
-	t_env	*env;
-	int		i;
-
-	current = env_list;
-	envp = ft_calloc(ft_lstsize(env_list) + 1, sizeof(char *));
-	i = 0;
-	while (current != NULL)
-	{
-		env = (t_env *)current->content;
-		if (env->var != NULL)
-			envp[i++] = construct_envp_line(env->name, env->var);
-		current = current->next;
-	}
-	envp[i] = NULL;
-	return (envp);
-}
+#include "../minishell.h"
 
 t_list	*getenv_node(t_list *env_list, char *name)
 {
@@ -87,11 +43,6 @@ char	*getenv_list(t_list *env_list, char *name)
 		return (NULL);
 	return (env->var);
 }
-
-// void	env_list_del(t_list *env_list, char *name)
-// {
-//
-// }
 
 char	*get_shell(t_term *term, char *name)
 {

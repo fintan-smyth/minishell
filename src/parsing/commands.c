@@ -77,7 +77,6 @@ t_list	*split_commands(t_list *tokens)
 		}
 		else if (is_redirect(current_tkn))
 			encode_redirect(current_tkn);
-		// else
 		current_tkn = current_tkn->next;
 	}
 	return (cmd_list);

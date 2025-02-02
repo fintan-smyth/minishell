@@ -29,7 +29,6 @@ void	ft_qsort(void **array, int left, int right,
 	int	i;
 	int	last;
 
-
 	if (left >= right)
 		return ;
 	swap_arr_pos(array, left, (left + right) / 2);

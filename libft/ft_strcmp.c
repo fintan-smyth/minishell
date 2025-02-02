@@ -14,7 +14,6 @@
 
 int	ft_strcmp(char *s1, char *s2)
 {
-	// ft_printf("s1:\t%s\ns2:\t%s\n\n", s1, s2);
 	while (*s1 == *s2)
 	{
 		if (*s1 == '\0')

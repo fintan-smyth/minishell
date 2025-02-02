@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:10:22 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/01 14:25:47 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/02 17:07:58 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	is_debug(t_term *term)
 
 void	prepare_args(t_cmd *cmd)
 {
-	cmd->argv = (char **)lst_to_arr(cmd->tokens);
+	cmd->argv = (char **)ft_lst_to_arr(cmd->tokens);
 	cmd->argc = count_args(cmd->argv);
 }
 

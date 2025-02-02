@@ -10,19 +10,26 @@ BUILD_DIR:= ./build
 
 SRC = $(SRC_DIR)/main.c \
 	  $(SRC_DIR)/entries.c \
-	  $(SRC_DIR)/exec.c \
-	  $(SRC_DIR)/environ.c \
+	  $(SRC_DIR)/prompt.c \
+	  $(SRC_DIR)/env/env_list.c \
+	  $(SRC_DIR)/env/envp.c \
+	  $(SRC_DIR)/exec/exec.c \
+	  $(SRC_DIR)/exec/exec_utils.c \
 	  $(SRC_DIR)/builtins/cd.c \
 	  $(SRC_DIR)/builtins/env.c \
 	  $(SRC_DIR)/builtins/pwd.c \
 	  $(SRC_DIR)/builtins/echo.c \
-	  $(SRC_DIR)/parsing/tokenise.c \
-	  $(SRC_DIR)/parsing/expansion.c \
 	  $(SRC_DIR)/parsing/strip_quotes.c \
 	  $(SRC_DIR)/parsing/commands.c \
-	  $(SRC_DIR)/parsing/redirection.c \
 	  $(SRC_DIR)/parsing/parse_line.c \
 	  $(SRC_DIR)/parsing/pipes.c \
+	  $(SRC_DIR)/parsing/tokenise/tokenise.c \
+	  $(SRC_DIR)/parsing/tokenise/tokenise_utils.c \
+	  $(SRC_DIR)/parsing/expansion/expansion.c \
+	  $(SRC_DIR)/parsing/expansion/expansion_vars.c \
+	  $(SRC_DIR)/parsing/expansion/expansion_wildcards.c \
+	  $(SRC_DIR)/parsing/redirect/redirect.c \
+	  $(SRC_DIR)/parsing/redirect/redirect_actions.c \
 
 OBJ = $(patsubst $(SRC_DIR)/%,$(BUILD_DIR)/%,$(SRC:.c=.o))
 
@@ -47,7 +54,12 @@ $(LIBFT):
 
 $(BUILD_DIR):
 	mkdir -p $@/builtins
-	mkdir -p $@/parsing
+	mkdir -p $@/parsing/tokenise
+	mkdir -p $@/parsing/expansion
+	mkdir -p $@/parsing/redirect
+	mkdir -p $@/exec
+	mkdir -p $@/env
+	mkdir -p $@/signals
 
 clean:
 	rm -rf ./build/

@@ -41,7 +41,7 @@ void	strip_quotes_token(char *token)
 
 void	strip_excess_nodes(t_list **tokens)
 {
-	t_list *current;
+	t_list	*current;
 	t_list	*next;
 
 	current = *tokens;
