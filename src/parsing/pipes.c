@@ -13,6 +13,7 @@
 #include "parsing.h"
 
 void	connect_pipes(t_list *cmd_list)
+// Loops over a list of commands and connects any necessary pipes.
 {
 	t_cmd	*current;
 	t_cmd	*next;

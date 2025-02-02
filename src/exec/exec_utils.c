@@ -13,17 +13,21 @@
 #include "../minishell.h"
 #include <sys/stat.h>
 
-int	count_args(char **args)
+int	count_args(char **argv)
+// Counts the number of args in an **argv.
 {
 	int	i;
 
 	i = 0;
-	while (args[i] != NULL)
+	while (argv[i] != NULL)
 		i++;
 	return (i);
 }
 
 int	search_path(t_term *term, char *cmd, char *cmd_path)
+// Searches the PATH variable to see if an executable matches the cmd name.
+// If found, places the full command path in the cmd_path array and returns 1
+// If no executable is found, cmd_path is empty and return 0
 {
 	struct stat	*statbuf;
 	char		**paths;
@@ -48,6 +52,6 @@ int	search_path(t_term *term, char *cmd, char *cmd_path)
 	free_split(&paths);
 	free(statbuf);
 	if (cmd_path[0] == 0)
-		return (1);
-	return (0);
+		return (0);
+	return (1);
 }

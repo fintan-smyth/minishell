@@ -13,6 +13,7 @@
 #include "../minishell.h"
 
 void	env(char **envp)
+// Executes the 'env' builtin command
 {
 	int	i;
 
@@ -23,6 +24,7 @@ void	env(char **envp)
 }
 
 int	validate_export(char *arg, char **equals)
+// Validates syntax for an 'export' command
 {
 	*equals = ft_strchr(arg, '=');
 	if (*equals == NULL)
@@ -33,6 +35,7 @@ int	validate_export(char *arg, char **equals)
 }
 
 void	export_env(t_term *term, int argc, char **argv)
+// Executes the 'export' builtin command
 {
 	char	*equals;
 	t_list	*existing;
@@ -61,6 +64,7 @@ void	export_env(t_term *term, int argc, char **argv)
 }
 
 void	unset_env(t_term *term, int argc, char **argv)
+// Executes the 'unset' builtin command
 {
 	t_list	*env_node;
 	t_env	*env;

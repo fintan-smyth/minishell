@@ -15,6 +15,8 @@
 #include <readline/readline.h>
 
 void	redirect_out(t_cmd *cmd, t_list **rd_token, t_list *prev, int mode)
+// Applies file redirection for the redirect out (>) or append (>>) operator.
+// Trims redirection tokens from the token list.
 {
 	int		fd;
 	int		fmode;
@@ -44,6 +46,8 @@ void	redirect_out(t_cmd *cmd, t_list **rd_token, t_list *prev, int mode)
 }
 
 void	redirect_in(t_cmd *cmd, t_list **rd_token, t_list *prev)
+// Applies file redirection for the redirect in (<) operator.
+// Trims redirection tokens from the token list.
 {
 	int		fd;
 
@@ -67,6 +71,8 @@ void	redirect_in(t_cmd *cmd, t_list **rd_token, t_list *prev)
 }
 
 t_list	*read_hdoc(char *delim)
+// Prompts the user for multi line text input.
+// Input stops being read when a line containing just 'delim' is found.
 {
 	char	*line;
 	t_list	*hdoc;
@@ -91,6 +97,8 @@ t_list	*read_hdoc(char *delim)
 }
 
 void	write_hdoc(t_cmd *cmd, t_list *hdoc, t_term *term, int expand)
+// Writes text input collected by the heredoc into the heredoc pipe,
+// to be later read from by a command.
 {
 	t_list	*current;
 	char	*var;
@@ -110,6 +118,8 @@ void	write_hdoc(t_cmd *cmd, t_list *hdoc, t_term *term, int expand)
 }
 
 void	redirect_hdoc(t_cmd *cmd, t_list **rd_token, t_list *prev, t_term *term)
+// Applies file redirection for the heredoc (<<) operator.
+// Trims redirection tokens from the token list.
 {
 	char	*delim;
 	int		expand;

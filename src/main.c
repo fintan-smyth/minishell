@@ -18,6 +18,7 @@
 void	exec_cmd(t_term *term, t_cmd *cmd);
 
 void	cleanup(t_term *term)
+// Cleans up the t_term struct before exit
 {
 	ft_lstclear(&term->env_list, free_env);
 	rl_clear_history();
@@ -26,6 +27,7 @@ void	cleanup(t_term *term)
 }
 
 t_term	*init_term(char *name, char **line)
+// Initialises a t_term structure
 {
 	t_term	*term;
 
@@ -37,6 +39,8 @@ t_term	*init_term(char *name, char **line)
 }
 
 void	execute_cmd_list(t_list **cmd_list, t_term *term, char *line)
+// Executes a series of commands stored in the cmd_list.
+// Frees the cmd_list and the line read to create it.
 {
 	t_list	*current_cmd;
 

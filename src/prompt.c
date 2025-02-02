@@ -13,6 +13,7 @@
 #include "minishell.h"
 
 int	check_in_home(char *path, char *home)
+// Checks if the path is within the HOME directory
 {
 	char	*terminated;
 	size_t	size;
@@ -31,6 +32,7 @@ int	check_in_home(char *path, char *home)
 }
 
 char	*get_prompt(t_term *term, char *home)
+// Constructs a string to be used as the prompt for readline()
 {
 	size_t	prompt_size;
 	char	*path;

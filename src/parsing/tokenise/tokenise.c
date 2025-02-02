@@ -13,6 +13,9 @@
 #include "../parsing.h"
 
 void	delimit_token(t_list **tokens, char **lp, int *i)
+// Adds a new node to the list of tokens, containing *i characters of
+// text starting at *lp.
+// Moves *lp forward and resets *i.
 {
 	t_list	*new_token;
 
@@ -23,6 +26,7 @@ void	delimit_token(t_list **tokens, char **lp, int *i)
 }
 
 int	apply_quoting_tokenise(int *quoting, char c, char *q_char)
+// Toggles quoting rules when tokenising a line.
 {
 	int	out;
 
@@ -43,6 +47,7 @@ int	apply_quoting_tokenise(int *quoting, char c, char *q_char)
 }
 
 int	handle_ops_tokenise(t_list **tokens, char **lp, int *i)
+// Handles operators when tokenising a line.
 {
 	int	out;
 
@@ -62,6 +67,7 @@ int	handle_ops_tokenise(t_list **tokens, char **lp, int *i)
 }
 
 int	handle_space_tokenise(t_list **tokens, char **line, char **lp, int *i)
+// Handles whitespace when tokenising a line.
 {
 	int	out;
 
@@ -81,6 +87,8 @@ int	handle_space_tokenise(t_list **tokens, char **line, char **lp, int *i)
 }
 
 t_list	*tokenise(char *line)
+// Splits a line into tokens according to posix shell syntax rules.
+// Returns a list of tokens.
 {
 	t_list	*tokens;
 	char	*lp;

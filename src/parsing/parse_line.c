@@ -14,6 +14,7 @@
 #include "parsing.h"
 
 void	print_parse_debug(t_list *tokens, t_cmd *cmd, char *msg)
+// Prints debugging output if MS_DEBUG environemnt variable is set to ON.
 {
 	ft_printf("\e[1;3%dm%s\n\e[m", *msg % 6 + 1, msg);
 	print_tokens(tokens);
@@ -31,6 +32,7 @@ void	print_parse_debug(t_list *tokens, t_cmd *cmd, char *msg)
 }
 
 int	is_debug(t_term *term)
+// Checks if MS_DEBUG environment variable is set to ON.
 {
 	char	*debug;
 
@@ -43,12 +45,16 @@ int	is_debug(t_term *term)
 }
 
 void	prepare_args(t_cmd *cmd)
+// Places 'argc' and 'argv' variables into t_cmd struct to be
+// used during execution.
 {
 	cmd->argv = (char **)ft_lst_to_arr(cmd->tokens);
 	cmd->argc = count_args(cmd->argv);
 }
 
 t_list	*parse_line(char *line, t_term *term)
+// Parses a line into a list of commands to be executed, applying any
+// necessary expansion and redirection.
 {
 	t_list	*tokens;
 	t_list	*cmd_list;

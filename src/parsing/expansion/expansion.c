@@ -14,6 +14,8 @@
 #include "../../minishell.h"
 
 void	delimit_retoken(t_list **next, char *start)
+// Adds a new node to the list of tokens before 'next', containing
+// the string at 'start'
 {
 	t_list	*new;
 
@@ -22,6 +24,7 @@ void	delimit_retoken(t_list **next, char *start)
 }
 
 void	retokenise(t_list *token)
+// Retokenises the line after any unquoted spaces are added by expansions
 {
 	t_list	*current;
 	int		i;
@@ -48,6 +51,7 @@ void	retokenise(t_list *token)
 }
 
 void	expand_token_list(t_list *tokens, t_term *term)
+// Expands any shell variables or wildcards in an existing list of tokens
 {
 	t_list	*current;
 

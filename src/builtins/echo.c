@@ -13,6 +13,7 @@
 #include "../parsing/parsing.h"
 
 void	echo(t_cmd *cmd)
+// Executes the 'echo' builtin command
 {
 	int		i;
 	int		nl;

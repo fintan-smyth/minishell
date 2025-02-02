@@ -13,6 +13,7 @@
 #include "../minishell.h"
 
 void	free_env(void *data)
+// Frees a t_env struct
 {
 	t_env	*env;
 
@@ -23,6 +24,7 @@ void	free_env(void *data)
 }
 
 char	*construct_envp_line(char *name, char *env)
+// Constructs a line to be used in the **envp array
 {
 	size_t	len;
 	char	*line;
@@ -37,6 +39,7 @@ char	*construct_envp_line(char *name, char *env)
 }
 
 char	**construct_envp(t_list *env_list)
+// Constructs the **envp array to pe passed to execve() calls
 {
 	char	**envp;
 	t_list	*current;

@@ -15,6 +15,9 @@
 #include "../builtins/builtins.h"
 
 int	handle_builtins(t_term *term, t_cmd *cmd)
+// Checks if a given command is a builtin, and if so executes it.
+// Returns 1 if command was a builtin
+// Returns 0 if command was not a builtin
 {
 	if (!ft_strncmp((cmd->argv)[0], "cd", 3))
 		cd(term, cmd);
@@ -34,6 +37,8 @@ int	handle_builtins(t_term *term, t_cmd *cmd)
 }
 
 void	handle_parent(t_cmd *cmd, pid_t child, int *status)
+// Branch of commands to be executed by parent after fork.
+// Cleans up fds, waits for child to exit, and collects exit status.
 {
 	if ((cmd->pipe)[0] > 0)
 	{
@@ -48,6 +53,8 @@ void	handle_parent(t_cmd *cmd, pid_t child, int *status)
 }
 
 void	handle_child(t_cmd *cmd, t_term *term, char *cmd_path)
+// Branch of commands to be executed by child after fork.
+// dups the appropriate file descriptors and executes the passed in command.
 {
 	if (cmd->fd_in == (cmd->pipe)[0])
 		close((cmd->pipe)[1]);
@@ -58,6 +65,7 @@ void	handle_child(t_cmd *cmd, t_term *term, char *cmd_path)
 }
 
 void	exec_cmd(t_term *term, t_cmd *cmd)
+// Executes the passed in command.
 {
 	pid_t	child;
 	int		status;
@@ -67,7 +75,7 @@ void	exec_cmd(t_term *term, t_cmd *cmd)
 		return ;
 	else if (!handle_builtins(term, cmd))
 	{
-		if (search_path(term, (cmd->argv)[0], cmd_path) == 0)
+		if (search_path(term, (cmd->argv)[0], cmd_path) != 0)
 		{
 			child = fork();
 			if (child > 0)

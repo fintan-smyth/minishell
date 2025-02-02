@@ -14,6 +14,9 @@
 #include "../parsing/parsing.h"
 
 void	update_wd(t_term *term)
+// Updates data about the current working directory
+// - the $PWD and $OLDPWD environment variables
+// - the cwd field of the t_term struct
 {
 	t_env	*pwd;
 	t_env	*oldpwd;
@@ -27,6 +30,8 @@ void	update_wd(t_term *term)
 }
 
 static char	*get_path(t_list *env_list, char **argv, int *revert)
+// Gets the path used to change directory.
+// Sets the 'revert' variable used to determine printing directory for "cd -"
 {
 	char	*path;
 
@@ -44,6 +49,7 @@ static char	*get_path(t_list *env_list, char **argv, int *revert)
 }
 
 void	cd(t_term *term, t_cmd *cmd)
+// Executes the 'cd' builtin command
 {
 	char	*path;
 	int		revert;

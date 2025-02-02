@@ -13,6 +13,8 @@
 #include "../parsing.h"
 
 int	encode_wildcards(char *token)
+// Replaces valid wildcards with an encoded character, to differentiate
+// from characters blocked by quoting or otherwise not to be expanded
 {
 	int		i;
 	int		wild;
@@ -41,7 +43,10 @@ int	encode_wildcards(char *token)
 	return (wild);
 }
 
-void	search_entries(char **expanded, t_term *term, char *linecpy)
+void	search_entries(char **expanded, t_term *term, char *to_match)
+// Searches entries in the cwd to find those matching
+// the 'to_match' wildcard string.
+// Concatenates any matching entry names onto the 'expanded' string.
 {
 	t_list	*entries;
 	char	**d_names;
@@ -55,9 +60,9 @@ void	search_entries(char **expanded, t_term *term, char *linecpy)
 	i = -1;
 	while (d_names[++i] != NULL)
 	{
-		if (*d_names[i] == '.' && *linecpy != '.')
+		if (*d_names[i] == '.' && *to_match != '.')
 			;
-		else if (ft_match_wc(d_names[i], linecpy, 5))
+		else if (ft_match_wc(d_names[i], to_match, 5))
 		{
 			if (*expanded != NULL)
 				*expanded = extend_line(*expanded, " ");
@@ -69,6 +74,7 @@ void	search_entries(char **expanded, t_term *term, char *linecpy)
 }
 
 void	expand_wildcards(char **line, t_term *term)
+// Expands any wildcards in a token.
 {
 	char	*linecpy;
 	char	*expanded;

@@ -13,6 +13,7 @@
 #include "../minishell.h"
 
 t_list	*getenv_node(t_list *env_list, char *name)
+// Returns the env_list node matching with name matching 'name'
 {
 	t_list	*current;
 	char	*env_name;
@@ -31,6 +32,7 @@ t_list	*getenv_node(t_list *env_list, char *name)
 }
 
 char	*getenv_list(t_list *env_list, char *name)
+// Returns the environment variable with name matching 'name'
 {
 	t_env	*env;
 	t_list	*node;
@@ -45,6 +47,7 @@ char	*getenv_list(t_list *env_list, char *name)
 }
 
 char	*get_shell(t_term *term, char *name)
+// Returns the path of the running minishell executable
 {
 	size_t	len;
 	char	*shell;
@@ -61,7 +64,9 @@ char	*get_shell(t_term *term, char *name)
 	return (shell);
 }
 
-void	env_list_add(t_list **lst, char *name, char *var)
+void	env_list_add(t_list **env_list, char *name, char *var)
+// Adds a new environment variable to the env_list, with
+// name 'name' and variable 'var'.
 {
 	t_env	*env;
 
@@ -71,10 +76,11 @@ void	env_list_add(t_list **lst, char *name, char *var)
 		env->var = ft_strdup(var);
 	else
 		env->var = NULL;
-	ft_lstadd_back(lst, ft_lstnew(env));
+	ft_lstadd_back(env_list, ft_lstnew(env));
 }
 
 void	init_env_list(t_term *term, char *name)
+// Initialises the env_list with variables in the shell's enviromnent
 {
 	char	*shell;
 

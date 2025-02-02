@@ -13,6 +13,7 @@
 #include "../parsing.h"
 
 int	is_op(char c)
+// Checks if a character can form part of an operator.
 {
 	if (ft_strchr("><|&", c) == NULL)
 		return (0);
@@ -20,6 +21,8 @@ int	is_op(char c)
 }
 
 int	matches_prev_op(char c, char prev)
+// Checks if a character can be used with the previous character to
+// form an operator.
 {
 	if (prev == '<' && c == '<')
 		return (1);
@@ -33,6 +36,7 @@ int	matches_prev_op(char c, char prev)
 }
 
 void	print_tokens(t_list *tokens)
+// Prints a list of tokens for debugging purposes.
 {
 	t_list	*current;
 

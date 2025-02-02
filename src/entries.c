@@ -14,6 +14,8 @@
 #include <dirent.h>
 
 t_entry	*copy_dirent(struct dirent *dirent)
+// Copies the relevant data about a directory entry
+// and returns it in a t_entry struct
 {
 	t_entry	*entry;
 
@@ -24,6 +26,8 @@ t_entry	*copy_dirent(struct dirent *dirent)
 }
 
 t_list	*get_entries(t_term *term)
+// Returns a list of the t_entry structs, containing data
+// about the entries in the current working directory,
 {
 	struct dirent	*dirent;
 	DIR				*dir;
@@ -48,16 +52,19 @@ t_list	*get_entries(t_term *term)
 }
 
 char	*get_dname(t_list *node)
+// Returns the name of an entry from a list node containing its t_entry struct
 {
 	return (((t_entry *)node->content)->d_name);
 }
 
 unsigned char	get_dtype(t_list *node)
+// Returns the type of an entry from a list node containing its t_entry struct
 {
 	return (((t_entry *)node->content)->d_type);
 }
 
 void	print_entries(t_list *entries)
+// Prints a list of t_entry structs
 {
 	t_list	*current;
 

@@ -13,6 +13,7 @@
 #include "../parsing.h"
 
 int	valid_var_chr(char c)
+// Checks if a char is valid to be used in an environment variable name
 {
 	if (ft_isalnum(c))
 		return (1);
@@ -22,6 +23,8 @@ int	valid_var_chr(char c)
 }
 
 char	*extend_line(char *line, char *extra)
+// returns 'line' with 'extra' added to the end.
+// If replaced, the old 'line' is freed
 {
 	char	*out;
 
@@ -37,6 +40,9 @@ char	*extend_line(char *line, char *extra)
 }
 
 int	expand_var_inplace(char **line, char *varp, t_term *term)
+// Expands the environment variable at *varp in place.
+// Returns 1 if variable name is valid so expansion is attempted.
+// Returns 0 if no expansion attempted, leaving the '$' in place
 {
 	char	*expanded;
 	char	*env_name;
@@ -66,6 +72,7 @@ int	expand_var_inplace(char **line, char *varp, t_term *term)
 }
 
 void	expand_token_var(char **token, t_term *term)
+// Expands all environment variables in a token not blocked by quoting
 {
 	char	*varp;
 	int		i;

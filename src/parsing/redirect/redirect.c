@@ -15,6 +15,8 @@
 #include <readline/readline.h>
 
 int	is_redirect(t_list *token)
+// Checks if a token is an unencoded redirect operator.
+// If it is, returns an int corresponding tow which operator it is.
 {
 	char	*text;
 
@@ -31,6 +33,9 @@ int	is_redirect(t_list *token)
 }
 
 void	encode_redirect(t_list *token)
+// Replaces valid redirect operators with an encoded character, to
+// differentiate from characters blocked by quoting orotherwise not
+// to be expanded
 {
 	int		mode;
 
@@ -41,6 +46,7 @@ void	encode_redirect(t_list *token)
 }
 
 void	apply_redirection(t_cmd *cmd, t_term *term)
+// Executes all redirection for a command.
 {
 	t_list	*current;
 	t_list	*prev;

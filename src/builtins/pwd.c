@@ -14,6 +14,7 @@
 #include "../parsing/parsing.h"
 
 void	pwd(t_term *term, t_cmd *cmd)
+// Executes the 'pwd' builtin command
 {
 	ft_putendl_fd(term->cwd, cmd->fd_out);
 }

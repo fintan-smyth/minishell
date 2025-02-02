@@ -13,6 +13,7 @@
 #include "parsing.h"
 
 t_cmd	*construct_cmd(t_list *tokens)
+// Returns a memory allocated t_cmd struct containing 'tokens'.
 {
 	t_cmd	*cmd;
 
@@ -26,6 +27,7 @@ t_cmd	*construct_cmd(t_list *tokens)
 }
 
 int	is_cmd_sep(t_list *token)
+// Checks if a token is used to separate commands.
 {
 	char	*text;
 
@@ -40,6 +42,7 @@ int	is_cmd_sep(t_list *token)
 }
 
 void	free_cmd(void *cmdptr)
+// Frees a t_cmd struct.
 {
 	t_cmd	*cmd;
 
@@ -54,6 +57,8 @@ void	free_cmd(void *cmdptr)
 }
 
 t_list	*split_commands(t_list *tokens)
+// Splits a list of tokens into a list of commands to be executed in sequence.
+// Returns the list of t_cmd structs.
 {
 	t_list	*cmd_list;
 	t_list	*current_tkn;
