@@ -1,7 +1,5 @@
-# Compiler
 CC = cc
 
-# Compiler flags
 CFLAGS = -Wall -Wextra -Werror -g3
 
 SRC_DIR := ./src
@@ -39,9 +37,7 @@ LIBFT = libft/libft.a
 
 mand: $(NAME)
 
-# bonus: $(NAME_BONUS)
-
-all: mand bonus
+all: mand
 
 $(NAME): $(LIBFT) $(BUILD_DIR) $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) -L ./libft -lft -lreadline
@@ -66,7 +62,7 @@ clean:
 	make -C libft/ clean
 
 fclean: clean
-	rm -rf $(NAME) # $(NAME_BONUS)
+	rm -rf $(NAME)
 	make -C libft/ fclean
 
 re: fclean all
