@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 18:45:57 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/01 21:35:46 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/02 14:38:04 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,11 +123,36 @@ int	encode_wildcards(char *token)
 	return (wild);
 }
 
+void	search_entries(char **expanded, t_term *term, char *linecpy)
+{
+	t_list	*entries;
+	char	**d_names;
+	int		i;
+
+	entries = NULL;
+	entries = get_entries(term);
+	d_names = (char **)lst_to_arr(entries);
+	ft_qsort((void **)d_names, 0, ft_lstsize(entries) - 1,
+		(int (*)(void *, void *))ft_strcmp);
+	i = -1;
+	while (d_names[++i] != NULL)
+	{
+		if (*d_names[i] == '.' && *linecpy != '.')
+			;
+		else if (ft_match_wc(d_names[i], linecpy, 5))
+		{
+			if (*expanded != NULL)
+				*expanded = extend_line(*expanded, " ");
+			*expanded = extend_line(*expanded, d_names[i]);
+		}
+	}
+	free(d_names);
+	ft_lstclear(&entries, free);
+}
+
 void	expand_wildcards(char **line, t_term *term)
 {
-	t_list	*entry;
 	char	*linecpy;
-	char	*d_name;
 	char	*expanded;
 
 	expanded = NULL;
@@ -135,20 +160,7 @@ void	expand_wildcards(char **line, t_term *term)
 	if (!encode_wildcards(linecpy))
 		return (free(linecpy));
 	strip_quotes_token(linecpy);
-	entry = term->entries;
-	while (entry != NULL)
-	{
-		d_name = ((t_entry *)entry->content)->d_name;
-		if (*d_name == '.' && *linecpy != '.')
-			;
-		else if (ft_match_wc(d_name, linecpy, 5))
-		{
-			if (expanded != NULL)
-				expanded = extend_line(expanded, " ");
-			expanded = extend_line(expanded, d_name);
-		}
-		entry = entry->next;
-	}
+	search_entries(&expanded, term, linecpy);
 	free(linecpy);
 	if (expanded == NULL)
 		return ;
