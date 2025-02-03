@@ -38,9 +38,9 @@ void	prompt_add_exit_status(char *prompt, int status, size_t prompt_size)
 	char	*status_str;
 
 	status_str = ft_itoa(WEXITSTATUS(status));
-	ft_strlcat(prompt, " \e[m(\e[1;31m", prompt_size);
+	ft_strlcat(prompt, " \e[m\e[1;31m", prompt_size);
 	ft_strlcat(prompt, status_str, prompt_size);
-	ft_strlcat(prompt, "\e[m)", prompt_size);
+	ft_strlcat(prompt, "\e[m", prompt_size);
 	free(status_str);
 }
 
@@ -55,7 +55,7 @@ char	*get_prompt(t_term *term, char *home)
 	term->prompt = ft_calloc(prompt_size, 1);
 	ft_strlcat(term->prompt, "\e[36m", prompt_size);
 	ft_strlcat(term->prompt, getenv_list(term->env_list, "USER"), prompt_size);
-	ft_strlcat(term->prompt, "\e[31m@minishell\e[m:\e[1;34m ", prompt_size);
+	ft_strlcat(term->prompt, "\e[35m@minishell\e[m:\e[1;34m ", prompt_size);
 	if (check_in_home(term->cwd, home))
 	{
 		ft_strlcat(term->prompt, "~", prompt_size);
