@@ -37,6 +37,7 @@ typedef struct s_term
 	char	cwd[PATH_MAX];
 	char	*prompt;
 	t_list	*env_list;
+	int		status;
 }	t_term;
 
 //Cleanup

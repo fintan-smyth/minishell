@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <stdlib.h>
 
 int	check_in_home(char *path, char *home)
 // Checks if the path is within the HOME directory
@@ -36,6 +37,7 @@ char	*get_prompt(t_term *term, char *home)
 {
 	size_t	prompt_size;
 	char	*path;
+	char	*status;
 
 	free(term->prompt);
 	prompt_size = ft_strlen(term->cwd) + 200;
@@ -52,6 +54,15 @@ char	*get_prompt(t_term *term, char *home)
 	}
 	else
 		ft_strlcat(term->prompt, term->cwd, prompt_size);
+	if (term->status > 0)
+	{
+		// status = strerror(WEXITSTATUS(term->status));
+		status = ft_itoa(WEXITSTATUS(term->status));
+		ft_strlcat(term->prompt, " \e[m(\e[1;31m", prompt_size);
+		ft_strlcat(term->prompt, status, prompt_size);
+		ft_strlcat(term->prompt, "\e[m)", prompt_size);
+		free(status);
+	}
 	ft_strlcat(term->prompt, "\e[1;32m > \e[m", prompt_size);
 	return (term->prompt);
 }

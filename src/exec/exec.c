@@ -64,15 +64,17 @@ void	handle_child(t_cmd *cmd, t_term *term, char *cmd_path)
 	exit(EXIT_FAILURE);
 }
 
-void	exec_cmd(t_term *term, t_cmd *cmd)
+int	exec_cmd(t_term *term, t_cmd *cmd)
 // Executes the passed in command.
+// Returns the exit status of an executed command.
 {
 	pid_t	child;
 	int		status;
 	char	cmd_path[PATH_MAX];
 
+	status = 0;
 	if ((cmd->argv)[0] == NULL)
-		return ;
+		return (0);
 	else if (!handle_builtins(term, cmd))
 	{
 		if (search_path(term, (cmd->argv)[0], cmd_path) != 0)
@@ -89,4 +91,5 @@ void	exec_cmd(t_term *term, t_cmd *cmd)
 			ft_putendl_fd(": command not found", 2);
 		}
 	}
+	return (status);
 }
