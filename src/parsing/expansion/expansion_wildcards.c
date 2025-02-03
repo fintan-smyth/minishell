@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion_wildcards.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
+/*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 18:00:10 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/02 18:10:33 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/03 20:27:30 by myiu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	encode_wildcards(char *token)
 	return (wild);
 }
 
-void	search_entries(char **expanded, t_term *term, char *to_match)
+void	search_entries(char **expanded, t_prog *term, char *to_match)
 // Searches entries in the cwd to find those matching
 // the 'to_match' wildcard string.
 // Concatenates any matching entry names onto the 'expanded' string.
@@ -73,7 +73,7 @@ void	search_entries(char **expanded, t_term *term, char *to_match)
 	ft_lstclear(&entries, free);
 }
 
-void	expand_wildcards(char **line, t_term *term)
+void	expand_wildcards(char **line, t_prog *term)
 // Expands any wildcards in a token.
 {
 	char	*linecpy;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
+/*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 19:00:13 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/01 15:07:14 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/03 20:27:30 by myiu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@
 # include "../parsing/parsing.h"
 
 void	echo(t_cmd *cmd);
-void	cd(t_term *term, t_cmd *cmd);
-void	pwd(t_term *term, t_cmd *cmd);
+void	cd(t_prog *term, t_cmd *cmd);
+void	pwd(t_prog *term, t_cmd *cmd);
 void	env(char **envp);
-void	export_env(t_term *term, int argc, char **argv);
-void	unset_env(t_term *term, int argc, char **argv);
+void	export_env(t_prog *term, int argc, char **argv);
+void	unset_env(t_prog *term, int argc, char **argv);
 
 #endif // BUILTINS_H

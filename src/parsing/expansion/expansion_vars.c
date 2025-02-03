@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion_vars.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
+/*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 17:57:45 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/02 18:10:21 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/03 20:27:30 by myiu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ char	*extend_line(char *line, char *extra)
 	return (out);
 }
 
-int	expand_var_inplace(char **line, char *varp, t_term *term)
+int	expand_var_inplace(char **line, char *varp, t_prog *term)
 // Expands the environment variable at *varp in place.
 // Returns 1 if variable name is valid so expansion is attempted.
 // Returns 0 if no expansion attempted, leaving the '$' in place
@@ -71,7 +71,7 @@ int	expand_var_inplace(char **line, char *varp, t_term *term)
 	return (1);
 }
 
-void	expand_token_var(char **token, t_term *term)
+void	expand_token_var(char **token, t_prog *term)
 // Expands all environment variables in a token not blocked by quoting
 {
 	char	*varp;

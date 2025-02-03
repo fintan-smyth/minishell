@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
+/*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:20:50 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/31 00:42:13 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/03 20:27:30 by myiu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 #include "../parsing/parsing.h"
 
-void	update_wd(t_term *term)
+void	update_wd(t_prog *term)
 // Updates data about the current working directory
 // - the $PWD and $OLDPWD environment variables
-// - the cwd field of the t_term struct
+// - the cwd field of the t_prog struct
 {
 	t_env	*pwd;
 	t_env	*oldpwd;
@@ -48,7 +48,7 @@ static char	*get_path(t_list *env_list, char **argv, int *revert)
 	return (path);
 }
 
-void	cd(t_term *term, t_cmd *cmd)
+void	cd(t_prog *term, t_cmd *cmd)
 // Executes the 'cd' builtin command
 {
 	char	*path;

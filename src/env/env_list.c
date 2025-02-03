@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   environ.c                                          :+:      :+:    :+:   */
+/*   env_list.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
+/*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:45:55 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/02 17:41:55 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/03 20:27:30 by myiu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ char	*getenv_list(t_list *env_list, char *name)
 	return (env->var);
 }
 
-char	*get_shell(t_term *term, char *name)
+char	*get_shell(t_prog *term, char *name)
 // Returns the path of the running minishell executable
 {
 	size_t	len;
@@ -79,7 +79,7 @@ void	env_list_add(t_list **env_list, char *name, char *var)
 	ft_lstadd_back(env_list, ft_lstnew(env));
 }
 
-void	init_env_list(t_term *term, char *name)
+void	init_env_list(t_prog *term, char *name)
 // Initialises the env_list with variables in the shell's enviromnent
 {
 	char	*shell;

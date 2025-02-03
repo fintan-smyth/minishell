@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_line.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
+/*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:10:22 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/02 17:07:58 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/03 20:27:30 by myiu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	print_parse_debug(t_list *tokens, t_cmd *cmd, char *msg)
 	}
 }
 
-int	is_debug(t_term *term)
+int	is_debug(t_prog *term)
 // Checks if MS_DEBUG environment variable is set to ON.
 {
 	char	*debug;
@@ -52,7 +52,7 @@ void	prepare_args(t_cmd *cmd)
 	cmd->argc = count_args(cmd->argv);
 }
 
-t_list	*parse_line(char *line, t_term *term)
+t_list	*parse_line(char *line, t_prog *term)
 // Parses a line into a list of commands to be executed, applying any
 // necessary expansion and redirection.
 {

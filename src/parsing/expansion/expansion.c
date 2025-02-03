@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
+/*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 18:45:57 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/02 18:10:12 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/03 20:27:30 by myiu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	retokenise(t_list *token)
 	}
 }
 
-void	expand_token_list(t_list *tokens, t_term *term)
+void	expand_token_list(t_list *tokens, t_prog *term)
 // Expands any shell variables or wildcards in an existing list of tokens
 {
 	t_list	*current;

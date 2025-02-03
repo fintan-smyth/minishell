@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
+/*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 17:36:43 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/02 17:37:20 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/03 20:27:30 by myiu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	prompt_add_exit_status(char *prompt, int status, size_t prompt_size)
 	free(status_str);
 }
 
-char	*get_prompt(t_term *term, char *home)
+char	*get_prompt(t_prog *term, char *home)
 // Constructs a string to be used as the prompt for readline()
 {
 	size_t	prompt_size;

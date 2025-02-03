@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   entries.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
+/*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:18:41 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/02 14:33:14 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/03 20:27:30 by myiu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ t_entry	*copy_dirent(struct dirent *dirent)
 	return (entry);
 }
 
-t_list	*get_entries(t_term *term)
+t_list	*get_entries(t_prog *term)
 // Returns a list of the t_entry structs, containing data
 // about the entries in the current working directory,
 {

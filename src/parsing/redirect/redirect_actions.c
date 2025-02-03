@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect_actions.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
+/*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 18:04:38 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/02 18:10:50 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/03 20:27:30 by myiu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ t_list	*read_hdoc(char *delim)
 	return (hdoc);
 }
 
-void	write_hdoc(t_cmd *cmd, t_list *hdoc, t_term *term, int expand)
+void	write_hdoc(t_cmd *cmd, t_list *hdoc, t_prog *term, int expand)
 // Writes text input collected by the heredoc into the heredoc pipe,
 // to be later read from by a command.
 {
@@ -119,7 +119,7 @@ void	write_hdoc(t_cmd *cmd, t_list *hdoc, t_term *term, int expand)
 	close(cmd->hdpipe[1]);
 }
 
-void	redirect_hdoc(t_cmd *cmd, t_list **rd_token, t_list *prev, t_term *term)
+void	redirect_hdoc(t_cmd *cmd, t_list **rd_token, t_list *prev, t_prog *term)
 // Applies file redirection for the heredoc (<<) operator.
 // Trims redirection tokens from the token list.
 {

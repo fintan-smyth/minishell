@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirect.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
+/*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 17:19:48 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/02 18:10:46 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/03 20:27:30 by myiu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	encode_redirect(t_list *token)
 	*(char *)token->content = mode;
 }
 
-void	apply_redirection(t_cmd *cmd, t_term *term)
+void	apply_redirection(t_cmd *cmd, t_prog *term)
 // Executes all redirection for a command.
 {
 	t_list	*current;

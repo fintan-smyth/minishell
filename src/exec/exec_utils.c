@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
+/*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 17:46:00 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/02 17:46:27 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/03 20:27:30 by myiu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	count_args(char **argv)
 	return (i);
 }
 
-int	search_path(t_term *term, char *cmd, char *cmd_path)
+int	search_path(t_prog *term, char *cmd, char *cmd_path)
 // Searches the PATH variable to see if an executable matches the cmd name.
 // If found, places the full command path in the cmd_path array and returns 1
 // If no executable is found, cmd_path is empty and return 0
