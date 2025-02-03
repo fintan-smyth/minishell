@@ -40,6 +40,7 @@ void	redirect_out(t_cmd *cmd, t_list **rd_token, t_list *prev, int mode)
 	if (cmd->fd_out > 2)
 		close(cmd->fd_out);
 	cmd->fd_out = fd;
+	cmd->rd_out = 1;
 	ft_lstdel_next(prev, free);
 	ft_lstdel_next(prev, free);
 	*rd_token = NULL;
@@ -65,6 +66,7 @@ void	redirect_in(t_cmd *cmd, t_list **rd_token, t_list *prev)
 	if (cmd->fd_in > 2)
 		close(cmd->fd_in);
 	cmd->fd_in = fd;
+	cmd->rd_in = 1;
 	ft_lstdel_next(prev, free);
 	ft_lstdel_next(prev, free);
 	*rd_token = NULL;
@@ -134,6 +136,7 @@ void	redirect_hdoc(t_cmd *cmd, t_list **rd_token, t_list *prev, t_term *term)
 	}
 	hdoc = read_hdoc(delim);
 	write_hdoc(cmd, hdoc, term, expand);
+	cmd->rd_in = 1;
 	ft_lstclear(&hdoc, free);
 	ft_lstdel_next(prev, free);
 	ft_lstdel_next(prev, free);

@@ -15,6 +15,7 @@
 
 # include "../minishell.h"
 # include <fcntl.h>
+# include <stdbool.h>
 
 typedef struct s_cmd
 {
@@ -27,6 +28,8 @@ typedef struct s_cmd
 	int		pipe[2];
 	int		hdpipe[2];
 	int		error;
+	bool	rd_in;
+	bool	rd_out;
 }	t_cmd;
 
 enum

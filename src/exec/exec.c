@@ -42,13 +42,9 @@ void	handle_parent(t_cmd *cmd, pid_t child, int *status)
 {
 	if ((cmd->pipe)[0] > 0)
 	{
-		close((cmd->pipe)[0]);
 		close((cmd->pipe)[1]);
-		if (cmd->fd_in == (cmd->pipe)[0])
-			cmd->fd_in = 0;
+		close((cmd->pipe)[0]);
 	}
-	if (cmd->sep == OP_PIPE)
-		cmd->fd_out = 1;
 	waitpid(child, status, 0);
 }
 

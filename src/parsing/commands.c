@@ -49,9 +49,9 @@ void	free_cmd(void *cmdptr)
 	cmd = (t_cmd *)cmdptr;
 	ft_lstclear(&cmd->tokens, free);
 	free(cmd->argv);
-	if (cmd->fd_in > 2)
+	if (cmd->rd_in == 1)
 		close(cmd->fd_in);
-	if (cmd->fd_out > 2)
+	if (cmd->rd_out == 1)
 		close(cmd->fd_out);
 	free(cmdptr);
 }
