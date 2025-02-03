@@ -49,7 +49,20 @@ void	execute_cmd_list(t_list **cmd_list, t_term *term, char *line)
 	while (current_cmd != NULL)
 	{
 		term->status = exec_cmd(term, (t_cmd *)current_cmd->content);
-		current_cmd = current_cmd->next;
+		if (term->status == 0)
+		{
+			if (((t_cmd *)current_cmd->content)->sep == OP_OR)
+				current_cmd = current_cmd->next->next;
+			else
+				current_cmd = current_cmd->next;
+		}
+		else
+		{
+			if (((t_cmd *)current_cmd->content)->sep == OP_AND)
+				current_cmd = current_cmd->next->next;
+			else
+				current_cmd = current_cmd->next;
+		}
 	}
 	add_history(line);
 	free(line);
