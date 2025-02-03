@@ -40,7 +40,7 @@ char	*get_prompt(t_term *term, char *home)
 	char	*status;
 
 	free(term->prompt);
-	prompt_size = ft_strlen(term->cwd) + 200;
+	prompt_size = ft_strlen(term->cwd) + 100;
 	term->prompt = ft_calloc(prompt_size, 1);
 	ft_strlcat(term->prompt, "\e[36m", prompt_size);
 	ft_strlcat(term->prompt, getenv_list(term->env_list, "USER"), prompt_size);
@@ -56,7 +56,6 @@ char	*get_prompt(t_term *term, char *home)
 		ft_strlcat(term->prompt, term->cwd, prompt_size);
 	if (term->status > 0)
 	{
-		// status = strerror(WEXITSTATUS(term->status));
 		status = ft_itoa(WEXITSTATUS(term->status));
 		ft_strlcat(term->prompt, " \e[m(\e[1;31m", prompt_size);
 		ft_strlcat(term->prompt, status, prompt_size);
