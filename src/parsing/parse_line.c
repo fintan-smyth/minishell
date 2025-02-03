@@ -58,27 +58,33 @@ t_list	*parse_line(char *line, t_prog *term)
 {
 	t_list	*tokens;
 	t_list	*cmd_list;
-	t_list	*current;
+	t_list	*current_cmd;
+	t_list	*current_pipeline;
 
 	tokens = tokenise(line);
 	cmd_list = split_commands(tokens);
-	current = cmd_list;
-	while (current != NULL)
+	current_pipeline = cmd_list;
+	while (current_pipeline != NULL)
 	{
-		tokens = ((t_cmd *)current->content)->tokens;
-		if (is_debug(term))
-			print_parse_debug(tokens, (t_cmd *)current->content, "Tokenised");
-		expand_token_list(tokens, term);
-		if (is_debug(term))
-			print_parse_debug(tokens, (t_cmd *)current->content, "Expanded");
-		strip_quotes(&tokens);
-		if (is_debug(term))
-			print_parse_debug(tokens, (t_cmd *)current->content, "Stripped");
-		apply_redirection((t_cmd *)current->content, term);
-		if (is_debug(term))
-			print_parse_debug(tokens, (t_cmd *)current->content, "Redirected");
-		prepare_args((t_cmd *)current->content);
-		current = current->next;
+		current_cmd = (t_list *)current_pipeline->content;
+		while (current_cmd != NULL)
+		{
+			tokens = ((t_cmd *)current_cmd->content)->tokens;
+			if (is_debug(term))
+				print_parse_debug(tokens, (t_cmd *)current_cmd->content, "Tokenised");
+			expand_token_list(tokens, term);
+			if (is_debug(term))
+				print_parse_debug(tokens, (t_cmd *)current_cmd->content, "Expanded");
+			strip_quotes(&tokens);
+			if (is_debug(term))
+				print_parse_debug(tokens, (t_cmd *)current_cmd->content, "Stripped");
+			apply_redirection((t_cmd *)current_cmd->content, term);
+			if (is_debug(term))
+				print_parse_debug(tokens, (t_cmd *)current_cmd->content, "Redirected");
+			prepare_args((t_cmd *)current_cmd->content);
+			current_cmd = current_cmd->next;
+		}
+		current_pipeline = current_pipeline->next;
 	}
 	return (cmd_list);
 }

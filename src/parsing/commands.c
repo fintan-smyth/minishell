@@ -22,7 +22,7 @@ t_cmd	*construct_cmd(t_list *tokens)
 	cmd->fd_out = 1;
 	(cmd->pipe)[0] = -1;
 	(cmd->pipe)[1] = -1;
-	cmd->sep = OP_END;
+	cmd->sep = OP_NONE;
 	return (cmd);
 }
 
@@ -65,25 +65,39 @@ t_list	*split_commands(t_list *tokens)
 // Splits a list of tokens into a list of commands to be executed in sequence.
 // Returns the list of t_cmd structs.
 {
+	t_list	*pipeline;
 	t_list	*cmd_list;
 	t_list	*current_tkn;
 	t_cmd	*cmd;
 	int		sep;
 
 	cmd_list = NULL;
+	pipeline = NULL;
 	cmd = construct_cmd(tokens);
-	ft_lstadd_back(&cmd_list, ft_lstnew(cmd));
+	ft_lstadd_back(&pipeline, ft_lstnew(cmd));
+	ft_lstadd_back(&cmd_list, ft_lstnew(pipeline));
 	current_tkn = tokens;
 	while (current_tkn != NULL)
 	{
 		sep = is_cmd_sep(current_tkn);
-		if (sep && current_tkn->next != NULL)
+		// ft_printf("token: <%s>\n", (char *)current_tkn->content);
+		if (sep == OP_PIPE && current_tkn->next != NULL)
 		{
 			cmd->sep = sep;
 			cmd = construct_cmd(current_tkn->next);
-			ft_lstadd_back(&cmd_list, ft_lstnew(cmd));
+			ft_lstadd_back(&pipeline, ft_lstnew(cmd));
 			current_tkn->next = NULL;
 			current_tkn = cmd->tokens;
+		}
+		else if (sep > OP_PIPE && current_tkn->next != NULL)
+		{
+			cmd->sep = sep;
+			cmd = construct_cmd(current_tkn->next);
+			ft_lstadd_back(&cmd_list, ft_lstnew(ft_lstnew(cmd)));
+			cmd->condition = sep;
+			current_tkn->next = NULL;
+			current_tkn = cmd->tokens;
+			pipeline = (t_list *)ft_lstlast(cmd_list)->content;
 		}
 		else if (is_redirect(current_tkn))
 			encode_redirect(current_tkn);

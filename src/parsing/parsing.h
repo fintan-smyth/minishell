@@ -23,6 +23,7 @@ typedef struct s_cmd
 	char	**argv;
 	int		argc;
 	int		sep;
+	int		condition;
 	int		fd_in;
 	int		fd_out;
 	int		pipe[2];
@@ -34,7 +35,7 @@ typedef struct s_cmd
 
 enum
 {
-	OP_END = 0,
+	OP_NONE = 0,
 	OP_PIPE = 1,
 	OP_AND = 2,
 	OP_OR = 3,

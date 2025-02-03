@@ -43,34 +43,65 @@ t_prog	*init_term(char *name, char **line)
 	return (prog);
 }
 
-void	execute_cmd_list(t_list **cmd_list, t_prog *term, char *line)
+void	execute_pipeline(t_list **pipeline, t_prog *term)
 // Executes a series of commands stored in the cmd_list.
-// Frees the cmd_list and the line read to create it.
+// Frees the cmd_list.
 {
 	t_list	*current_cmd;
+	// int		sep;
 
-	current_cmd = *cmd_list;
+	current_cmd = *pipeline;
 	while (current_cmd != NULL)
 	{
+		// sep = ((t_cmd *)current_cmd->content)->sep;
 		term->status = exec_cmd(term, (t_cmd *)current_cmd->content);
+		current_cmd = current_cmd->next;
+		// if (term->status == 0)
+		// {
+		// 	if (sep == OP_OR)
+		// 	{
+		// 		while (((t_cmd *)current_cmd->content)->sep == OP_PIPE)
+		// 			current_cmd = current_cmd->next;
+		// 		current_cmd = current_cmd->next;
+		// 	}
+		// }
+		// else
+		// {
+		// 	if (sep == OP_AND)
+		// 	{
+		// 		while (((t_cmd *)current_cmd->content)->sep == OP_PIPE)
+		// 			current_cmd = current_cmd->next;
+		// 		current_cmd = current_cmd->next;
+		// 	}
+		// }
+	}
+	ft_lstclear(pipeline, free_cmd);
+}
+
+void	execute_cmd_list(t_list **cmd_list, t_prog *term)
+{
+	t_list	*current_pipeline;
+
+	current_pipeline = *cmd_list;
+	{
+		execute_pipeline((t_list **)&current_pipeline->content, term);
 		if (term->status == 0)
 		{
-			if (((t_cmd *)current_cmd->content)->sep == OP_OR)
-				current_cmd = current_cmd->next->next;
-			else
-				current_cmd = current_cmd->next;
+			if (((t_cmd *)((t_list *)current_pipeline->content)->content)->condition == OP_OR)
+			{
+				ft_lstclear(((t_list **)&current_pipeline->content), free_cmd);
+				current_pipeline = current_pipeline->next;
+			}
 		}
 		else
 		{
-			if (((t_cmd *)current_cmd->content)->sep == OP_AND)
-				current_cmd = current_cmd->next->next;
-			else
-				current_cmd = current_cmd->next;
+			if (((t_cmd *)((t_list *)current_pipeline->content)->content)->condition == OP_AND)
+			{
+				ft_lstclear(((t_list **)&current_pipeline->content), free_cmd);
+				current_pipeline = current_pipeline->next;
+			}
 		}
 	}
-	add_history(line);
-	free(line);
-	ft_lstclear(cmd_list, free_cmd);
 }
 
 int	main(int argc, char **argv)
@@ -93,8 +124,10 @@ int	main(int argc, char **argv)
 			continue ;
 		}
 		cmd_list = parse_line(line, term);
-		connect_pipes(cmd_list);
-		execute_cmd_list(&cmd_list, term, line);
+		// connect_pipes(cmd_list);
+		execute_pipeline(&cmd_list, term);
+		add_history(line);
+		free(line);
 		line = readline(get_prompt(term, getenv_list(term->env_list, "HOME")));
 	}
 	handle_eof(term);
