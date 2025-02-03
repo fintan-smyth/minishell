@@ -53,6 +53,11 @@ void	free_cmd(void *cmdptr)
 		close(cmd->fd_in);
 	if (cmd->rd_out == 1)
 		close(cmd->fd_out);
+	if ((cmd->pipe)[0] > 0)
+	{
+		close((cmd->pipe)[1]);
+		close((cmd->pipe)[0]);
+	}
 	free(cmdptr);
 }
 

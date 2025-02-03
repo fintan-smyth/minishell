@@ -44,6 +44,8 @@ void	handle_parent(t_cmd *cmd, pid_t child, int *status)
 	{
 		close((cmd->pipe)[1]);
 		close((cmd->pipe)[0]);
+		cmd->pipe[0] = -1;
+		cmd->pipe[1] = -1;
 	}
 	waitpid(child, status, 0);
 }
