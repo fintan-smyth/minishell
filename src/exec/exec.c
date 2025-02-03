@@ -66,7 +66,7 @@ void	handle_child(t_cmd *cmd, t_term *term, char *cmd_path)
 
 int	exec_cmd(t_term *term, t_cmd *cmd)
 // Executes the passed in command.
-// Returns the exit status of an executed command.
+// Returns the exit status of command.
 {
 	pid_t	child;
 	int		status;
