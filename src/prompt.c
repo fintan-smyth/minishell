@@ -32,12 +32,23 @@ int	check_in_home(char *path, char *home)
 	return (free(terminated), 0);
 }
 
+void	prompt_add_exit_status(char *prompt, int status, size_t prompt_size)
+// Adds exit status of last command into the prompt.
+{
+	char	*status_str;
+
+	status_str = ft_itoa(WEXITSTATUS(status));
+	ft_strlcat(prompt, " \e[m(\e[1;31m", prompt_size);
+	ft_strlcat(prompt, status_str, prompt_size);
+	ft_strlcat(prompt, "\e[m)", prompt_size);
+	free(status_str);
+}
+
 char	*get_prompt(t_term *term, char *home)
 // Constructs a string to be used as the prompt for readline()
 {
 	size_t	prompt_size;
 	char	*path;
-	char	*status;
 
 	free(term->prompt);
 	prompt_size = ft_strlen(term->cwd) + 100;
@@ -55,13 +66,7 @@ char	*get_prompt(t_term *term, char *home)
 	else
 		ft_strlcat(term->prompt, term->cwd, prompt_size);
 	if (term->status > 0)
-	{
-		status = ft_itoa(WEXITSTATUS(term->status));
-		ft_strlcat(term->prompt, " \e[m(\e[1;31m", prompt_size);
-		ft_strlcat(term->prompt, status, prompt_size);
-		ft_strlcat(term->prompt, "\e[m)", prompt_size);
-		free(status);
-	}
+		prompt_add_exit_status(term->prompt, term->status, prompt_size);
 	ft_strlcat(term->prompt, "\e[1;32m > \e[m", prompt_size);
 	return (term->prompt);
 }
