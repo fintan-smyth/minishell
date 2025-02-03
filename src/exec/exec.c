@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
+/*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 16:39:24 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/02 17:48:17 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/03 20:27:30 by myiu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "../parsing/parsing.h"
 #include "../builtins/builtins.h"
 
-int	handle_builtins(t_term *term, t_cmd *cmd)
+int	handle_builtins(t_prog *term, t_cmd *cmd)
 // Checks if a given command is a builtin, and if so executes it.
 // Returns 1 if command was a builtin
 // Returns 0 if command was not a builtin
@@ -50,7 +50,7 @@ void	handle_parent(t_cmd *cmd, pid_t child, int *status)
 	waitpid(child, status, 0);
 }
 
-void	handle_child(t_cmd *cmd, t_term *term, char *cmd_path)
+void	handle_child(t_cmd *cmd, t_prog *term, char *cmd_path)
 // Branch of commands to be executed by child after fork.
 // dups the appropriate file descriptors and executes the passed in command.
 {
@@ -58,11 +58,12 @@ void	handle_child(t_cmd *cmd, t_term *term, char *cmd_path)
 		close((cmd->pipe)[1]);
 	dup2(cmd->fd_in, 0);
 	dup2(cmd->fd_out, 1);
+	reset_child_sig();
 	execve(cmd_path, cmd->argv, construct_envp(term->env_list));
 	exit(EXIT_FAILURE);
 }
 
-int	exec_cmd(t_term *term, t_cmd *cmd)
+int	exec_cmd(t_prog *term, t_cmd *cmd)
 // Executes the passed in command.
 // Returns the exit status of command.
 {

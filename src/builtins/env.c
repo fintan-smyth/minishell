@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
+/*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 16:24:38 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/29 17:00:00 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/03 20:27:30 by myiu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	validate_export(char *arg, char **equals)
 	return (1);
 }
 
-void	export_env(t_term *term, int argc, char **argv)
+void	export_env(t_prog *term, int argc, char **argv)
 // Executes the 'export' builtin command
 {
 	char	*equals;
@@ -63,7 +63,7 @@ void	export_env(t_term *term, int argc, char **argv)
 	}
 }
 
-void	unset_env(t_term *term, int argc, char **argv)
+void	unset_env(t_prog *term, int argc, char **argv)
 // Executes the 'unset' builtin command
 {
 	t_list	*env_node;
