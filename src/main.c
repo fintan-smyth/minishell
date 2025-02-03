@@ -29,15 +29,18 @@ void	cleanup(t_prog *term)
 t_prog	*init_term(char *name, char **line)
 // Initialises a t_prog structure
 {
-	t_prog	*term;
+	t_prog			*prog;
+	struct termios	term;
 
-	term = ft_calloc(1, sizeof(*term));
-	term->status = 0;
-	getcwd(term->cwd, PATH_MAX);
-	init_env_list(term, name);
-	
-	*line = readline(get_prompt(term, getenv_list(term->env_list, "HOME")));
-	return (term);
+	prog = ft_calloc(1, sizeof(*prog));
+	prog->status = 0;
+	getcwd(prog->cwd, PATH_MAX);
+	init_env_list(prog, name);
+	tcgetattr(STDIN_FILENO, &term);
+	term.c_lflag &= ~ECHOCTL;
+	tcsetattr(fileno(stdin), TCSANOW, &term);
+	*line = readline(get_prompt(prog, getenv_list(prog->env_list, "HOME")));
+	return (prog);
 }
 
 void	execute_cmd_list(t_list **cmd_list, t_prog *term, char *line)
@@ -81,7 +84,7 @@ int	main(int argc, char **argv)
 	term = init_term(argv[0], &line);
 	while (line != NULL)
 	{
-		setup_signals();
+		//setup_signals();
 		if (*line == 0)
 		{
 			free(line);
