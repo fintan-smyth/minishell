@@ -55,7 +55,7 @@ void	execute_pipeline(t_list **pipeline, t_prog *term)
 	while (current_cmd != NULL)
 	{
 		if (is_debug(term))
-			ft_printf("\e[1;33m### SUBCMD No %d ###\e[m\n", ++i);
+			ft_printf("\e[1;33m### EXECUTING SUBCMD No %d ###\e[m\n", ++i);
 		term->status = exec_cmd(term, (t_cmd *)current_cmd->content);
 		current_cmd = current_cmd->next;
 	}
@@ -64,7 +64,7 @@ void	execute_pipeline(t_list **pipeline, t_prog *term)
 void	execute_cmd_list(t_list **cmd_list, t_prog *term)
 {
 	t_list	*current_pipeline;
-	int	i;
+	int		i;
 
 	current_pipeline = *cmd_list;
 	i = 0;
@@ -89,7 +89,7 @@ void	execute_cmd_list(t_list **cmd_list, t_prog *term)
 			}
 		}
 		if (is_debug(term))
-			ft_printf("\e[1;31m### PIPELINE No %d ###\e[m\n", ++i);
+			ft_printf("\e[1;31m### EXECUTING PIPELINE No %d ###\e[m\n", ++i);
 		execute_pipeline((t_list **)&current_pipeline->content, term);
 		current_pipeline = current_pipeline->next;
 	}
@@ -107,7 +107,6 @@ int	main(int argc, char **argv)
 	term = init_term(argv[0], &line);
 	while (line != NULL)
 	{
-		//setup_signals();
 		if (*line == 0)
 		{
 			free(line);

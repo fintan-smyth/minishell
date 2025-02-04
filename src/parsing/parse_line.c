@@ -70,13 +70,13 @@ t_list	*parse_line(char *line, t_prog *term)
 	while (current_pipeline != NULL)
 	{
 		if (is_debug(term))
-			ft_printf("\e[1;31m### PIPELINE No %d ###\e[m\n", ++i);
+			ft_printf("\e[1;31m### TOKENISING PIPELINE No %d ###\e[m\n", ++i);
 		current_cmd = (t_list *)current_pipeline->content;
 		j = 0;
 		while (current_cmd != NULL)
 		{
 			if (is_debug(term))
-				ft_printf("\e[1;33m### SUBCMD No %d ###\e[m\n", ++j);
+				ft_printf("\e[1;33m### TOKENISING SUBCMD No %d ###\e[m\n", ++j);
 			tokens = ((t_cmd *)current_cmd->content)->tokens;
 			if (is_debug(term))
 				print_parse_debug(tokens, (t_cmd *)current_cmd->content, "Tokenised");
