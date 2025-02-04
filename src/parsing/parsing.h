@@ -33,6 +33,14 @@ typedef struct s_cmd
 	bool	rd_out;
 }	t_cmd;
 
+typedef struct s_ptree
+{
+	t_list	*pipeline;
+	int		op;
+	struct s_ptree	*left;
+	struct s_ptree	*right;
+}	t_ptree;
+
 enum
 {
 	OP_NONE = 0,
