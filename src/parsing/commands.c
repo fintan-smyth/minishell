@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:18:36 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/04 18:32:30 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/04 21:16:22 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,10 @@ int	is_cmd_sep(t_list *token)
 		return (OP_OR);
 	if (ft_strncmp(text, "&&", 3) == 0)
 		return (OP_AND);
+	if (ft_strncmp(text, "(", 2) == 0)
+		return (OP_OPNPRN);
+	if (ft_strncmp(text, ")", 2) == 0)
+		return (OP_CLSPRN);
 	return (0);
 }
 
@@ -169,9 +173,12 @@ t_ptree	*construct_parse_tree(t_list **ptree_list)
 	nodestack = NULL;
 	while (current != NULL)
 	{
-		if (((t_ptree *)current->content)->op == 0)
+		if (((t_ptree *)current->content)->op == OP_OPNPRN)
+			push_ptree_stack(&charstack, current->content);
+		else if (((t_ptree *)current->content)->op == 0)
 			push_ptree_stack(&nodestack, current->content);
-		else if (((t_ptree *)current->content)->op > 0)
+		else if (((t_ptree *)current->content)->op == 2
+			|| ((t_ptree *)current->content)->op == 3)
 		{
 			while (charstack != NULL)
 			{
@@ -181,6 +188,17 @@ t_ptree	*construct_parse_tree(t_list **ptree_list)
 				push_ptree_stack(&nodestack, tree_node);
 			}
 			push_ptree_stack(&charstack, current->content);
+		}
+		else if (((t_ptree *)current->content)->op == OP_CLSPRN)
+		{
+			while (charstack != NULL && ((t_ptree *)ft_lstlast(charstack)->content)->op != OP_OPNPRN)
+			{
+				tree_node = pop_ptree_stack(&charstack);
+				tree_node->right = pop_ptree_stack(&nodestack);
+				tree_node->left = pop_ptree_stack(&nodestack);
+				push_ptree_stack(&nodestack, tree_node);
+			}
+			pop_ptree_stack(&charstack);
 		}
 		current = current->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:10:22 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/04 18:30:13 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/04 23:09:33 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,8 @@ t_ptree	*parse_line(char *line, t_prog *term)
 	t_ptree	*ptree;
 
 	tokens = tokenise(line);
+	// print_tokens(tokens);
+	// exit(0);
 	cmd_list = split_commands(tokens);
 	print_ptree_lst(cmd_list);
 	ptree = construct_parse_tree(&cmd_list);

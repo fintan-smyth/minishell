@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 13:50:15 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/03 20:27:30 by myiu             ###   ########.fr       */
+/*   Updated: 2025/02/04 20:57:36 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,40 +61,40 @@ void	execute_pipeline(t_list **pipeline, t_prog *term)
 	}
 }
 
-void	execute_cmd_list(t_list **cmd_list, t_prog *term)
-{
-	t_list	*current_pipeline;
-	int		i;
-
-	current_pipeline = *cmd_list;
-	i = 0;
-	term->status = 0;
-	while (current_pipeline != NULL)
-	{
-		if (term->status == 0)
-		{
-			if (((t_cmd *)((t_list *)current_pipeline->content)->content)->condition == OP_OR)
-			{
-				current_pipeline = current_pipeline->next;
-				i++;
-				continue ;
-			}
-		}
-		else
-		{
-			if (((t_cmd *)((t_list *)current_pipeline->content)->content)->condition == OP_AND)
-			{
-				current_pipeline = current_pipeline->next;
-				i++;
-			}
-		}
-		if (is_debug(term))
-			ft_printf("\e[1;31m### EXECUTING PIPELINE No %d ###\e[m\n", ++i);
-		execute_pipeline((t_list **)&current_pipeline->content, term);
-		current_pipeline = current_pipeline->next;
-	}
-	ft_lstclear(cmd_list, free_pipeline);
-}
+// void	execute_cmd_list(t_list **cmd_list, t_prog *term)
+// {
+// 	t_list	*current_pipeline;
+// 	int		i;
+//
+// 	current_pipeline = *cmd_list;
+// 	i = 0;
+// 	term->status = 0;
+// 	while (current_pipeline != NULL)
+// 	{
+// 		if (term->status == 0)
+// 		{
+// 			if (((t_cmd *)((t_list *)current_pipeline->content)->content)->condition == OP_OR)
+// 			{
+// 				current_pipeline = current_pipeline->next;
+// 				i++;
+// 				continue ;
+// 			}
+// 		}
+// 		else
+// 		{
+// 			if (((t_cmd *)((t_list *)current_pipeline->content)->content)->condition == OP_AND)
+// 			{
+// 				current_pipeline = current_pipeline->next;
+// 				i++;
+// 			}
+// 		}
+// 		if (is_debug(term))
+// 			ft_printf("\e[1;31m### EXECUTING PIPELINE No %d ###\e[m\n", ++i);
+// 		execute_pipeline((t_list **)&current_pipeline->content, term);
+// 		current_pipeline = current_pipeline->next;
+// 	}
+// 	ft_lstclear(cmd_list, free_pipeline);
+// }
 
 void	execute_ptree(t_ptree *ptree, t_prog *term)
 {
