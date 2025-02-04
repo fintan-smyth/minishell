@@ -89,7 +89,7 @@ void	execute_cmd_list(t_list **cmd_list, t_prog *term)
 			}
 		}
 		if (is_debug(term))
-			ft_printf("\e[1;33m### PIPELINE No %d ###\e[m\n", ++i);
+			ft_printf("\e[1;31m### PIPELINE No %d ###\e[m\n", ++i);
 		execute_pipeline((t_list **)&current_pipeline->content, term);
 		current_pipeline = current_pipeline->next;
 	}
