@@ -77,7 +77,9 @@ void	strip_quotes_token(char *token);
 void	strip_quotes(t_list **tokens);
 
 //Commands
+int		is_debug(t_prog *term);
 void	free_cmd(void *cmd);
+void	free_pipeline(void *lstptr);
 int		is_cmd_sep(t_list *token);
 t_list	*split_commands(t_list *tokens);
 

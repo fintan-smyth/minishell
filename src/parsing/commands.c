@@ -61,6 +61,15 @@ void	free_cmd(void *cmdptr)
 	free(cmdptr);
 }
 
+void	free_pipeline(void *lstptr)
+{
+	t_list	*pipeline;
+
+	pipeline = (t_list *)lstptr;
+	ft_lstclear(&pipeline, free_cmd);
+}
+
+
 t_list	*split_commands(t_list *tokens)
 // Splits a list of tokens into a list of commands to be executed in sequence.
 // Returns the list of t_cmd structs.
@@ -80,7 +89,6 @@ t_list	*split_commands(t_list *tokens)
 	while (current_tkn != NULL)
 	{
 		sep = is_cmd_sep(current_tkn);
-		// ft_printf("token: <%s>\n", (char *)current_tkn->content);
 		if (sep == OP_PIPE && current_tkn->next != NULL)
 		{
 			cmd->sep = sep;
