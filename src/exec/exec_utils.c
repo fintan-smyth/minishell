@@ -30,12 +30,17 @@ int	search_path(t_prog *term, char *cmd, char *cmd_path)
 // If no executable is found, cmd_path is empty and return 0
 {
 	struct stat	*statbuf;
+	char		*path_env;
 	char		**paths;
 	int			i;
 
 	i = 0;
 	statbuf = malloc(sizeof(*statbuf));
-	paths = ft_split(getenv_list(term->env_list, "PATH"), ':');
+	path_env = getenv_list(term->env_list, "PATH");
+	if (path_env == NULL)
+		paths = ft_split("", ':');
+	else
+		paths = ft_split(path_env, ':');
 	ft_bzero(cmd_path, PATH_MAX);
 	ft_strlcat(cmd_path, cmd, PATH_MAX);
 	stat(cmd_path, statbuf);
