@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 14:32:29 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/03 20:27:30 by myiu             ###   ########.fr       */
+/*   Updated: 2025/02/04 18:26:34 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ enum
 	RD_HRD = 4,
 };
 
-t_list	*parse_line(char *line, t_prog *term);
 
 //Tokenise
 int		is_op(char c);
@@ -91,6 +90,13 @@ void	free_pipeline(void *lstptr);
 int		is_cmd_sep(t_list *token);
 t_list	*split_commands(t_list *tokens);
 
+//Command parse tree
+t_ptree	*ptree_new(t_list *pipeline, int op);
+void	push_ptree_stack(t_list	**stack, t_ptree *node);
+t_ptree	*pop_ptree_stack(t_list	**stack);
+t_ptree	*construct_parse_tree(t_list **ptree_list);
+t_ptree	*parse_line(char *line, t_prog *term);
+
 //Redirection
 int		is_redirect(t_list *token);
 void	encode_redirect(t_list *token);
@@ -99,6 +105,6 @@ void	redirect_hdoc(t_cmd *cmd, t_list **rd_token,
 void	redirect_out(t_cmd *cmd, t_list **rd_token, t_list *prev, int mode);
 void	redirect_in(t_cmd *cmd, t_list **rd_token, t_list *prev);
 void	apply_redirection(t_cmd *cmd, t_prog *term);
-void	connect_pipes(t_list *cmd_list);
+void	connect_pipes(t_list *pipeline);
 
 #endif // PARSING_H

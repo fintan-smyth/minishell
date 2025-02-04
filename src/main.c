@@ -96,10 +96,24 @@ void	execute_cmd_list(t_list **cmd_list, t_prog *term)
 	ft_lstclear(cmd_list, free_pipeline);
 }
 
+void	execute_ptree(t_ptree *ptree, t_prog *term)
+{
+	if (ptree == NULL)
+		return ;
+	execute_ptree(ptree->left, term);
+	if (ptree->op == 0)
+		execute_pipeline(&ptree->pipeline, term);
+	else if (ptree->op == OP_AND && term->status != 0)
+		return ;
+	else if (ptree->op == OP_OR && term->status == 0)
+		return ;
+	execute_ptree(ptree->right, term);
+}
+
 int	main(int argc, char **argv)
 {
 	t_prog	*term;
-	t_list	*cmd_list;
+	t_ptree	*ptree;
 	char	*line;
 
 	(void)argc;
@@ -114,9 +128,8 @@ int	main(int argc, char **argv)
 						getenv_list(term->env_list, "HOME")));
 			continue ;
 		}
-		cmd_list = parse_line(line, term);
-		connect_pipes(cmd_list);
-		execute_cmd_list(&cmd_list, term);
+		ptree = parse_line(line, term);
+		execute_ptree(ptree, term);
 		add_history(line);
 		free(line);
 		line = readline(get_prompt(term, getenv_list(term->env_list, "HOME")));

@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:18:36 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/01 14:52:08 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/04 18:32:30 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,22 +69,65 @@ void	free_pipeline(void *lstptr)
 	ft_lstclear(&pipeline, free_cmd);
 }
 
+// t_list	*split_commands(t_list *tokens)
+// // Splits a list of tokens into a list of commands to be executed in sequence.
+// // Returns the list of t_cmd structs.
+// {
+// 	t_list	*pipeline;
+// 	t_list	*cmd_list;
+// 	t_list	*current_tkn;
+// 	t_cmd	*cmd;
+// 	int		sep;
+//
+// 	cmd_list = NULL;
+// 	pipeline = NULL;
+// 	cmd = construct_cmd(tokens);
+// 	ft_lstadd_back(&pipeline, ft_lstnew(cmd));
+// 	ft_lstadd_back(&cmd_list, ft_lstnew(pipeline));
+// 	current_tkn = tokens;
+// 	while (current_tkn != NULL)
+// 	{
+// 		sep = is_cmd_sep(current_tkn);
+// 		if (sep == OP_PIPE && current_tkn->next != NULL)
+// 		{
+// 			cmd->sep = sep;
+// 			cmd = construct_cmd(current_tkn->next);
+// 			ft_lstadd_back(&pipeline, ft_lstnew(cmd));
+// 			current_tkn->next = NULL;
+// 			current_tkn = cmd->tokens;
+// 		}
+// 		else if (sep > OP_PIPE && current_tkn->next != NULL)
+// 		{
+// 			cmd->sep = sep;
+// 			cmd = construct_cmd(current_tkn->next);
+// 			ft_lstadd_back(&cmd_list, ft_lstnew(ft_lstnew(cmd)));
+// 			cmd->condition = sep;
+// 			current_tkn->next = NULL;
+// 			current_tkn = cmd->tokens;
+// 			pipeline = (t_list *)ft_lstlast(cmd_list)->content;
+// 		}
+// 		else if (is_redirect(current_tkn))
+// 			encode_redirect(current_tkn);
+// 		current_tkn = current_tkn->next;
+// 	}
+// 	return (cmd_list);
+// }
 
 t_list	*split_commands(t_list *tokens)
 // Splits a list of tokens into a list of commands to be executed in sequence.
 // Returns the list of t_cmd structs.
 {
 	t_list	*pipeline;
-	t_list	*cmd_list;
+	t_list	*ptree_list;
 	t_list	*current_tkn;
 	t_cmd	*cmd;
 	int		sep;
 
-	cmd_list = NULL;
+	ptree_list = NULL;
 	pipeline = NULL;
 	cmd = construct_cmd(tokens);
 	ft_lstadd_back(&pipeline, ft_lstnew(cmd));
-	ft_lstadd_back(&cmd_list, ft_lstnew(pipeline));
+	push_ptree_stack(&ptree_list, ptree_new(pipeline, 0));
 	current_tkn = tokens;
 	while (current_tkn != NULL)
 	{
@@ -99,17 +142,72 @@ t_list	*split_commands(t_list *tokens)
 		}
 		else if (sep > OP_PIPE && current_tkn->next != NULL)
 		{
-			cmd->sep = sep;
+			push_ptree_stack(&ptree_list, ptree_new(NULL, sep));
 			cmd = construct_cmd(current_tkn->next);
-			ft_lstadd_back(&cmd_list, ft_lstnew(ft_lstnew(cmd)));
+			push_ptree_stack(&ptree_list, ptree_new(ft_lstnew(cmd), 0));
 			cmd->condition = sep;
 			current_tkn->next = NULL;
 			current_tkn = cmd->tokens;
-			pipeline = (t_list *)ft_lstlast(cmd_list)->content;
+			pipeline = ((t_ptree *)ft_lstlast(ptree_list)->content)->pipeline;
 		}
 		else if (is_redirect(current_tkn))
 			encode_redirect(current_tkn);
 		current_tkn = current_tkn->next;
 	}
-	return (cmd_list);
+	return (ptree_list);
+}
+
+t_ptree	*construct_parse_tree(t_list **ptree_list)
+{
+	t_list	*current;
+	t_list	*charstack;
+	t_list	*nodestack;
+	t_ptree	*tree_node;
+
+	current = *ptree_list;
+	charstack = NULL;
+	nodestack = NULL;
+	while (current != NULL)
+	{
+		if (((t_ptree *)current->content)->op == 0)
+			push_ptree_stack(&nodestack, current->content);
+		else if (((t_ptree *)current->content)->op > 0)
+		{
+			while (charstack != NULL)
+			{
+				tree_node = pop_ptree_stack(&charstack);
+				tree_node->right = pop_ptree_stack(&nodestack);
+				tree_node->left = pop_ptree_stack(&nodestack);
+				push_ptree_stack(&nodestack, tree_node);
+			}
+			push_ptree_stack(&charstack, current->content);
+		}
+		current = current->next;
+	}
+	while (charstack != NULL)
+	{
+		tree_node = pop_ptree_stack(&charstack);
+		tree_node->right = pop_ptree_stack(&nodestack);
+		tree_node->left = pop_ptree_stack(&nodestack);
+		push_ptree_stack(&nodestack, tree_node);
+	}
+	tree_node = (t_ptree *)(ft_lstlast(nodestack)->content);
+	return (tree_node);
+}
+
+void	print_ptree_lst(t_list *ptree_list)
+{
+	t_list	*current;
+	t_ptree *node;
+
+	current = ptree_list;
+	while (current != NULL)
+	{
+		node = (t_ptree *)current->content;
+		if (node->op == 0)
+			ft_printf("cmd: %s\n", (char *)((t_cmd *)node->pipeline->content)->tokens->content);
+		else
+			ft_printf("op: %d\n", node->op);
+		current = current->next;
+	}
 }
