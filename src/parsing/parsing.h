@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 14:32:29 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/05 16:30:20 by myiu             ###   ########.fr       */
+/*   Updated: 2025/02/05 17:43:20 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,30 +16,7 @@
 # include "../minishell.h"
 # include <fcntl.h>
 # include <stdbool.h>
-
-typedef struct s_cmd
-{
-	t_list	*tokens;
-	char	**argv;
-	int		argc;
-	int		sep;
-	int		condition;
-	int		fd_in;
-	int		fd_out;
-	int		pipe[2];
-	int		hdpipe[2];
-	int		error;
-	bool	rd_in;
-	bool	rd_out;
-}	t_cmd;
-
-typedef struct s_ptree
-{
-	t_list	*pipeline;
-	int		op;
-	struct s_ptree	*left;
-	struct s_ptree	*right;
-}	t_ptree;
+# include "../structs.h"
 
 enum
 {

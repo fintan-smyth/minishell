@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 13:39:32 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/03 20:28:12 by myiu             ###   ########.fr       */
+/*   Updated: 2025/02/05 17:43:20 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,26 +20,7 @@
 # include <errno.h>
 # include <sys/wait.h>
 # include <termios.h>
-
-typedef struct s_env
-{
-	char	*name;
-	char	*var;
-}	t_env;
-
-typedef struct s_entry
-{
-	char			d_name[NAME_MAX];
-	unsigned char	d_type;
-}	t_entry;
-
-typedef struct s_term
-{
-	char	cwd[PATH_MAX];
-	char	*prompt;
-	t_list	*env_list;
-	int		status;
-}	t_prog;
+# include "structs.h"
 
 //Cleanup
 void	cleanup(t_prog *term);

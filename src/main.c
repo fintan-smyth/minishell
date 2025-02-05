@@ -93,9 +93,11 @@ int	main(int argc, char **argv)
 						getenv_list(term->env_list, "HOME")));
 			continue ;
 		}
+		term->line = line;
 		ptree = parse_line(line, term);
 		execute_ptree(ptree, term);
 		traverse_ptree(ptree, PST_ORD, free_ptree_node, NULL);
+		term->ptree = NULL;
 		add_history(line);
 		free(line);
 		line = readline(get_prompt(term, getenv_list(term->env_list, "HOME")));
