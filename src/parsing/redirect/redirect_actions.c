@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 18:04:38 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/03 20:27:30 by myiu             ###   ########.fr       */
+/*   Updated: 2025/02/05 16:29:18 by myiu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,29 +72,55 @@ void	redirect_in(t_cmd *cmd, t_list **rd_token, t_list *prev)
 	*rd_token = NULL;
 }
 
-t_list	*read_hdoc(char *delim)
+void	sigint_handler(int signum)
+{
+	(void)signum;
+	kill(0, SIGINT);
+	rl_on_new_line();
+	rl_replace_line("^C", 0);
+	rl_redisplay();
+	exit (1);
+}
+
 // Prompts the user for multi line text input.
 // Input stops being read when a line containing just 'delim' is found.
+t_list	*read_hdoc(char *delim)
 {
-	char	*line;
-	t_list	*hdoc;
+	char				*line;
+	t_list				*hdoc;
+	pid_t				pid;
+	struct sigaction	sa;
 
+	sa.sa_handler = sig_handler;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
 	hdoc = NULL;
-	line = readline(">");
-	while (line != NULL && ft_strncmp(line, delim, ft_strlen(delim) + 1))
+	pid = fork();
+	if (pid == 0)
 	{
-		ft_lstadd_back(&hdoc, ft_lstnew(line));
+		signal(SIGINT, SIG_DFL);
 		line = readline(">");
+		while (line != NULL && ft_strncmp(line, delim, ft_strlen(delim) + 1))
+		{
+			ft_lstadd_back(&hdoc, ft_lstnew(line));
+			line = readline(">");
+		}
+		if (line == NULL)
+		{
+			ft_putstr_fd("minishell: warning: here-document ", 2);
+			ft_putstr_fd("delimited by end-of-file (wanted ", 2);
+			ft_putstr_fd(delim, 2);
+			ft_putendl_fd(")", 2);
+		}
+		else
+			free(line);
+		exit (0);
 	}
-	if (line == NULL)
+	else if (pid > 0)
 	{
-		ft_putstr_fd("minishell: warning: here-document ", 2);
-		ft_putstr_fd("delimited by end-of-file (wanted ", 2);
-		ft_putstr_fd(delim, 2);
-		ft_putendl_fd(")", 2);
+		wait(NULL);
+		return (NULL);
 	}
-	else
-		free(line);
 	return (hdoc);
 }
 
