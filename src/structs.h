@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 17:41:34 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/05 17:43:20 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/05 23:01:06 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ typedef struct s_term
 	char	*line;
 	t_list	*env_list;
 	int		status;
-	int		hd_status;
+	int		parse_status;
 	t_ptree	*ptree;
 }	t_prog;
 

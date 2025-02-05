@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:10:22 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/05 00:37:25 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/05 23:05:46 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	parse_pipeline(t_ptree *ptree, void *term)
 	if (ptree->op != 0)
 		return ;
 	current_cmd = ptree->pipeline;
-	while (current_cmd != NULL)
+	while (current_cmd != NULL && ((t_prog *)term)->parse_status == 0)
 	{
 		tokens = ((t_cmd *)current_cmd->content)->tokens;
 		if (is_debug((t_prog *)term))
@@ -87,6 +87,7 @@ t_ptree	*parse_line(char *line, t_prog *term)
 	t_list	*tokens;
 	t_list	*cmd_list;
 
+	term->parse_status = 0;
 	tokens = tokenise(line);
 	cmd_list = split_commands(tokens);
 	term->ptree = construct_parse_tree(&cmd_list);

@@ -1,5 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   signals.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fsmyth <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/05 23:24:55 by fsmyth            #+#    #+#             */
+/*   Updated: 2025/02/05 23:25:08 by fsmyth           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 #include <signal.h>
+
+sig_atomic_t g_signal;
 
 /*
 	ctrl C(sigint) -> new prompt on a new line
@@ -17,10 +31,12 @@ void	sig_handler(int sig)
 	}
 }
 
+
 void	setup_signals(void)
 {
 	struct sigaction	sa;
 
+	g_signal = 0;
 	sa.sa_handler = sig_handler;
 	sa.sa_flags = SA_RESTART;
 	sigemptyset(&sa.sa_mask);
@@ -31,7 +47,7 @@ void	setup_signals(void)
 
 void	handle_eof(t_prog *term)
 {
-	// printf("exit\n");
+	printf("exit\n");
 	cleanup(term);
 	exit(EXIT_SUCCESS);
 }

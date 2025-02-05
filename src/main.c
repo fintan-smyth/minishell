@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 13:50:15 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/05 00:02:32 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/05 23:06:16 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,8 @@ int	main(int argc, char **argv)
 		}
 		term->line = line;
 		ptree = parse_line(line, term);
-		execute_ptree(ptree, term);
+		if (term->parse_status == 0)
+			execute_ptree(ptree, term);
 		traverse_ptree(ptree, PST_ORD, free_ptree_node, NULL);
 		term->ptree = NULL;
 		add_history(line);

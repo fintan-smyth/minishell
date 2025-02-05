@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 17:19:48 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/03 20:27:30 by myiu             ###   ########.fr       */
+/*   Updated: 2025/02/05 23:04:05 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	apply_redirection(t_cmd *cmd, t_prog *term)
 	(void)term;
 	current = cmd->tokens;
 	prev = NULL;
-	while (current != NULL)
+	while (current != NULL && term->parse_status == 0)
 	{
 		mode = *(char *)current->content;
 		if (mode == RD_IN)
