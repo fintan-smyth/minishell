@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:18:36 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/04 21:16:22 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/05 00:32:40 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,38 +124,60 @@ t_list	*split_commands(t_list *tokens)
 	t_list	*pipeline;
 	t_list	*ptree_list;
 	t_list	*current_tkn;
+	t_list	*temp;
 	t_cmd	*cmd;
 	int		sep;
 
 	ptree_list = NULL;
 	pipeline = NULL;
-	cmd = construct_cmd(tokens);
+	current_tkn = tokens;
+	temp = NULL;
+	sep = is_cmd_sep(current_tkn);
+	while (sep > OP_PIPE)
+	{
+		push_ptree_stack(&ptree_list, ptree_new(NULL, sep));
+		temp = current_tkn;
+		current_tkn = current_tkn->next;
+		ft_lstdelone(temp, free);
+		if (current_tkn == NULL)
+			break ;
+		sep = is_cmd_sep(current_tkn);
+	}
+	cmd = construct_cmd(current_tkn);
 	ft_lstadd_back(&pipeline, ft_lstnew(cmd));
 	push_ptree_stack(&ptree_list, ptree_new(pipeline, 0));
-	current_tkn = tokens;
 	while (current_tkn != NULL)
 	{
 		sep = is_cmd_sep(current_tkn);
 		if (sep == OP_PIPE && current_tkn->next != NULL)
 		{
-			cmd->sep = sep;
 			cmd = construct_cmd(current_tkn->next);
 			ft_lstadd_back(&pipeline, ft_lstnew(cmd));
 			current_tkn->next = NULL;
 			current_tkn = cmd->tokens;
 		}
-		else if (sep > OP_PIPE && current_tkn->next != NULL)
+		else if (sep > OP_PIPE)
 		{
-			push_ptree_stack(&ptree_list, ptree_new(NULL, sep));
-			cmd = construct_cmd(current_tkn->next);
+			temp->next = NULL;
+			while (sep > OP_PIPE)
+			{
+				push_ptree_stack(&ptree_list, ptree_new(NULL, sep));
+				temp = current_tkn;
+				current_tkn = current_tkn->next;
+				ft_lstdelone(temp, free);
+				if (current_tkn == NULL)
+					break ;
+				sep = is_cmd_sep(current_tkn);
+			}
+			if (current_tkn == NULL)
+				break ;
+			cmd = construct_cmd(current_tkn);
 			push_ptree_stack(&ptree_list, ptree_new(ft_lstnew(cmd), 0));
-			cmd->condition = sep;
-			current_tkn->next = NULL;
-			current_tkn = cmd->tokens;
 			pipeline = ((t_ptree *)ft_lstlast(ptree_list)->content)->pipeline;
 		}
 		else if (is_redirect(current_tkn))
 			encode_redirect(current_tkn);
+		temp = current_tkn;
 		current_tkn = current_tkn->next;
 	}
 	return (ptree_list);
@@ -180,7 +202,7 @@ t_ptree	*construct_parse_tree(t_list **ptree_list)
 		else if (((t_ptree *)current->content)->op == 2
 			|| ((t_ptree *)current->content)->op == 3)
 		{
-			while (charstack != NULL)
+			while (charstack != NULL && ((t_ptree *)ft_lstlast(charstack)->content)->op != OP_OPNPRN)
 			{
 				tree_node = pop_ptree_stack(&charstack);
 				tree_node->right = pop_ptree_stack(&nodestack);
@@ -191,6 +213,7 @@ t_ptree	*construct_parse_tree(t_list **ptree_list)
 		}
 		else if (((t_ptree *)current->content)->op == OP_CLSPRN)
 		{
+			free_ptree_node(current->content);
 			while (charstack != NULL && ((t_ptree *)ft_lstlast(charstack)->content)->op != OP_OPNPRN)
 			{
 				tree_node = pop_ptree_stack(&charstack);
@@ -198,7 +221,7 @@ t_ptree	*construct_parse_tree(t_list **ptree_list)
 				tree_node->left = pop_ptree_stack(&nodestack);
 				push_ptree_stack(&nodestack, tree_node);
 			}
-			pop_ptree_stack(&charstack);
+			free_ptree_node(pop_ptree_stack(&charstack));
 		}
 		current = current->next;
 	}
@@ -210,6 +233,8 @@ t_ptree	*construct_parse_tree(t_list **ptree_list)
 		push_ptree_stack(&nodestack, tree_node);
 	}
 	tree_node = (t_ptree *)(ft_lstlast(nodestack)->content);
+	ft_lstclear(ptree_list, NULL);
+	ft_lstclear(&nodestack, NULL);
 	return (tree_node);
 }
 

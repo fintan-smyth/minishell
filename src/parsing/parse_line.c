@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:10:22 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/04 23:09:33 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/05 00:37:25 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,11 +87,11 @@ void	parse_ptree(t_ptree *ptree, t_prog *term)
 	parse_ptree(ptree->left, term);
 	if (ptree->op == 0)
 	{
-		ft_printf("cmd: %s\n", (char *)((t_cmd *)ptree->pipeline->content)->tokens->content);
+		// ft_printf("cmd: %s\n", (char *)((t_cmd *)ptree->pipeline->content)->tokens->content);
 		parse_pipeline(ptree->pipeline, term);
 	}
-	else
-		ft_printf("cmd: %d\n", ptree->op);
+	// else
+	// 	ft_printf("cmd: %d\n", ptree->op);
 	parse_ptree(ptree->right, term);
 }
 
@@ -104,12 +104,10 @@ t_ptree	*parse_line(char *line, t_prog *term)
 	t_ptree	*ptree;
 
 	tokens = tokenise(line);
-	// print_tokens(tokens);
-	// exit(0);
 	cmd_list = split_commands(tokens);
-	print_ptree_lst(cmd_list);
+	// print_ptree_lst(cmd_list);
+	// exit(0);
 	ptree = construct_parse_tree(&cmd_list);
 	parse_ptree(ptree, term);
-	// exit(0);
 	return (ptree);
 }

@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 14:32:29 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/04 21:00:12 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/05 00:10:05 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,8 @@ t_ptree	*ptree_new(t_list *pipeline, int op);
 void	push_ptree_stack(t_list	**stack, t_ptree *node);
 t_ptree	*pop_ptree_stack(t_list	**stack);
 t_ptree	*construct_parse_tree(t_list **ptree_list);
+void	free_ptree_node(void *node);
+void	free_ptree(t_ptree *ptree);
 t_ptree	*parse_line(char *line, t_prog *term);
 
 //Redirection
