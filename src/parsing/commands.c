@@ -73,50 +73,6 @@ void	free_pipeline(void *lstptr)
 	ft_lstclear(&pipeline, free_cmd);
 }
 
-// t_list	*split_commands(t_list *tokens)
-// // Splits a list of tokens into a list of commands to be executed in sequence.
-// // Returns the list of t_cmd structs.
-// {
-// 	t_list	*pipeline;
-// 	t_list	*cmd_list;
-// 	t_list	*current_tkn;
-// 	t_cmd	*cmd;
-// 	int		sep;
-//
-// 	cmd_list = NULL;
-// 	pipeline = NULL;
-// 	cmd = construct_cmd(tokens);
-// 	ft_lstadd_back(&pipeline, ft_lstnew(cmd));
-// 	ft_lstadd_back(&cmd_list, ft_lstnew(pipeline));
-// 	current_tkn = tokens;
-// 	while (current_tkn != NULL)
-// 	{
-// 		sep = is_cmd_sep(current_tkn);
-// 		if (sep == OP_PIPE && current_tkn->next != NULL)
-// 		{
-// 			cmd->sep = sep;
-// 			cmd = construct_cmd(current_tkn->next);
-// 			ft_lstadd_back(&pipeline, ft_lstnew(cmd));
-// 			current_tkn->next = NULL;
-// 			current_tkn = cmd->tokens;
-// 		}
-// 		else if (sep > OP_PIPE && current_tkn->next != NULL)
-// 		{
-// 			cmd->sep = sep;
-// 			cmd = construct_cmd(current_tkn->next);
-// 			ft_lstadd_back(&cmd_list, ft_lstnew(ft_lstnew(cmd)));
-// 			cmd->condition = sep;
-// 			current_tkn->next = NULL;
-// 			current_tkn = cmd->tokens;
-// 			pipeline = (t_list *)ft_lstlast(cmd_list)->content;
-// 		}
-// 		else if (is_redirect(current_tkn))
-// 			encode_redirect(current_tkn);
-// 		current_tkn = current_tkn->next;
-// 	}
-// 	return (cmd_list);
-// }
-
 t_list	*split_commands(t_list *tokens)
 // Splits a list of tokens into a list of commands to be executed in sequence.
 // Returns the list of t_cmd structs.
@@ -213,7 +169,7 @@ t_ptree	*construct_parse_tree(t_list **ptree_list)
 		}
 		else if (((t_ptree *)current->content)->op == OP_CLSPRN)
 		{
-			free_ptree_node(current->content);
+			free_ptree_node(current->content, NULL);
 			while (charstack != NULL && ((t_ptree *)ft_lstlast(charstack)->content)->op != OP_OPNPRN)
 			{
 				tree_node = pop_ptree_stack(&charstack);
@@ -221,7 +177,7 @@ t_ptree	*construct_parse_tree(t_list **ptree_list)
 				tree_node->left = pop_ptree_stack(&nodestack);
 				push_ptree_stack(&nodestack, tree_node);
 			}
-			free_ptree_node(pop_ptree_stack(&charstack));
+			free_ptree_node(pop_ptree_stack(&charstack), NULL);
 		}
 		current = current->next;
 	}

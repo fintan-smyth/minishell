@@ -26,10 +26,6 @@ t_ptree	*ptree_new(t_list *pipeline, int op)
 
 void	push_ptree_stack(t_list	**stack, t_ptree *node)
 {
-	// if (node->op != 0)
-	// 	ft_printf("\e[32mPushing\e[m %p: %d\n", stack, node->op);
-	// else
-	// 	ft_printf("\e[32mPushing\e[m %p: %s\n", stack, (char *)((t_cmd *)node->pipeline->content)->tokens->content);
 	ft_lstadd_back(stack, ft_lstnew(node));
 }
 
@@ -42,46 +38,54 @@ t_ptree	*pop_ptree_stack(t_list	**stack)
 	if (current->next == NULL)
 	{
 		out = (t_ptree *)current->content;
-		// if (out->op != 0)
-		// 	ft_printf("\e[31mPopping\e[m %p: %d\n", stack, out->op);
-		// else
-		// 	ft_printf("\e[31mPopping\e[m %p: %s\n", stack, (char *)((t_cmd *)out->pipeline->content)->tokens->content);
 		ft_lstclear(stack, NULL);
 		return (out);
 	}
 	while (current->next->next != NULL)
 		current = current->next;
 	out = (t_ptree *)current->next->content;
-	// if (out->op != 0)
-	// 	ft_printf("\e[31mPopping\e[m %p: %d\n", stack, out->op);
-	// else
-	// 	ft_printf("\e[31mPopping\e[m %p: %s\n", stack, (char *)((t_cmd *)out->pipeline->content)->tokens->content);
 	ft_lstdelone(current->next, NULL);
 	current->next = NULL;
 	return (out);
 }
 
-void	free_ptree_node(void *node)
+void	free_ptree_node(t_ptree *ptree, void *null)
 {
-	t_ptree	*ptree;
-
-	// ft_printf("\e[32m### Freeing ");
-	ptree = (t_ptree *)node;
+	(void)null;
 	if (ptree->op == 0)
-	{
-		// ft_printf("%s ###\e[m\n",(char *)((t_cmd *)ptree->pipeline->content)->tokens->content);
 		free_pipeline(ptree->pipeline);
-	}
-	// else
-	// 	ft_printf("%d ###\e[m\n", ptree->op);
 	free(ptree);
 }
 
-void	free_ptree(t_ptree *ptree)
+void	traverse_ptree(t_ptree *ptree, int order, void (*f)(t_ptree *, void *), void *data)
 {
 	if (ptree == NULL)
 		return ;
-	free_ptree(ptree->left);
-	free_ptree(ptree->right);
-	free_ptree_node(ptree);
+	if (order == PRE_ORD)
+		f(ptree, data);
+	traverse_ptree(ptree->left, order, f, data);
+	if (order == IN_ORD)
+		f(ptree, data);
+	traverse_ptree(ptree->right, order, f, data);
+	if (order == PST_ORD)
+		f(ptree, data);
+}
+
+void	print_ptree_node(t_ptree *ptree, void *null)
+{
+	(void)null;
+	if (ptree->op > 0)
+	{
+		if (ptree->op == OP_AND)
+			ft_printf("\e[1;32m&&\e[m ");
+		else if (ptree->op == OP_OR)
+			ft_printf("\e[1;31m||\e[m ");
+		else if (ptree->op == OP_OPNPRN)
+			ft_printf("\e[1;33m(e[m ");
+		else if (ptree->op == OP_CLSPRN)
+			ft_printf("\e[1;33m)e[m ");
+	}
+	else
+		ft_printf("\e[1;34m%s\e[m ",
+			(char *)((t_cmd *)ptree->pipeline->content)->tokens->content);
 }

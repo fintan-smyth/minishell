@@ -52,47 +52,32 @@ void	prepare_args(t_cmd *cmd)
 	cmd->argc = count_args(cmd->argv);
 }
 
-void	print_ptree_lst(t_list *ptree_list);
-
-void	parse_pipeline(t_list *pipeline, t_prog *term)
+void	parse_pipeline(t_ptree *ptree, void *term)
 {
 	t_list	*current_cmd;
 	t_list	*tokens;
 
-	current_cmd = pipeline;
+	if (ptree->op != 0)
+		return ;
+	current_cmd = ptree->pipeline;
 	while (current_cmd != NULL)
 	{
 		tokens = ((t_cmd *)current_cmd->content)->tokens;
-		if (is_debug(term))
+		if (is_debug((t_prog *)term))
 			print_parse_debug(tokens, (t_cmd *)current_cmd->content, "Tokenised");
-		expand_token_list(tokens, term);
-		if (is_debug(term))
+		expand_token_list(tokens, (t_prog *)term);
+		if (is_debug((t_prog *)term))
 			print_parse_debug(tokens, (t_cmd *)current_cmd->content, "Expanded");
 		strip_quotes(&tokens);
-		if (is_debug(term))
+		if (is_debug((t_prog *)term))
 			print_parse_debug(tokens, (t_cmd *)current_cmd->content, "Stripped");
-		apply_redirection((t_cmd *)current_cmd->content, term);
-		if (is_debug(term))
+		apply_redirection((t_cmd *)current_cmd->content, (t_prog *)term);
+		if (is_debug((t_prog *)term))
 			print_parse_debug(tokens, (t_cmd *)current_cmd->content, "Redirected");
 		prepare_args((t_cmd *)current_cmd->content);
 		current_cmd = current_cmd->next;
 	}
-	connect_pipes(pipeline);
-}
-
-void	parse_ptree(t_ptree *ptree, t_prog *term)
-{
-	if (ptree == NULL)
-		return ;
-	parse_ptree(ptree->left, term);
-	if (ptree->op == 0)
-	{
-		// ft_printf("cmd: %s\n", (char *)((t_cmd *)ptree->pipeline->content)->tokens->content);
-		parse_pipeline(ptree->pipeline, term);
-	}
-	// else
-	// 	ft_printf("cmd: %d\n", ptree->op);
-	parse_ptree(ptree->right, term);
+	connect_pipes(ptree->pipeline);
 }
 
 t_ptree	*parse_line(char *line, t_prog *term)
@@ -105,9 +90,13 @@ t_ptree	*parse_line(char *line, t_prog *term)
 
 	tokens = tokenise(line);
 	cmd_list = split_commands(tokens);
-	// print_ptree_lst(cmd_list);
-	// exit(0);
 	ptree = construct_parse_tree(&cmd_list);
-	parse_ptree(ptree, term);
+	traverse_ptree(ptree, IN_ORD, parse_pipeline, term);
+	if (is_debug(term))
+	{
+		ft_printf("\e[35m### POST ORDER ###\e[m\n");
+		traverse_ptree(ptree, PST_ORD, print_ptree_node, NULL);
+		write(1, "\n", 1);
+	}
 	return (ptree);
 }

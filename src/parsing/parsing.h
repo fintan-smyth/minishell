@@ -66,6 +66,13 @@ enum
 	RD_HRD = 4,
 };
 
+enum
+{
+	IN_ORD,
+	PRE_ORD,
+	PST_ORD,
+};
+
 
 //Tokenise
 int		is_op(char c);
@@ -97,9 +104,10 @@ t_ptree	*ptree_new(t_list *pipeline, int op);
 void	push_ptree_stack(t_list	**stack, t_ptree *node);
 t_ptree	*pop_ptree_stack(t_list	**stack);
 t_ptree	*construct_parse_tree(t_list **ptree_list);
-void	free_ptree_node(void *node);
-void	free_ptree(t_ptree *ptree);
+void	free_ptree_node(t_ptree *node, void *null);
+void	print_ptree_node(t_ptree *ptree, void *null);
 t_ptree	*parse_line(char *line, t_prog *term);
+void	traverse_ptree(t_ptree *ptree, int order, void (*f)(t_ptree *, void *), void *data);
 
 //Redirection
 int		is_redirect(t_list *token);
