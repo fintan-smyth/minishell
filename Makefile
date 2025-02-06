@@ -20,6 +20,7 @@ SRC = $(SRC_DIR)/main.c \
 	  $(SRC_DIR)/parsing/strip_quotes.c \
 	  $(SRC_DIR)/parsing/commands.c \
 	  $(SRC_DIR)/parsing/parse_line.c \
+	  $(SRC_DIR)/parsing/parse_tree.c \
 	  $(SRC_DIR)/parsing/pipes.c \
 	  $(SRC_DIR)/parsing/tokenise/tokenise.c \
 	  $(SRC_DIR)/parsing/tokenise/tokenise_utils.c \

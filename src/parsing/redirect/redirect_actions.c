@@ -6,13 +6,18 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 18:04:38 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/05 16:29:18 by myiu             ###   ########.fr       */
+/*   Updated: 2025/02/05 23:25:34 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parsing.h"
 #include <fcntl.h>
 #include <readline/readline.h>
+#include <signal.h>
+#include <termios.h>
+#include <unistd.h>
+
+extern sig_atomic_t g_signal;
 
 void	redirect_out(t_cmd *cmd, t_list **rd_token, t_list *prev, int mode)
 // Applies file redirection for the redirect out (>) or append (>>) operator.
@@ -75,35 +80,72 @@ void	redirect_in(t_cmd *cmd, t_list **rd_token, t_list *prev)
 void	sigint_handler(int signum)
 {
 	(void)signum;
-	kill(0, SIGINT);
-	rl_on_new_line();
-	rl_replace_line("^C", 0);
-	rl_redisplay();
-	exit (1);
+	write(1, "\n", 1);
+	g_signal = SIGINT;
+	close(STDIN_FILENO);
+}
+
+void	write_hdoc(t_cmd *cmd, t_list *hdoc, t_prog *term, int expand)
+// Writes text input collected by the heredoc into the heredoc pipe,
+// to be later read from by a command.
+{
+	t_list	*current;
+	char	*var;
+
+	current = hdoc;
+	while (current != NULL)
+	{
+		var = ft_strchr((char *)current->content, '$');
+		if (expand && var)
+			expand_var_inplace((char **)&current->content, var, term);
+		ft_putendl_fd((char *)current->content, cmd->hdpipe[1]);
+		current = current->next;
+	}
+	// close(cmd->hdpipe[1]);
+}
+
+void	cleanup_heredoc(t_list **hdoc, t_cmd *cmd, t_prog *term, char *line)
+{
+	ft_lstclear(hdoc, free);
+	free(line);
+	close(cmd->hdpipe[0]);
+	close(cmd->hdpipe[1]);
+	traverse_ptree(term->ptree, PST_ORD, free_ptree_node, NULL);
+	free(term->line);
+	cleanup(term);
 }
 
 // Prompts the user for multi line text input.
 // Input stops being read when a line containing just 'delim' is found.
-t_list	*read_hdoc(char *delim)
+void	read_hdoc(t_cmd *cmd, char *delim, t_prog *term, int expand)
 {
 	char				*line;
 	t_list				*hdoc;
 	pid_t				pid;
-	struct sigaction	sa;
 
-	sa.sa_handler = sig_handler;
-	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = 0;
 	hdoc = NULL;
+	pipe(cmd->hdpipe);
+	cmd->fd_in = cmd->hdpipe[0];
 	pid = fork();
 	if (pid == 0)
 	{
-		signal(SIGINT, SIG_DFL);
-		line = readline(">");
+		signal(SIGINT, sigint_handler);
+		// signal(SIGINT, SIG_DFL);
+		line = readline("> ");
+		if (g_signal == SIGINT)
+		{
+			cleanup_heredoc(&hdoc, cmd, term, line);
+			exit(1);
+		}
 		while (line != NULL && ft_strncmp(line, delim, ft_strlen(delim) + 1))
 		{
 			ft_lstadd_back(&hdoc, ft_lstnew(line));
-			line = readline(">");
+			line = readline("> ");
+			if (g_signal == SIGINT)
+			{
+				cleanup_heredoc(&hdoc, cmd, term, line);
+				exit(1);
+			}
 		}
 		if (line == NULL)
 		{
@@ -114,35 +156,17 @@ t_list	*read_hdoc(char *delim)
 		}
 		else
 			free(line);
-		exit (0);
+		write_hdoc(cmd, hdoc, term, expand);
+		cleanup_heredoc(&hdoc, cmd, term, line);
+		exit(0);
 	}
 	else if (pid > 0)
 	{
-		wait(NULL);
-		return (NULL);
+		signal(SIGINT, SIG_IGN);
+		waitpid(pid, &term->parse_status, 0);
+		setup_signals();
 	}
-	return (hdoc);
-}
-
-void	write_hdoc(t_cmd *cmd, t_list *hdoc, t_prog *term, int expand)
-// Writes text input collected by the heredoc into the heredoc pipe,
-// to be later read from by a command.
-{
-	t_list	*current;
-	char	*var;
-
-	pipe(cmd->hdpipe);
-	cmd->fd_in = cmd->hdpipe[0];
-	current = hdoc;
-	while (current != NULL)
-	{
-		var = ft_strchr((char *)current->content, '$');
-		if (expand && var)
-			expand_var_inplace((char **)&current->content, var, term);
-		ft_putendl_fd((char *)current->content, cmd->hdpipe[1]);
-		current = current->next;
-	}
-	close(cmd->hdpipe[1]);
+	return ;
 }
 
 void	redirect_hdoc(t_cmd *cmd, t_list **rd_token, t_list *prev, t_prog *term)
@@ -151,7 +175,6 @@ void	redirect_hdoc(t_cmd *cmd, t_list **rd_token, t_list *prev, t_prog *term)
 {
 	char	*delim;
 	int		expand;
-	t_list	*hdoc;
 
 	expand = 1;
 	delim = (char *)(*rd_token)->next->content;
@@ -160,10 +183,14 @@ void	redirect_hdoc(t_cmd *cmd, t_list **rd_token, t_list *prev, t_prog *term)
 		expand = 0;
 		strip_quotes_token(delim);
 	}
-	hdoc = read_hdoc(delim);
-	write_hdoc(cmd, hdoc, term, expand);
+	read_hdoc(cmd, delim, term, expand);
 	cmd->rd_in = 1;
-	ft_lstclear(&hdoc, free);
+	close(cmd->hdpipe[1]);
+	if (term->parse_status > 0)
+	{
+		if (is_debug(term))
+			ft_printf("\e[31m### HDOC FAILED ###\e[m\n");
+	}
 	ft_lstdel_next(prev, free);
 	ft_lstdel_next(prev, free);
 	*rd_token = NULL;

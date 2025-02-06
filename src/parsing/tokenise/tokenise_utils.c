@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 17:53:59 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/02 18:10:40 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/04 20:58:36 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	is_op(char c)
 // Checks if a character can form part of an operator.
 {
-	if (ft_strchr("><|&", c) == NULL)
+	if (ft_strchr("><|&()", c) == NULL)
 		return (0);
 	return (1);
 }

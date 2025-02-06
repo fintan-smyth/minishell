@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 14:35:24 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/02 18:10:33 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/04 23:06:51 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ t_list	*tokenise(char *line)
 	char	*lp;
 	int		quoting;
 	char	q_char;
+	// char	prev;
 	int		i;
 
 	lp = line;
@@ -101,6 +102,7 @@ t_list	*tokenise(char *line)
 	quoting = 0;
 	q_char = 0;
 	tokens = NULL;
+	// prev = 0;
 	while (lp[++i])
 	{
 		if (apply_quoting_tokenise(&quoting, lp[i], &q_char))

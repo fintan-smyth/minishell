@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 14:32:29 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/05 16:30:20 by myiu             ###   ########.fr       */
+/*   Updated: 2025/02/05 17:43:20 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,7 @@
 # include "../minishell.h"
 # include <fcntl.h>
 # include <stdbool.h>
-
-typedef struct s_cmd
-{
-	t_list	*tokens;
-	char	**argv;
-	int		argc;
-	int		sep;
-	int		condition;
-	int		fd_in;
-	int		fd_out;
-	int		pipe[2];
-	int		hdpipe[2];
-	int		error;
-	bool	rd_in;
-	bool	rd_out;
-}	t_cmd;
+# include "../structs.h"
 
 enum
 {
@@ -39,6 +24,8 @@ enum
 	OP_PIPE = 1,
 	OP_AND = 2,
 	OP_OR = 3,
+	OP_OPNPRN = 4,
+	OP_CLSPRN = 5,
 };
 
 enum
@@ -56,7 +43,13 @@ enum
 	RD_HRD = 4,
 };
 
-t_list	*parse_line(char *line, t_prog *term);
+enum
+{
+	IN_ORD,
+	PRE_ORD,
+	PST_ORD,
+};
+
 
 //Tokenise
 int		is_op(char c);
@@ -83,6 +76,16 @@ void	free_pipeline(void *lstptr);
 int		is_cmd_sep(t_list *token);
 t_list	*split_commands(t_list *tokens);
 
+//Command parse tree
+t_ptree	*ptree_new(t_list *pipeline, int op);
+void	push_ptree_stack(t_list	**stack, t_ptree *node);
+t_ptree	*pop_ptree_stack(t_list	**stack);
+t_ptree	*construct_parse_tree(t_list **ptree_list);
+void	free_ptree_node(t_ptree *node, void *null);
+void	print_ptree_node(t_ptree *ptree, void *null);
+t_ptree	*parse_line(char *line, t_prog *term);
+void	traverse_ptree(t_ptree *ptree, int order, void (*f)(t_ptree *, void *), void *data);
+
 //Redirection
 int		is_redirect(t_list *token);
 void	encode_redirect(t_list *token);
@@ -91,6 +94,6 @@ void	redirect_hdoc(t_cmd *cmd, t_list **rd_token,
 void	redirect_out(t_cmd *cmd, t_list **rd_token, t_list *prev, int mode);
 void	redirect_in(t_cmd *cmd, t_list **rd_token, t_list *prev);
 void	apply_redirection(t_cmd *cmd, t_prog *term);
-void	connect_pipes(t_list *cmd_list);
+void	connect_pipes(t_list *pipeline);
 
 #endif // PARSING_H

@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:10:22 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/03 20:27:30 by myiu             ###   ########.fr       */
+/*   Updated: 2025/02/05 23:05:46 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,47 +52,51 @@ void	prepare_args(t_cmd *cmd)
 	cmd->argc = count_args(cmd->argv);
 }
 
-t_list	*parse_line(char *line, t_prog *term)
+void	parse_pipeline(t_ptree *ptree, void *term)
+{
+	t_list	*current_cmd;
+	t_list	*tokens;
+
+	if (ptree->op != 0)
+		return ;
+	current_cmd = ptree->pipeline;
+	while (current_cmd != NULL && ((t_prog *)term)->parse_status == 0)
+	{
+		tokens = ((t_cmd *)current_cmd->content)->tokens;
+		if (is_debug((t_prog *)term))
+			print_parse_debug(tokens, (t_cmd *)current_cmd->content, "Tokenised");
+		expand_token_list(tokens, (t_prog *)term);
+		if (is_debug((t_prog *)term))
+			print_parse_debug(tokens, (t_cmd *)current_cmd->content, "Expanded");
+		strip_quotes(&tokens);
+		if (is_debug((t_prog *)term))
+			print_parse_debug(tokens, (t_cmd *)current_cmd->content, "Stripped");
+		apply_redirection((t_cmd *)current_cmd->content, (t_prog *)term);
+		if (is_debug((t_prog *)term))
+			print_parse_debug(tokens, (t_cmd *)current_cmd->content, "Redirected");
+		prepare_args((t_cmd *)current_cmd->content);
+		current_cmd = current_cmd->next;
+	}
+	connect_pipes(ptree->pipeline);
+}
+
+t_ptree	*parse_line(char *line, t_prog *term)
 // Parses a line into a list of commands to be executed, applying any
 // necessary expansion and redirection.
 {
 	t_list	*tokens;
 	t_list	*cmd_list;
-	t_list	*current_cmd;
-	t_list	*current_pipeline;
-	int	i;
-	int	j;
 
+	term->parse_status = 0;
 	tokens = tokenise(line);
 	cmd_list = split_commands(tokens);
-	current_pipeline = cmd_list;
-	i = 0;
-	while (current_pipeline != NULL)
+	term->ptree = construct_parse_tree(&cmd_list);
+	traverse_ptree(term->ptree, IN_ORD, parse_pipeline, term);
+	if (is_debug(term))
 	{
-		if (is_debug(term))
-			ft_printf("\e[1;31m### TOKENISING PIPELINE No %d ###\e[m\n", ++i);
-		current_cmd = (t_list *)current_pipeline->content;
-		j = 0;
-		while (current_cmd != NULL)
-		{
-			if (is_debug(term))
-				ft_printf("\e[1;33m### TOKENISING SUBCMD No %d ###\e[m\n", ++j);
-			tokens = ((t_cmd *)current_cmd->content)->tokens;
-			if (is_debug(term))
-				print_parse_debug(tokens, (t_cmd *)current_cmd->content, "Tokenised");
-			expand_token_list(tokens, term);
-			if (is_debug(term))
-				print_parse_debug(tokens, (t_cmd *)current_cmd->content, "Expanded");
-			strip_quotes(&tokens);
-			if (is_debug(term))
-				print_parse_debug(tokens, (t_cmd *)current_cmd->content, "Stripped");
-			apply_redirection((t_cmd *)current_cmd->content, term);
-			if (is_debug(term))
-				print_parse_debug(tokens, (t_cmd *)current_cmd->content, "Redirected");
-			prepare_args((t_cmd *)current_cmd->content);
-			current_cmd = current_cmd->next;
-		}
-		current_pipeline = current_pipeline->next;
+		ft_printf("\e[35m### POST ORDER ###\e[m\n");
+		traverse_ptree(term->ptree, PST_ORD, print_ptree_node, NULL);
+		write(1, "\n", 1);
 	}
-	return (cmd_list);
+	return (term->ptree);
 }
