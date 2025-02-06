@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 13:50:15 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/05 23:06:16 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/06 22:00:35 by myiu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,15 +75,22 @@ void	execute_ptree(t_ptree *ptree, t_prog *term)
 	execute_ptree(ptree->right, term);
 }
 
-int	main(int argc, char **argv)
+int	main(int argc, char **argv, char *env[])
 {
 	t_prog	*term;
 	t_ptree	*ptree;
 	char	*line;
+	int		i;
 
 	(void)argc;
+	i = 0;
 	setup_signals();
 	term = init_term(argv[0], &line);
+	if (strcmp(line, "env") == 0)
+	{
+		while (env[i++] != NULL)
+			printf("%s\n", env[i]);
+	}
 	while (line != NULL)
 	{
 		if (*line == 0)
@@ -91,6 +98,7 @@ int	main(int argc, char **argv)
 			free(line);
 			line = readline(get_prompt(term,
 						getenv_list(term->env_list, "HOME")));
+			 
 			continue ;
 		}
 		term->line = line;

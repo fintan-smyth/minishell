@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 17:41:34 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/06 16:20:31 by myiu             ###   ########.fr       */
+/*   Updated: 2025/02/06 20:10:20 by myiu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ typedef struct s_ptree
 	struct s_ptree	*right;
 }	t_ptree;
 
-typedef struct s_term
+typedef struct s_prog
 {
 	char	cwd[PATH_MAX];
 	char	*prompt;
