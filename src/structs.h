@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
+/*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 17:41:34 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/05 23:01:06 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/06 16:20:31 by myiu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ typedef struct s_entry
 
 typedef struct s_ptree
 {
-	t_list	*pipeline;
-	int		op;
+	t_list			*pipeline;
+	int				op;
 	struct s_ptree	*left;
 	struct s_ptree	*right;
 }	t_ptree;

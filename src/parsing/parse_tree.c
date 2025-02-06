@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_tree.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
+/*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 16:10:16 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/05 00:34:31 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/06 16:31:59 by myiu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,8 @@ void	free_ptree_node(t_ptree *ptree, void *null)
 	free(ptree);
 }
 
-void	traverse_ptree(t_ptree *ptree, int order, void (*f)(t_ptree *, void *), void *data)
+void	traverse_ptree(t_ptree *ptree, int order, void (*f)(t_ptree *, void *),
+	void *data)
 {
 	if (ptree == NULL)
 		return ;

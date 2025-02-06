@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 18:04:38 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/06 14:30:24 by myiu             ###   ########.fr       */
+/*   Updated: 2025/02/06 16:34:34 by myiu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <termios.h>
 #include <unistd.h>
 
-extern sig_atomic_t g_signal;
+extern sig_atomic_t	g_signal;
 
 void	redirect_out(t_cmd *cmd, t_list **rd_token, t_list *prev, int mode)
 // Applies file redirection for the redirect out (>) or append (>>) operator.
@@ -101,7 +101,6 @@ void	write_hdoc(t_cmd *cmd, t_list *hdoc, t_prog *term, int expand)
 		ft_putendl_fd((char *)current->content, cmd->hdpipe[1]);
 		current = current->next;
 	}
-	// close(cmd->hdpipe[1]);
 }
 
 void	cleanup_heredoc(t_list **hdoc, t_cmd *cmd, t_prog *term, char *line)
@@ -131,7 +130,6 @@ void	read_hdoc(t_cmd *cmd, char *delim, t_prog *term, int expand)
 	if (pid == 0)
 	{
 		signal(SIGINT, sigint_handler);
-		// signal(SIGINT, SIG_DFL);
 		line = readline("> ");
 		if (g_signal == SIGINT)
 		{

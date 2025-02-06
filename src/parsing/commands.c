@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
+/*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:18:36 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/05 00:32:40 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/06 16:27:42 by myiu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,7 +158,8 @@ t_ptree	*construct_parse_tree(t_list **ptree_list)
 		else if (((t_ptree *)current->content)->op == 2
 			|| ((t_ptree *)current->content)->op == 3)
 		{
-			while (charstack != NULL && ((t_ptree *)ft_lstlast(charstack)->content)->op != OP_OPNPRN)
+			while (charstack != NULL && ((t_ptree *)
+					ft_lstlast(charstack)->content)->op != OP_OPNPRN)
 			{
 				tree_node = pop_ptree_stack(&charstack);
 				tree_node->right = pop_ptree_stack(&nodestack);
@@ -170,7 +171,8 @@ t_ptree	*construct_parse_tree(t_list **ptree_list)
 		else if (((t_ptree *)current->content)->op == OP_CLSPRN)
 		{
 			free_ptree_node(current->content, NULL);
-			while (charstack != NULL && ((t_ptree *)ft_lstlast(charstack)->content)->op != OP_OPNPRN)
+			while (charstack != NULL && ((t_ptree *)
+					ft_lstlast(charstack)->content)->op != OP_OPNPRN)
 			{
 				tree_node = pop_ptree_stack(&charstack);
 				tree_node->right = pop_ptree_stack(&nodestack);
@@ -197,14 +199,17 @@ t_ptree	*construct_parse_tree(t_list **ptree_list)
 void	print_ptree_lst(t_list *ptree_list)
 {
 	t_list	*current;
-	t_ptree *node;
+	t_ptree	*node;
 
 	current = ptree_list;
 	while (current != NULL)
 	{
 		node = (t_ptree *)current->content;
 		if (node->op == 0)
-			ft_printf("cmd: %s\n", (char *)((t_cmd *)node->pipeline->content)->tokens->content);
+		{
+			ft_printf("cmd: %s\n", (char *)
+				((t_cmd *)node->pipeline->content)->tokens->content);
+		}
 		else
 			ft_printf("op: %d\n", node->op);
 		current = current->next;

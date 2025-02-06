@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:10:22 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/05 23:05:46 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/06 16:31:32 by myiu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,30 +52,31 @@ void	prepare_args(t_cmd *cmd)
 	cmd->argc = count_args(cmd->argv);
 }
 
+//changed current_cmd to cur_cmd for norm
 void	parse_pipeline(t_ptree *ptree, void *term)
 {
-	t_list	*current_cmd;
+	t_list	*cur_cmd;
 	t_list	*tokens;
 
 	if (ptree->op != 0)
 		return ;
-	current_cmd = ptree->pipeline;
-	while (current_cmd != NULL && ((t_prog *)term)->parse_status == 0)
+	cur_cmd = ptree->pipeline;
+	while (cur_cmd != NULL && ((t_prog *)term)->parse_status == 0)
 	{
-		tokens = ((t_cmd *)current_cmd->content)->tokens;
+		tokens = ((t_cmd *)cur_cmd->content)->tokens;
 		if (is_debug((t_prog *)term))
-			print_parse_debug(tokens, (t_cmd *)current_cmd->content, "Tokenised");
+			print_parse_debug(tokens, (t_cmd *)cur_cmd->content, "Tokenised");
 		expand_token_list(tokens, (t_prog *)term);
 		if (is_debug((t_prog *)term))
-			print_parse_debug(tokens, (t_cmd *)current_cmd->content, "Expanded");
+			print_parse_debug(tokens, (t_cmd *)cur_cmd->content, "Expanded");
 		strip_quotes(&tokens);
 		if (is_debug((t_prog *)term))
-			print_parse_debug(tokens, (t_cmd *)current_cmd->content, "Stripped");
-		apply_redirection((t_cmd *)current_cmd->content, (t_prog *)term);
+			print_parse_debug(tokens, (t_cmd *)cur_cmd->content, "Stripped");
+		apply_redirection((t_cmd *)cur_cmd->content, (t_prog *)term);
 		if (is_debug((t_prog *)term))
-			print_parse_debug(tokens, (t_cmd *)current_cmd->content, "Redirected");
-		prepare_args((t_cmd *)current_cmd->content);
-		current_cmd = current_cmd->next;
+			print_parse_debug(tokens, (t_cmd *)cur_cmd->content, "Redirected");
+		prepare_args((t_cmd *)cur_cmd->content);
+		cur_cmd = cur_cmd->next;
 	}
 	connect_pipes(ptree->pipeline);
 }

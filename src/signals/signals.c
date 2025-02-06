@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fsmyth <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 23:24:55 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/05 23:25:08 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/06 16:37:29 by myiu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 #include <signal.h>
 
-sig_atomic_t g_signal;
+sig_atomic_t	g_signal;
 
 /*
 	ctrl C(sigint) -> new prompt on a new line
@@ -30,7 +30,6 @@ void	sig_handler(int sig)
 		rl_redisplay();
 	}
 }
-
 
 void	setup_signals(void)
 {

@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 14:32:29 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/05 17:43:20 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/06 16:33:32 by myiu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ enum
 	PST_ORD,
 };
 
-
 //Tokenise
 int		is_op(char c);
 int		matches_prev_op(char c, char prev);
@@ -84,7 +83,8 @@ t_ptree	*construct_parse_tree(t_list **ptree_list);
 void	free_ptree_node(t_ptree *node, void *null);
 void	print_ptree_node(t_ptree *ptree, void *null);
 t_ptree	*parse_line(char *line, t_prog *term);
-void	traverse_ptree(t_ptree *ptree, int order, void (*f)(t_ptree *, void *), void *data);
+void	traverse_ptree(t_ptree *ptree, int order, void (*f)(t_ptree *, void *),
+			void *data);
 
 //Redirection
 int		is_redirect(t_list *token);
