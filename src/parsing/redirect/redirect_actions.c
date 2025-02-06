@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 18:04:38 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/05 23:25:34 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/06 14:30:24 by myiu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,8 @@ void	write_hdoc(t_cmd *cmd, t_list *hdoc, t_prog *term, int expand)
 void	cleanup_heredoc(t_list **hdoc, t_cmd *cmd, t_prog *term, char *line)
 {
 	ft_lstclear(hdoc, free);
-	free(line);
+	if (line)
+		free(line);
 	close(cmd->hdpipe[0]);
 	close(cmd->hdpipe[1]);
 	traverse_ptree(term->ptree, PST_ORD, free_ptree_node, NULL);
@@ -155,7 +156,10 @@ void	read_hdoc(t_cmd *cmd, char *delim, t_prog *term, int expand)
 			ft_putendl_fd(")", 2);
 		}
 		else
+		{
 			free(line);
+			line = NULL;
+		}
 		write_hdoc(cmd, hdoc, term, expand);
 		cleanup_heredoc(&hdoc, cmd, term, line);
 		exit(0);
