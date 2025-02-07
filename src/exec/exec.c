@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 16:39:24 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/03 20:27:30 by myiu             ###   ########.fr       */
+/*   Updated: 2025/02/07 15:52:02 by myiu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ int	handle_builtins(t_prog *term, t_cmd *cmd)
 		unset_env(term, cmd);
 	else if (!ft_strncmp((cmd->argv)[0], "echo", 5))
 		echo(cmd);
+	else if (!ft_strncmp((cmd->argv)[0], "exit", 5))
+		exit_shell(term);
 	else
 		return (0);
 	return (1);

@@ -17,6 +17,7 @@ SRC = $(SRC_DIR)/main.c \
 	  $(SRC_DIR)/builtins/env.c \
 	  $(SRC_DIR)/builtins/pwd.c \
 	  $(SRC_DIR)/builtins/echo.c \
+	  $(SRC_DIR)/builtins/exit.c \
 	  $(SRC_DIR)/parsing/strip_quotes.c \
 	  $(SRC_DIR)/parsing/commands.c \
 	  $(SRC_DIR)/parsing/parse_line.c \
