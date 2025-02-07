@@ -11,11 +11,6 @@
 /* ************************************************************************** */
 
 #include "../parsing.h"
-#include <fcntl.h>
-#include <readline/readline.h>
-#include <signal.h>
-#include <termios.h>
-#include <unistd.h>
 
 extern sig_atomic_t	g_signal;
 

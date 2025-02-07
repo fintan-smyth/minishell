@@ -88,7 +88,7 @@ int	main(int argc, char **argv, char *env[])
 	term = init_term(argv[0], &line, env);
 	while (line != NULL)
 	{
-		if (*line == 0)
+		if (*line == 0 || ft_strwhitespace(line))
 		{
 			free(line);
 			line = readline(get_prompt(term,
