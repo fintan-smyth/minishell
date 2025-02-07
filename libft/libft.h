@@ -6,7 +6,7 @@
 /*   By: fsmyth <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 12:19:13 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/02 17:25:16 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/07 16:17:13 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,5 +98,6 @@ void	**ft_lst_to_arr(t_list *list);
 void	ft_qsort(void **array, int left, int right,
 			int (*cmp)(void *, void *));
 int		ft_strcmp(char *s1, char *s2);
+int		ft_strnum(char *str);
 
 #endif

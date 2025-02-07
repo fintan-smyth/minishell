@@ -28,6 +28,7 @@ SRC = ft_isalpha.c \
 	  ft_calloc.c \
 	  ft_match_wc.c \
 	  ft_strdup.c \
+	  ft_strnum.c \
 	  ft_strndup.c \
 	  ft_substr.c \
 	  ft_strjoin.c \

@@ -35,6 +35,7 @@ char	*get_prompt(t_prog *term, char *home);
 //Exec
 int		count_args(char **args);
 int		search_path(t_prog *term, char *cmd, char *cmd_path);
+int		exec_cmd(t_prog *term, t_cmd *cmd);
 
 //Env
 void	free_env(void *env);

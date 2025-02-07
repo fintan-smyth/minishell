@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 16:39:24 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/07 15:52:02 by myiu             ###   ########.fr       */
+/*   Updated: 2025/02/07 16:28:24 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	handle_builtins(t_prog *term, t_cmd *cmd)
 	else if (!ft_strncmp((cmd->argv)[0], "echo", 5))
 		echo(cmd);
 	else if (!ft_strncmp((cmd->argv)[0], "exit", 5))
-		exit_shell(term);
+		exit_shell(term, cmd);
 	else
 		return (0);
 	return (1);
@@ -70,10 +70,9 @@ int	exec_cmd(t_prog *term, t_cmd *cmd)
 // Returns the exit status of command.
 {
 	pid_t	child;
-	int		status;
 	char	cmd_path[PATH_MAX];
 
-	status = 0;
+	// term->status = 0;
 	if ((cmd->argv)[0] == NULL)
 		return (0);
 	else if (!handle_builtins(term, cmd))
@@ -82,16 +81,16 @@ int	exec_cmd(t_prog *term, t_cmd *cmd)
 		{
 			child = fork();
 			if (child > 0)
-				handle_parent(cmd, child, &status);
+				handle_parent(cmd, child, &term->status);
 			else
 				handle_child(cmd, term, cmd_path);
 		}
 		else
 		{
-			status = 127 << 8;
+			term->status = 127 << 8;
 			ft_putstr_fd(cmd->argv[0], 2);
 			ft_putendl_fd(": command not found", 2);
 		}
 	}
-	return (status);
+	return (term->status);
 }

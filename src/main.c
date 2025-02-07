@@ -15,7 +15,6 @@
 #include <readline/history.h>
 #include <readline/readline.h>
 
-int	exec_cmd(t_prog *term, t_cmd *cmd, t_list *pipeline);
 
 void	cleanup(t_prog *term)
 // Cleans up the t_prog struct before exit
@@ -56,7 +55,7 @@ void	execute_pipeline(t_list *pipeline, t_prog *term)
 	{
 		if (is_debug(term))
 			ft_printf("\e[1;33m### EXECUTING SUBCMD No %d ###\e[m\n", ++i);
-		term->status = exec_cmd(term, (t_cmd *)current_cmd->content, pipeline);
+		exec_cmd(term, (t_cmd *)current_cmd->content);
 		current_cmd = current_cmd->next;
 	}
 }

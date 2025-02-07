@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 19:00:13 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/07 15:51:15 by myiu             ###   ########.fr       */
+/*   Updated: 2025/02/07 16:28:15 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,6 @@ void	pwd(t_prog *term, t_cmd *cmd);
 void	env(t_cmd *cmd, char **envp);
 void	export_env(t_prog *term, t_cmd *cmd);
 void	unset_env(t_prog *term, t_cmd *cmd);
-void	exit_shell(t_prog *term);
+void	exit_shell(t_prog *term, t_cmd *cmd);
 
 #endif // BUILTINS_H
