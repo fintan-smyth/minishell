@@ -124,6 +124,8 @@ void	read_hdoc(t_cmd *cmd, char *delim, t_prog *term, int expand)
 	pid_t				pid;
 
 	hdoc = NULL;
+	if (cmd->hdpipe[0] > 2)
+		close(cmd->hdpipe[0]);
 	pipe(cmd->hdpipe);
 	cmd->fd_in = cmd->hdpipe[0];
 	pid = fork();
