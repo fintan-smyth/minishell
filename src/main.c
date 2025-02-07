@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 13:50:15 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/07 17:20:01 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/07 18:33:42 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,10 +93,8 @@ int	main(int argc, char **argv, char *env[])
 	t_prog	*term;
 	t_ptree	*ptree;
 	char	*line;
-	int		i;
 
 	(void)argc;
-	i = 0;
 	setup_signals();
 	term = init_term(argv[0], &line, env);
 	while (line != NULL)
