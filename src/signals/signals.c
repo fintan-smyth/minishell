@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 23:24:55 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/07 17:20:13 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/07 17:43:58 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	sig_handler(int sig)
 {
 	if (sig == SIGINT)
 	{
-		write(1, "^C\n", 3);
+		write(1, "\n", 3);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
