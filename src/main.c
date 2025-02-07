@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 13:50:15 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/07 17:05:31 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/07 17:20:01 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,10 @@ void	execute_pipeline(t_list *pipeline, t_prog *term)
 		if (WIFSIGNALED(term->status))
 		{
 			if (WTERMSIG(term->status))
+			{
 				ft_putendl_fd("Quit (core dumped)", 2);
-			term->status += 131 << 8;
+				term->status += (131 << 8);
+			}
 		}
 		current_cmd = current_cmd->next;
 	}
@@ -117,5 +119,4 @@ int	main(int argc, char **argv, char *env[])
 		line = readline(get_prompt(term, getenv_list(term->env_list, "HOME")));
 	}
 	handle_eof(term);
-	cleanup(term);
 }

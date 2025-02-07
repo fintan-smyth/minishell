@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 23:24:55 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/07 17:04:23 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/07 17:20:13 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,12 @@ void	setup_signals(void)
 
 void	handle_eof(t_prog *term)
 {
+	int	status;
+
+	status = term->status;
 	printf("\nexit\n");
 	cleanup(term);
-	exit(WEXITSTATUS(term->status));
+	exit(WEXITSTATUS(status));
 }
 
 void	reset_child_sig(void)
