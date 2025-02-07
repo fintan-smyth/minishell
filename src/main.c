@@ -26,7 +26,7 @@ void	cleanup(t_prog *term)
 	free(term);
 }
 
-t_prog	*init_term(char *name, char **line)
+t_prog	*init_term(char *name, char **line, char **env)
 // Initialises a t_prog structure
 {
 	t_prog			*prog;
@@ -35,7 +35,7 @@ t_prog	*init_term(char *name, char **line)
 	prog = ft_calloc(1, sizeof(*prog));
 	prog->status = 0;
 	getcwd(prog->cwd, PATH_MAX);
-	init_env_list(prog, name);
+	init_env_list(prog, name, env);
 	tcgetattr(STDIN_FILENO, &term);
 	term.c_lflag &= ~ECHOCTL;
 	tcsetattr(fileno(stdin), TCSANOW, &term);
@@ -85,12 +85,7 @@ int	main(int argc, char **argv, char *env[])
 	(void)argc;
 	i = 0;
 	setup_signals();
-	term = init_term(argv[0], &line);
-	if (strcmp(line, "env") == 0)
-	{
-		while (env[i++] != NULL)
-			printf("%s\n", env[i]);
-	}
+	term = init_term(argv[0], &line, env);
 	while (line != NULL)
 	{
 		if (*line == 0)
@@ -98,7 +93,6 @@ int	main(int argc, char **argv, char *env[])
 			free(line);
 			line = readline(get_prompt(term,
 						getenv_list(term->env_list, "HOME")));
-			 
 			continue ;
 		}
 		term->line = line;

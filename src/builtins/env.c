@@ -37,8 +37,6 @@ int	validate_export(char *arg, char **equals)
 void	export_env(t_prog *term, int argc, char **argv)
 // Executes the 'export' builtin command
 {
-	char	*equals;
-	t_list	*existing;
 	int		i;
 
 	if (argc < 2)
@@ -47,19 +45,7 @@ void	export_env(t_prog *term, int argc, char **argv)
 	{
 		i = 0;
 		while (argv[++i] != NULL)
-		{
-			if (!validate_export(argv[i], &equals))
-				continue ;
-			*equals = 0;
-			existing = getenv_node(term->env_list, argv[i]);
-			if (existing == NULL)
-				env_list_add(&term->env_list, argv[i], equals + 1);
-			else
-			{
-				free(((t_env *)existing->content)->var);
-				((t_env *)existing->content)->var = ft_strdup(equals + 1);
-			}
-		}
+			envp_to_lst(term, argv[i]);
 	}
 }
 
