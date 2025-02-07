@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 18:04:38 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/06 16:34:34 by myiu             ###   ########.fr       */
+/*   Updated: 2025/02/07 15:20:08 by myiu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	redirect_in(t_cmd *cmd, t_list **rd_token, t_list *prev)
 void	sigint_handler(int signum)
 {
 	(void)signum;
-	write(1, "\n", 1);
+	write(1, "^C\n", 3);
 	g_signal = SIGINT;
 	close(STDIN_FILENO);
 }
@@ -122,7 +122,7 @@ void	read_hdoc(t_cmd *cmd, char *delim, t_prog *term, int expand)
 	char				*line;
 	t_list				*hdoc;
 	pid_t				pid;
-
+	
 	hdoc = NULL;
 	if (cmd->hdpipe[0] > 2)
 		close(cmd->hdpipe[0]);

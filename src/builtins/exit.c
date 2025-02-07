@@ -1,27 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins.h                                         :+:      :+:    :+:   */
+/*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/30 19:00:13 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/07 15:51:15 by myiu             ###   ########.fr       */
+/*   Created: 2025/02/07 15:24:45 by myiu              #+#    #+#             */
+/*   Updated: 2025/02/07 15:51:08 by myiu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BUILTINS_H
-# define BUILTINS_H
+#include "../minishell.h"
+#include "../parsing/parsing.h"
 
-# include "../minishell.h"
-# include "../parsing/parsing.h"
-
-void	echo(t_cmd *cmd);
-void	cd(t_prog *term, t_cmd *cmd);
-void	pwd(t_prog *term, t_cmd *cmd);
-void	env(t_cmd *cmd, char **envp);
-void	export_env(t_prog *term, t_cmd *cmd);
-void	unset_env(t_prog *term, t_cmd *cmd);
-void	exit_shell(t_prog *term);
-
-#endif // BUILTINS_H
+void	exit_shell(t_prog *term)
+{
+	traverse_ptree(term->ptree, PST_ORD, free_ptree_node, NULL);
+	cleanup(term);
+	exit(EXIT_SUCCESS);
+}
