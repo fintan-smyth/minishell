@@ -12,6 +12,8 @@
 
 #include "../minishell.h"
 
+int	validate_export(char *arg, char **equals);
+
 void	free_env(void *data)
 // Frees a t_env struct
 {
@@ -36,6 +38,30 @@ char	*construct_envp_line(char *name, char *env)
 	ft_strlcat(line, "=", len + 2);
 	ft_strlcat(line, env, len + 2);
 	return (line);
+}
+
+void	env_change_or_add(t_prog *term, char *name, char *var)
+{
+	t_list	*existing;
+
+	existing = getenv_node(term->env_list, name);
+	if (existing == NULL)
+		env_list_add(&term->env_list, name, var);
+	else
+	{
+		free(((t_env *)existing->content)->var);
+		((t_env *)existing->content)->var = ft_strdup(var);
+	}
+}
+
+void	envp_to_lst(t_prog *term, char *envp)
+{
+	char	*equals;
+
+	if (!validate_export(envp, &equals))
+		return ;
+	*equals = 0;
+	env_change_or_add(term, envp, equals + 1);
 }
 
 char	**construct_envp(t_list *env_list)

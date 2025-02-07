@@ -79,20 +79,22 @@ void	env_list_add(t_list **env_list, char *name, char *var)
 	ft_lstadd_back(env_list, ft_lstnew(env));
 }
 
-void	init_env_list(t_prog *term, char *name)
+void	init_env_list(t_prog *term, char *name, char **env)
 // Initialises the env_list with variables in the shell's enviromnent
 {
 	char	*shell;
+	int		i;
+	int		shlvl;
+	char	*shlvl_str;
 
-	env_list_add(&term->env_list, "HOME", getenv("HOME"));
-	env_list_add(&term->env_list, "TERM", getenv("TERM"));
-	env_list_add(&term->env_list, "USER", getenv("USER"));
-	env_list_add(&term->env_list, "PATH", getenv("PATH"));
-	env_list_add(&term->env_list, "TEST", getenv("TEST"));
-	env_list_add(&term->env_list, "MS_DEBUG", getenv("MS_DEBUG"));
-	env_list_add(&term->env_list, "PWD", term->cwd);
-	env_list_add(&term->env_list, "OLDPWD", term->cwd);
+	i = 0;
+	while (env[i] != NULL)
+		envp_to_lst(term, env[i++]);
 	shell = get_shell(term, name);
-	env_list_add(&term->env_list, "SHELL", shell);
+	env_change_or_add(term, "SHELL", shell);
 	free(shell);
+	shlvl = ft_atoi(getenv_list(term->env_list, "SHLVL")) + 1;
+	shlvl_str = ft_itoa(shlvl);
+	env_change_or_add(term, "SHLVL", shlvl_str);
+	free(shlvl_str);
 }

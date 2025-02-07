@@ -46,7 +46,7 @@ void	setup_signals(void)
 
 void	handle_eof(t_prog *term)
 {
-	printf("exit\n");
+	printf("\nexit\n");
 	cleanup(term);
 	exit(EXIT_SUCCESS);
 }

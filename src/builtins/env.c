@@ -12,14 +12,14 @@
 
 #include "../minishell.h"
 
-void	env(char **envp)
+void	env(t_cmd *cmd, char **envp)
 // Executes the 'env' builtin command
 {
 	int	i;
 
 	i = 0;
 	while (envp[i] != NULL)
-		ft_printf("%s\n", envp[i++]);
+		ft_putendl_fd(envp[i++], cmd->fd_out);
 	free_split(&envp);
 }
 
@@ -34,48 +34,34 @@ int	validate_export(char *arg, char **equals)
 	return (1);
 }
 
-void	export_env(t_prog *term, int argc, char **argv)
+void	export_env(t_prog *term, t_cmd *cmd)
 // Executes the 'export' builtin command
 {
-	char	*equals;
-	t_list	*existing;
 	int		i;
 
-	if (argc < 2)
-		env(construct_envp(term->env_list));
+	if (cmd->argc < 2)
+		env(cmd, construct_envp(term->env_list));
 	else
 	{
 		i = 0;
-		while (argv[++i] != NULL)
-		{
-			if (!validate_export(argv[i], &equals))
-				continue ;
-			*equals = 0;
-			existing = getenv_node(term->env_list, argv[i]);
-			if (existing == NULL)
-				env_list_add(&term->env_list, argv[i], equals + 1);
-			else
-			{
-				free(((t_env *)existing->content)->var);
-				((t_env *)existing->content)->var = ft_strdup(equals + 1);
-			}
-		}
+		while (cmd->argv[++i] != NULL)
+			envp_to_lst(term, cmd->argv[i]);
 	}
 }
 
-void	unset_env(t_prog *term, int argc, char **argv)
+void	unset_env(t_prog *term, t_cmd *cmd)
 // Executes the 'unset' builtin command
 {
 	t_list	*env_node;
 	t_env	*env;
 	int		i;
 
-	if (argc < 2)
+	if (cmd->argc < 2)
 		return ;
 	i = 1;
-	while (argv[i] != NULL)
+	while (cmd->argv[i] != NULL)
 	{
-		env_node = getenv_node(term->env_list, argv[i++]);
+		env_node = getenv_node(term->env_list, cmd->argv[i++]);
 		if (env_node != NULL)
 		{
 			env = (t_env *)env_node->content;

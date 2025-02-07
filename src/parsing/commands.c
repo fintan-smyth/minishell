@@ -82,48 +82,44 @@ t_list	*split_commands(t_list *tokens)
 	t_list	*current_tkn;
 	t_list	*temp;
 	t_cmd	*cmd;
-	int		sep;
 
 	ptree_list = NULL;
 	pipeline = NULL;
 	current_tkn = tokens;
 	temp = NULL;
-	sep = is_cmd_sep(current_tkn);
-	while (sep > OP_PIPE)
+	while (is_cmd_sep(current_tkn) > OP_PIPE)
 	{
-		push_ptree_stack(&ptree_list, ptree_new(NULL, sep));
+		push_ptree_stack(&ptree_list, ptree_new(NULL, is_cmd_sep(current_tkn)));
 		temp = current_tkn;
 		current_tkn = current_tkn->next;
 		ft_lstdelone(temp, free);
 		if (current_tkn == NULL)
 			break ;
-		sep = is_cmd_sep(current_tkn);
 	}
 	cmd = construct_cmd(current_tkn);
 	ft_lstadd_back(&pipeline, ft_lstnew(cmd));
 	push_ptree_stack(&ptree_list, ptree_new(pipeline, 0));
 	while (current_tkn != NULL)
 	{
-		sep = is_cmd_sep(current_tkn);
-		if (sep == OP_PIPE && current_tkn->next != NULL)
+		if (is_cmd_sep(current_tkn) == OP_PIPE && current_tkn->next != NULL)
 		{
 			cmd = construct_cmd(current_tkn->next);
 			ft_lstadd_back(&pipeline, ft_lstnew(cmd));
 			current_tkn->next = NULL;
 			current_tkn = cmd->tokens;
 		}
-		else if (sep > OP_PIPE)
+		else if (is_cmd_sep(current_tkn) > OP_PIPE)
 		{
 			temp->next = NULL;
-			while (sep > OP_PIPE)
+			while (is_cmd_sep(current_tkn) > OP_PIPE)
 			{
-				push_ptree_stack(&ptree_list, ptree_new(NULL, sep));
+				push_ptree_stack(&ptree_list,
+					ptree_new(NULL, is_cmd_sep(current_tkn)));
 				temp = current_tkn;
 				current_tkn = current_tkn->next;
 				ft_lstdelone(temp, free);
 				if (current_tkn == NULL)
 					break ;
-				sep = is_cmd_sep(current_tkn);
 			}
 			if (current_tkn == NULL)
 				break ;

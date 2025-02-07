@@ -24,11 +24,11 @@ int	handle_builtins(t_prog *term, t_cmd *cmd)
 	else if (!ft_strncmp((cmd->argv)[0], "pwd", 4))
 		pwd(term, cmd);
 	else if (!ft_strncmp((cmd->argv)[0], "env", 4))
-		env(construct_envp(term->env_list));
+		env(cmd, construct_envp(term->env_list));
 	else if (!ft_strncmp((cmd->argv)[0], "export", 7))
-		export_env(term, cmd->argc, cmd->argv);
+		export_env(term, cmd);
 	else if (!ft_strncmp((cmd->argv)[0], "unset", 6))
-		unset_env(term, cmd->argc, cmd->argv);
+		unset_env(term, cmd);
 	else if (!ft_strncmp((cmd->argv)[0], "echo", 5))
 		echo(cmd);
 	else

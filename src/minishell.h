@@ -40,10 +40,12 @@ int		search_path(t_prog *term, char *cmd, char *cmd_path);
 void	free_env(void *env);
 t_list	*getenv_node(t_list *env_list, char *name);
 char	*getenv_list(t_list *env_list, char *name);
-void	init_env_list(t_prog *term, char *name);
+void	init_env_list(t_prog *term, char *name, char **env);
 void	env_list_add(t_list **lst, char *name, char *var);
 char	*construct_envp_line(char *name, char *env);
 char	**construct_envp(t_list *list);
+void	envp_to_lst(t_prog *term, char *envp);
+void	env_change_or_add(t_prog *term, char *name, char *var);
 
 //Signals
 void	sig_handler(int sig);
