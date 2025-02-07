@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 17:43:31 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/02 17:43:54 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/07 17:34:34 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,13 @@ void	envp_to_lst(t_prog *term, char *envp)
 	char	*equals;
 
 	if (!validate_export(envp, &equals))
+	{
+		term->status = 1 << 8;
 		return ;
+	}
 	*equals = 0;
 	env_change_or_add(term, envp, equals + 1);
+	term->status = 0;
 }
 
 char	**construct_envp(t_list *env_list)

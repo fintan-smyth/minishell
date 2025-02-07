@@ -6,13 +6,13 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/27 16:58:13 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/01/31 00:37:42 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/07 17:24:58 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../parsing/parsing.h"
+#include "../builtins/builtins.h"
 
-void	echo(t_cmd *cmd)
+void	echo(t_prog *term, t_cmd *cmd)
 // Executes the 'echo' builtin command
 {
 	int		i;
@@ -40,4 +40,5 @@ void	echo(t_cmd *cmd)
 		else if (i != 2 && cmd->fd_out == 1)
 			ft_putstr_fd("\e[7m%\e[m\n", 1);
 	}
+	term->status = 0;
 }

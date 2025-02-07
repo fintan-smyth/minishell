@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 14:32:29 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/06 16:33:32 by myiu             ###   ########.fr       */
+/*   Updated: 2025/02/07 17:31:32 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ void	print_tokens(t_list *tokens);
 t_list	*tokenise(char *line);
 
 //Expansion
+int		valid_var_chr(char c);
 char	*extend_line(char *line, char *extra);
 int		expand_var_inplace(char **line, char *varp, t_prog *term);
 void	expand_token_var(char **token, t_prog *term);

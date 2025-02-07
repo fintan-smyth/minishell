@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 16:39:24 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/07 16:28:24 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/07 17:26:04 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,13 @@ int	handle_builtins(t_prog *term, t_cmd *cmd)
 	else if (!ft_strncmp((cmd->argv)[0], "pwd", 4))
 		pwd(term, cmd);
 	else if (!ft_strncmp((cmd->argv)[0], "env", 4))
-		env(cmd, construct_envp(term->env_list));
+		env(term, cmd, construct_envp(term->env_list));
 	else if (!ft_strncmp((cmd->argv)[0], "export", 7))
 		export_env(term, cmd);
 	else if (!ft_strncmp((cmd->argv)[0], "unset", 6))
 		unset_env(term, cmd);
 	else if (!ft_strncmp((cmd->argv)[0], "echo", 5))
-		echo(cmd);
+		echo(term, cmd);
 	else if (!ft_strncmp((cmd->argv)[0], "exit", 5))
 		exit_shell(term, cmd);
 	else

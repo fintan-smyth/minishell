@@ -6,13 +6,14 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 16:24:38 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/03 20:27:30 by myiu             ###   ########.fr       */
+/*   Updated: 2025/02/07 17:33:42 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+#include "../builtins/builtins.h"
 
-void	env(t_cmd *cmd, char **envp)
+void	env(t_prog *term, t_cmd *cmd, char **envp)
 // Executes the 'env' builtin command
 {
 	int	i;
@@ -21,6 +22,7 @@ void	env(t_cmd *cmd, char **envp)
 	while (envp[i] != NULL)
 		ft_putendl_fd(envp[i++], cmd->fd_out);
 	free_split(&envp);
+	term->status = 0;
 }
 
 int	validate_export(char *arg, char **equals)
@@ -31,6 +33,12 @@ int	validate_export(char *arg, char **equals)
 		return (0);
 	if (*equals == arg)
 		return (0);
+	while (arg < *equals)
+	{
+		if (!valid_var_chr(*arg))
+			return (0);
+		arg++;
+	}
 	return (1);
 }
 
@@ -40,7 +48,7 @@ void	export_env(t_prog *term, t_cmd *cmd)
 	int		i;
 
 	if (cmd->argc < 2)
-		env(cmd, construct_envp(term->env_list));
+		env(term, cmd, construct_envp(term->env_list));
 	else
 	{
 		i = 0;
@@ -69,4 +77,5 @@ void	unset_env(t_prog *term, t_cmd *cmd)
 			env->var = NULL;
 		}
 	}
+	term->status = 0;
 }

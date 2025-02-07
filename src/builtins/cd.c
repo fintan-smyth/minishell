@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:20:50 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/03 20:27:30 by myiu             ###   ########.fr       */
+/*   Updated: 2025/02/07 17:36:16 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,16 +56,21 @@ void	cd(t_prog *term, t_cmd *cmd)
 
 	path = get_path(term->env_list, cmd->argv, &revert);
 	if (cmd->argc > 2)
+	{
 		ft_putendl_fd("\e[32mminishell: \e[35mcd: \e[mtoo many arguments", 2);
+		term->status = 1 << 8;
+	}
 	else if (chdir(path) != 0)
 	{
 		ft_putstr_fd("\e[32mminishell: \e[35mcd: \e[m", 2);
 		ft_putendl_fd(strerror(errno), 2);
+		term->status = 1 << 8;
 	}
 	else
 	{
 		update_wd(term);
 		if (revert == 1)
 			ft_putendl_fd(term->cwd, cmd->fd_out);
+		term->status = 0;
 	}
 }
