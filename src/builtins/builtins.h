@@ -19,8 +19,8 @@
 void	echo(t_cmd *cmd);
 void	cd(t_prog *term, t_cmd *cmd);
 void	pwd(t_prog *term, t_cmd *cmd);
-void	env(char **envp);
-void	export_env(t_prog *term, int argc, char **argv);
-void	unset_env(t_prog *term, int argc, char **argv);
+void	env(t_cmd *cmd, char **envp);
+void	export_env(t_prog *term, t_cmd *cmd);
+void	unset_env(t_prog *term, t_cmd *cmd);
 
 #endif // BUILTINS_H
