@@ -22,6 +22,8 @@ t_cmd	*construct_cmd(t_list *tokens)
 	cmd->fd_out = 1;
 	(cmd->pipe)[0] = -1;
 	(cmd->pipe)[1] = -1;
+	(cmd->hdpipe)[0] = -1;
+	(cmd->hdpipe)[1] = -1;
 	cmd->sep = OP_NONE;
 	return (cmd);
 }
