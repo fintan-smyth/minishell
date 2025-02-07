@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 13:50:15 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/07 15:42:05 by myiu             ###   ########.fr       */
+/*   Updated: 2025/02/07 17:05:31 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,12 @@ void	execute_pipeline(t_list *pipeline, t_prog *term)
 		if (is_debug(term))
 			ft_printf("\e[1;33m### EXECUTING SUBCMD No %d ###\e[m\n", ++i);
 		exec_cmd(term, (t_cmd *)current_cmd->content);
+		if (WIFSIGNALED(term->status))
+		{
+			if (WTERMSIG(term->status))
+				ft_putendl_fd("Quit (core dumped)", 2);
+			term->status += 131 << 8;
+		}
 		current_cmd = current_cmd->next;
 	}
 }
