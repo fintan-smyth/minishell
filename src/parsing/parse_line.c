@@ -92,7 +92,7 @@ t_ptree	*parse_line(char *line, t_prog *term)
 	tokens = tokenise(line);
 	cmd_list = split_commands(tokens);
 	term->ptree = construct_parse_tree(&cmd_list);
-	traverse_ptree(term->ptree, IN_ORD, parse_pipeline, term);
+	// traverse_ptree(term->ptree, IN_ORD, parse_pipeline, term);
 	if (is_debug(term))
 	{
 		ft_printf("\e[35m### POST ORDER ###\e[m\n");

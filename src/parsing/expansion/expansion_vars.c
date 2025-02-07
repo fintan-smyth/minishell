@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../parsing.h"
+#include <stdlib.h>
 
 int	valid_var_chr(char c)
 // Checks if a char is valid to be used in an environment variable name
@@ -39,6 +40,22 @@ char	*extend_line(char *line, char *extra)
 	return (out);
 }
 
+void	expand_exit_status(char **line, char *varp, t_prog *term)
+{
+	char	*status;
+	char	*expanded;
+
+	status = ft_itoa(WEXITSTATUS(term->status));
+	*varp = 0;
+	varp++;
+	expanded = ft_strdup(*line);
+	expanded = extend_line(expanded, status);
+	expanded = extend_line(expanded, varp);
+	free(status);
+	free(*line);
+	*line = expanded;
+}
+
 int	expand_var_inplace(char **line, char *varp, t_prog *term)
 // Expands the environment variable at *varp in place.
 // Returns 1 if variable name is valid so expansion is attempted.
@@ -50,8 +67,13 @@ int	expand_var_inplace(char **line, char *varp, t_prog *term)
 	int		i;
 
 	*varp = 0;
-	expanded = ft_strdup(*line);
 	varp++;
+	if (*varp == '?')
+	{
+		expand_exit_status(line, varp, term);
+		return (1);
+	}
+	expanded = ft_strdup(*line);
 	i = 0;
 	while (valid_var_chr(varp[i]))
 		i++;

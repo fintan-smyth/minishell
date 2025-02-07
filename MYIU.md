@@ -1,6 +1,5 @@
 TODO
 
--input space cause seg fault
 
 -ctrl \ after typing -> quit
 echo with  " "/ '$USER'
@@ -10,7 +9,7 @@ echo with  " "/ '$USER'
 
 -exit
 
--echo $
+
 
 -multi hdoc(when close, leak fd from pipe)
 

@@ -65,9 +65,15 @@ void	execute_ptree(t_ptree *ptree, t_prog *term)
 {
 	if (ptree == NULL)
 		return ;
+	if (term->parse_status != 0)
+		return ;
 	execute_ptree(ptree->left, term);
 	if (ptree->op == 0)
-		execute_pipeline(ptree->pipeline, term);
+	{
+		parse_pipeline(ptree, term);
+		if (term->parse_status == 0)
+			execute_pipeline(ptree->pipeline, term);
+	}
 	else if (ptree->op == OP_AND && term->status != 0)
 		return ;
 	else if (ptree->op == OP_OR && term->status == 0)
@@ -97,7 +103,7 @@ int	main(int argc, char **argv, char *env[])
 		}
 		term->line = line;
 		ptree = parse_line(line, term);
-		if (term->parse_status == 0)
+		// if (term->parse_status == 0)
 			execute_ptree(ptree, term);
 		traverse_ptree(ptree, PST_ORD, free_ptree_node, NULL);
 		term->ptree = NULL;

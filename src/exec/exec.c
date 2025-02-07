@@ -86,6 +86,7 @@ int	exec_cmd(t_prog *term, t_cmd *cmd)
 		}
 		else
 		{
+			status = 127 << 8;
 			ft_putstr_fd(cmd->argv[0], 2);
 			ft_putendl_fd(": command not found", 2);
 		}

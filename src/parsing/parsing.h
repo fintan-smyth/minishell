@@ -82,6 +82,7 @@ t_ptree	*pop_ptree_stack(t_list	**stack);
 t_ptree	*construct_parse_tree(t_list **ptree_list);
 void	free_ptree_node(t_ptree *node, void *null);
 void	print_ptree_node(t_ptree *ptree, void *null);
+void	parse_pipeline(t_ptree *ptree, void *term);
 t_ptree	*parse_line(char *line, t_prog *term);
 void	traverse_ptree(t_ptree *ptree, int order, void (*f)(t_ptree *, void *),
 			void *data);
