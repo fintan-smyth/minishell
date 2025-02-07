@@ -6,12 +6,11 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:20:50 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/07 17:36:16 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/07 17:41:50 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-#include "../parsing/parsing.h"
 
 void	update_wd(t_prog *term)
 // Updates data about the current working directory

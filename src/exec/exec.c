@@ -6,12 +6,11 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 16:39:24 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/07 17:26:04 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/07 17:42:05 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-#include "../parsing/parsing.h"
 #include "../builtins/builtins.h"
 
 int	handle_builtins(t_prog *term, t_cmd *cmd)
