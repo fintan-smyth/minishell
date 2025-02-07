@@ -40,22 +40,28 @@ char	*construct_envp_line(char *name, char *env)
 	return (line);
 }
 
-void	envp_to_lst(t_prog *term, char *envp)
+void	env_change_or_add(t_prog *term, char *name, char *var)
 {
 	t_list	*existing;
+
+	existing = getenv_node(term->env_list, name);
+	if (existing == NULL)
+		env_list_add(&term->env_list, name, var);
+	else
+	{
+		free(((t_env *)existing->content)->var);
+		((t_env *)existing->content)->var = ft_strdup(var);
+	}
+}
+
+void	envp_to_lst(t_prog *term, char *envp)
+{
 	char	*equals;
 
 	if (!validate_export(envp, &equals))
 		return ;
 	*equals = 0;
-	existing = getenv_node(term->env_list, envp);
-	if (existing == NULL)
-		env_list_add(&term->env_list, envp, equals + 1);
-	else
-	{
-		free(((t_env *)existing->content)->var);
-		((t_env *)existing->content)->var = ft_strdup(equals + 1);
-	}
+	env_change_or_add(term, envp, equals + 1);
 }
 
 char	**construct_envp(t_list *env_list)

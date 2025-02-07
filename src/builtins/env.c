@@ -19,7 +19,7 @@ void	env(char **envp)
 
 	i = 0;
 	while (envp[i] != NULL)
-		ft_printf("%s\n", envp[i++]);
+		ft_putendl_fd(envp[i++], 1);
 	free_split(&envp);
 }
 
