@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 13:39:32 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/06 22:01:30 by myiu             ###   ########.fr       */
+/*   Updated: 2025/02/08 20:40:32 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	*get_prompt(t_prog *term, char *home);
 //Exec
 int		count_args(char **args);
 int		search_path(t_prog *term, char *cmd, char *cmd_path);
-int		exec_cmd(t_prog *term, t_cmd *cmd);
+int		exec_cmd(t_prog *term, t_cmd *cmd, t_list *pipeline);
 
 //Env
 void	free_env(void *env);
