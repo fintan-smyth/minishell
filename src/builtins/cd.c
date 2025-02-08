@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:20:50 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/07 17:41:50 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/08 18:53:12 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ void	update_wd(t_prog *term)
 	t_env	*oldpwd;
 
 	pwd = (t_env *)getenv_node(term->env_list, "PWD")->content;
+	if (pwd == NULL)
+		pwd->var = ft_strdup(term->cwd);
 	oldpwd = (t_env *)getenv_node(term->env_list, "OLDPWD")->content;
 	free(oldpwd->var);
 	oldpwd->var = pwd->var;
@@ -44,6 +46,15 @@ static char	*get_path(t_list *env_list, char **argv, int *revert)
 	}
 	else
 		path = argv[1];
+	if (path == NULL)
+	{
+		ft_putstr_fd("minishell: cd: ", 2);
+		if (*revert == 1)
+			ft_putstr_fd("OLDPWD", 2);
+		else
+			ft_putstr_fd("HOME", 2);
+		ft_putendl_fd(" not set", 2);
+	}
 	return (path);
 }
 
@@ -54,7 +65,9 @@ void	cd(t_prog *term, t_cmd *cmd)
 	int		revert;
 
 	path = get_path(term->env_list, cmd->argv, &revert);
-	if (cmd->argc > 2)
+	if (path == NULL)
+		term->status = 1 << 8;
+	else if (cmd->argc > 2)
 	{
 		ft_putendl_fd("\e[32mminishell: \e[35mcd: \e[mtoo many arguments", 2);
 		term->status = 1 << 8;

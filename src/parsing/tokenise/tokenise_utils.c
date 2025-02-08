@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 17:53:59 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/04 20:58:36 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/08 17:00:57 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,17 @@ int	is_op(char c)
 	if (ft_strchr("><|&()", c) == NULL)
 		return (0);
 	return (1);
+}
+
+int	token_is_op(t_list *token)
+{
+	if (token == NULL)
+		return (2);
+	else if (ft_strchr("><", *(char *)token->content))
+		return (1);
+	else if (ft_strchr("|&", *(char *)token->content))
+		return (3);
+	return (0);
 }
 
 int	matches_prev_op(char c, char prev)

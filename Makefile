@@ -30,7 +30,8 @@ SRC = $(SRC_DIR)/main.c \
 	  $(SRC_DIR)/parsing/expansion/expansion_wildcards.c \
 	  $(SRC_DIR)/parsing/redirect/redirect.c \
 	  $(SRC_DIR)/parsing/redirect/redirect_actions.c \
-	  $(SRC_DIR)/signals/signals.c\
+	  $(SRC_DIR)/signals/signals.c \
+	  $(SRC_DIR)/parsing/syntax.c \
 
 OBJ = $(patsubst $(SRC_DIR)/%,$(BUILD_DIR)/%,$(SRC:.c=.o))
 

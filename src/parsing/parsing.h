@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 14:32:29 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/07 17:31:32 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/08 17:15:37 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,14 @@ enum
 
 //Tokenise
 int		is_op(char c);
+int		token_is_op(t_list *token);
 int		matches_prev_op(char c, char prev);
 int		apply_quoting_tokenise(int *quoting, char c, char *q_char);
 void	print_tokens(t_list *tokens);
 t_list	*tokenise(char *line);
+
+//Syntax
+int		verify_tkn_syntax(t_list *tokens, t_prog *term);
 
 //Expansion
 int		valid_var_chr(char c);

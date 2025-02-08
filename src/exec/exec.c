@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 16:39:24 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/07 17:42:05 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/08 19:18:52 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,9 @@ void	handle_parent(t_cmd *cmd, pid_t child, int *status)
 		cmd->pipe[0] = -1;
 		cmd->pipe[1] = -1;
 	}
+	signal(SIGINT, SIG_IGN);
 	waitpid(child, status, 0);
+	setup_signals();
 }
 
 void	handle_child(t_cmd *cmd, t_prog *term, char *cmd_path)

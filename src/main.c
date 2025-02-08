@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 13:50:15 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/07 18:33:42 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/08 15:44:54 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,15 @@ void	execute_pipeline(t_list *pipeline, t_prog *term)
 		exec_cmd(term, (t_cmd *)current_cmd->content);
 		if (WIFSIGNALED(term->status))
 		{
-			if (WTERMSIG(term->status))
+			if (WTERMSIG(term->status) == SIGQUIT)
 			{
 				ft_putendl_fd("Quit (core dumped)", 2);
 				term->status += (131 << 8);
+			}
+			else if (WTERMSIG(term->status) == SIGINT)
+			{
+				ft_putendl_fd("", 2);
+				term->status += (130 << 8);
 			}
 		}
 		current_cmd = current_cmd->next;
@@ -108,7 +113,7 @@ int	main(int argc, char **argv, char *env[])
 		}
 		term->line = line;
 		ptree = parse_line(line, term);
-		// if (term->parse_status == 0)
+		if (term->parse_status == 0)
 			execute_ptree(ptree, term);
 		traverse_ptree(ptree, PST_ORD, free_ptree_node, NULL);
 		term->ptree = NULL;

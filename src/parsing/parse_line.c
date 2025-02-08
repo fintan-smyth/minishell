@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:10:22 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/06 16:31:32 by myiu             ###   ########.fr       */
+/*   Updated: 2025/02/08 17:34:52 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,15 @@ t_ptree	*parse_line(char *line, t_prog *term)
 
 	term->parse_status = 0;
 	tokens = tokenise(line);
+	if (is_debug(term))
+		print_parse_debug(tokens, NULL, "Initial tokenisation");
+	if (!verify_tkn_syntax(tokens, term))
+	{
+		term->status = 2 << 8;
+		term->parse_status = 1;
+		ft_lstclear(&tokens, free);
+		return (NULL);
+	}
 	cmd_list = split_commands(tokens);
 	term->ptree = construct_parse_tree(&cmd_list);
 	// traverse_ptree(term->ptree, IN_ORD, parse_pipeline, term);
