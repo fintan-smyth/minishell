@@ -6,7 +6,7 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 14:59:13 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/08 19:00:15 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/08 21:15:53 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	check_op_syntax(t_list *tokens)
 
 	brackets = 0;
 	prev = NULL;
-	if (ft_strchr("|&", *(char *)tokens)
+	if (ft_strchr("|&", *(char *)tokens->content)
 		|| !handle_brackets_syntax(tokens, prev, &brackets))
 		return (print_syntax_err(tokens), 0);
 	while (tokens->next != NULL)
@@ -58,16 +58,15 @@ int	check_op_syntax(t_list *tokens)
 		if (ft_strchr("|&", *(char *)tokens->content)
 			&& ft_strchr("|&", *(char *)tokens->next->content))
 			return (print_syntax_err(tokens->next), 0);
-		else if (ft_strchr("><", *(char *)tokens)
-			&& ft_strchr("|&()<>", *(char *)tokens->next))
+		else if (ft_strchr("><", *(char *)tokens->content)
+			&& ft_strchr("|&()<>", *(char *)tokens->next->content))
 			return (print_syntax_err(tokens->next), 0);
 		prev = tokens;
 		tokens = tokens->next;
 	}
-	if (ft_strchr("|&><(", *(char *)tokens->content))
+	if (ft_strchr("|&><(", *(char *)tokens->content)
+		|| brackets > 0)
 		return (print_syntax_err(tokens->next), 0);
-	// else if (brackets > 0)
-	// 	return (print_syntax_err(open_brack->next), 0);
 	return (1);
 }
 
