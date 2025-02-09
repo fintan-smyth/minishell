@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:18:36 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/09 04:20:41 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/09 17:01:47 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,11 @@ void	free_cmd(void *cmdptr)
 	t_cmd	*cmd;
 
 	cmd = (t_cmd *)cmdptr;
+	if (cmd == NULL)
+		return ;
 	ft_lstclear(&cmd->tokens, free);
 	free(cmd->argv);
-	if (cmd->rd_in == 1)
+	if (cmd->rd_in == 1 && cmd->fd_in > 0)
 		close(cmd->fd_in);
 	if (cmd->rd_out == 1)
 		close(cmd->fd_out);
@@ -72,7 +74,7 @@ void	free_pipeline(void *lstptr)
 	t_list	*pipeline;
 
 	pipeline = (t_list *)lstptr;
-	ft_lstclear(&pipeline, NULL);
+	ft_lstclear(&pipeline, free_cmd);
 }
 
 t_list	*split_commands(t_list *tokens)

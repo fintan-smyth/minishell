@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 18:04:38 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/07 15:20:08 by myiu             ###   ########.fr       */
+/*   Updated: 2025/02/09 17:02:51 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,16 +52,17 @@ void	redirect_in(t_cmd *cmd, t_list **rd_token, t_list *prev)
 {
 	int		fd;
 
-	if ((*rd_token)->next == NULL || is_redirect((*rd_token)->next))
-	{
-		cmd->error = 1;
-		return ;
-	}
+	// if ((*rd_token)->next == NULL || is_redirect((*rd_token)->next))
+	// {
+	// 	cmd->error = 1;
+	// 	return ;
+	// }
 	fd = open((char *)(*rd_token)->next->content, O_RDONLY);
 	if (fd < 0)
 	{
-		cmd->error = 2;
-		return ;
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd((char *)(*rd_token)->next->content, 2);
+		ft_putendl_fd(": No such file or directory", 2);
 	}
 	if (cmd->fd_in > 2)
 		close(cmd->fd_in);

@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 16:39:24 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/09 04:26:09 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/09 17:05:22 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,8 +136,10 @@ pid_t	exec_cmd(t_prog *term, t_cmd *cmd, t_list *pipeline)
 	// term->status = 0;
 	child = -1;
 	if ((cmd->argv)[0] == NULL)
-		return (0);
-	if (!handle_builtins(term, cmd))
+		return (-1);
+	if (cmd->rd_in == 1 && cmd->fd_in < 0)
+		term->status = 1 << 8;
+	else if (!handle_builtins(term, cmd))
 	{
 		if (search_path(term, (cmd->argv)[0], cmd_path) != 0)
 		{
@@ -170,7 +172,8 @@ void	execute_pipeline_alt(t_list *pipeline, t_prog *term)
 		cmd = (t_cmd *)current->content;
 		child = ft_calloc(1, sizeof(pid_t));
 		*child = exec_cmd(term, cmd, current);
-		free_cmd(cmd);
+		free_cmd(current->content);
+		current->content = NULL;
 		if (*child == -1)
 			status = term->status;
 		ft_lstadd_back(&pids, ft_lstnew(child));
