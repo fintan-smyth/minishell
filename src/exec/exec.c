@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 16:39:24 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/08 20:50:32 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/09 04:26:09 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,38 +53,74 @@ void	handle_parent(t_cmd *cmd, pid_t child, int *status)
 	setup_signals();
 }
 
-void	close_fds_child(t_list *pipeline, int fd_in, int fd_out)
+int	ft_lst_exists(t_list *lst, void *match, int (*cmp)(void *, void *))
+{
+	t_list	*current;
+
+	current = lst;
+	while (current != NULL)
+	{
+		if (cmp(current->content, match) == 0)
+			return (1);
+		current = current->next;
+	}
+	return (0);
+}
+
+int	int_cmp(void *num1, void *num2)
+{
+	int	diff;
+	int	nbr1;
+	int	nbr2;
+
+	nbr1 = *(int *)num1;
+	nbr2 = *(int *)num2;
+	diff = nbr1 - nbr2;
+	return (diff);
+}
+
+void	close_fds_child(t_list *pipeline)
 {
 	t_list	*current;
 	t_cmd	*cmd;
+	t_list	*fds;
 
-	(void)fd_in;
-	(void)fd_out;
+	fds = NULL;
 	current = pipeline;
 	while (current != NULL)
 	{
 		cmd = (t_cmd *)current->content;
-		if (cmd->fd_in > 2 )
-			close(cmd->fd_in);
-		if (cmd->fd_out > 2)
-			close(cmd->fd_out);
-		if (cmd->pipe[0] > 0)
-			close(cmd->pipe[0]);
-		if (cmd->pipe[1] > 0)
-			close(cmd->pipe[1]);
+		if (cmd->fd_in > 2
+			&& !ft_lst_exists(fds, &cmd->fd_in, int_cmp))
+			ft_lstadd_back(&fds, ft_lstnew(&cmd->fd_in));
+		if (cmd->fd_out > 2
+			&& !ft_lst_exists(fds, &cmd->fd_out, int_cmp))
+			ft_lstadd_back(&fds, ft_lstnew(&cmd->fd_out));
+		if (cmd->pipe[0] > 2
+			&& !ft_lst_exists(fds, &cmd->pipe[0], int_cmp))
+			ft_lstadd_back(&fds, ft_lstnew(&cmd->pipe[0]));
+		if (cmd->pipe[1] > 2
+			&& !ft_lst_exists(fds, &cmd->pipe[1], int_cmp))
+			ft_lstadd_back(&fds, ft_lstnew(&cmd->pipe[1]));
 		current = current->next;
 	}
+	current = fds;
+	while (current != NULL)
+	{
+		close(*(int *)current->content);
+		current = current->next;
+	}
+	ft_lstclear(&fds, NULL);
 }
 
 void	handle_child(t_cmd *cmd, t_prog *term, t_list *pipeline, char *cmd_path)
 // Branch of commands to be executed by child after fork.
 // dups the appropriate file descriptors and executes the passed in command.
 {
+	(void)pipeline;
 	dup2(cmd->fd_in, 0);
 	dup2(cmd->fd_out, 1);
-	if (cmd->fd_in == (cmd->pipe)[0])
-		close((cmd->pipe)[1]);
-	close_fds_child(pipeline, cmd->fd_in, cmd->fd_out);
+	close_fds_child(pipeline);
 	reset_child_sig();
 	execve(cmd_path, cmd->argv, construct_envp(term->env_list));
 	exit(EXIT_FAILURE);
@@ -133,14 +169,8 @@ void	execute_pipeline_alt(t_list *pipeline, t_prog *term)
 	{
 		cmd = (t_cmd *)current->content;
 		child = ft_calloc(1, sizeof(pid_t));
-		*child = exec_cmd(term, cmd, pipeline);
-		if ((cmd->pipe)[0] > 0)
-		{
-			close((cmd->pipe)[1]);
-			close((cmd->pipe)[0]);
-			cmd->pipe[0] = -1;
-			cmd->pipe[1] = -1;
-		}
+		*child = exec_cmd(term, cmd, current);
+		free_cmd(cmd);
 		if (*child == -1)
 			status = term->status;
 		ft_lstadd_back(&pids, ft_lstnew(child));

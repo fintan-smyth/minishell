@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 15:18:36 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/06 16:27:42 by myiu             ###   ########.fr       */
+/*   Updated: 2025/02/09 04:20:41 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	free_pipeline(void *lstptr)
 	t_list	*pipeline;
 
 	pipeline = (t_list *)lstptr;
-	ft_lstclear(&pipeline, free_cmd);
+	ft_lstclear(&pipeline, NULL);
 }
 
 t_list	*split_commands(t_list *tokens)
