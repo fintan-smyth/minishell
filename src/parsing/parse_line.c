@@ -6,16 +6,20 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:10:22 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/08 17:34:52 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/09 17:15:06 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 #include "parsing.h"
 
-void	print_parse_debug(t_list *tokens, t_cmd *cmd, char *msg)
+void	print_parse_debug(t_list *tokens, t_list *cmd_node, char *msg)
 // Prints debugging output if MS_DEBUG environemnt variable is set to ON.
 {
+	t_cmd	*cmd;
+
+	if (cmd_node != NULL)
+		cmd = (t_cmd *)cmd_node->content;
 	ft_printf("\e[1;3%dm%s\n\e[m", *msg % 6 + 1, msg);
 	print_tokens(tokens);
 	if (ft_strncmp(msg, "Redirected", 11) == 0)
@@ -24,7 +28,7 @@ void	print_parse_debug(t_list *tokens, t_cmd *cmd, char *msg)
 			cmd->fd_out,
 			cmd->fd_in,
 			cmd->error);
-		if (cmd->sep == OP_PIPE)
+		if (cmd_node->next != NULL)
 			ft_printf("\e[1;32mvvvvvvvv\nPIPED TO\nvvvvvvvv\e[m\n");
 		else
 			ft_printf("----------\n");
@@ -65,16 +69,17 @@ void	parse_pipeline(t_ptree *ptree, void *term)
 	{
 		tokens = ((t_cmd *)cur_cmd->content)->tokens;
 		if (is_debug((t_prog *)term))
-			print_parse_debug(tokens, (t_cmd *)cur_cmd->content, "Tokenised");
+			print_parse_debug(tokens, cur_cmd, "Tokenised");
 		expand_token_list(tokens, (t_prog *)term);
 		if (is_debug((t_prog *)term))
-			print_parse_debug(tokens, (t_cmd *)cur_cmd->content, "Expanded");
+			print_parse_debug(tokens, cur_cmd, "Expanded");
 		strip_quotes(&tokens);
+		((t_cmd *)cur_cmd->content)->tokens = tokens;
 		if (is_debug((t_prog *)term))
-			print_parse_debug(tokens, (t_cmd *)cur_cmd->content, "Stripped");
+			print_parse_debug(tokens, cur_cmd, "Stripped");
 		apply_redirection((t_cmd *)cur_cmd->content, (t_prog *)term);
 		if (is_debug((t_prog *)term))
-			print_parse_debug(tokens, (t_cmd *)cur_cmd->content, "Redirected");
+			print_parse_debug(tokens, cur_cmd, "Redirected");
 		prepare_args((t_cmd *)cur_cmd->content);
 		cur_cmd = cur_cmd->next;
 	}
