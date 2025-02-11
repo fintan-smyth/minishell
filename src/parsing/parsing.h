@@ -95,8 +95,9 @@ void	traverse_ptree(t_ptree *ptree, int order, void (*f)(t_ptree *, void *),
 //Redirection
 int		is_redirect(t_list *token);
 void	encode_redirect(t_list *token);
+void	handle_hdocs(t_cmd *cmd, t_prog *term);
 void	redirect_hdoc(t_cmd *cmd, t_list **rd_token,
-			t_list *prev, t_prog *term);
+			t_list *prev);
 void	redirect_out(t_cmd *cmd, t_list **rd_token, t_list *prev, int mode);
 void	redirect_in(t_cmd *cmd, t_list **rd_token, t_list *prev);
 void	apply_redirection(t_cmd *cmd, t_prog *term);

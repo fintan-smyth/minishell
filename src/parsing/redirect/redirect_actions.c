@@ -21,11 +21,6 @@ void	redirect_out(t_cmd *cmd, t_list **rd_token, t_list *prev, int mode)
 	int		fd;
 	int		fmode;
 
-	// if ((*rd_token)->next == NULL || is_redirect((*rd_token)->next))
-	// {
-	// 	cmd->error = 1;
-	// 	return ;
-	// }
 	fmode = O_WRONLY | O_CREAT;
 	if (mode == RD_APP)
 		fmode |= O_APPEND;
@@ -49,17 +44,13 @@ void	redirect_in(t_cmd *cmd, t_list **rd_token, t_list *prev)
 {
 	int		fd;
 
-	// if ((*rd_token)->next == NULL || is_redirect((*rd_token)->next))
-	// {
-	// 	cmd->error = 1;
-	// 	return ;
-	// }
 	fd = open((char *)(*rd_token)->next->content, O_RDONLY);
 	if (fd < 0)
 	{
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd((char *)(*rd_token)->next->content, 2);
 		ft_putendl_fd(": No such file or directory", 2);
+		cmd->rd_err = 1;
 	}
 	if (cmd->fd_in > 2)
 		close(cmd->fd_in);
@@ -117,10 +108,9 @@ void	read_hdoc(t_cmd *cmd, char *delim, t_prog *term, int expand)
 	pid_t				pid;
 	
 	hdoc = NULL;
-	if (cmd->fd_in > 2)
-		close(cmd->fd_in);
+	if (cmd->hdpipe[0] > 2)
+		close(cmd->hdpipe[0]);
 	pipe(cmd->hdpipe);
-	cmd->fd_in = cmd->hdpipe[0];
 	pid = fork();
 	if (pid == 0)
 	{
@@ -166,15 +156,24 @@ void	read_hdoc(t_cmd *cmd, char *delim, t_prog *term, int expand)
 	return ;
 }
 
-void	redirect_hdoc(t_cmd *cmd, t_list **rd_token, t_list *prev, t_prog *term)
+void	redirect_hdoc(t_cmd *cmd, t_list **rd_token, t_list *prev)
 // Applies file redirection for the heredoc (<<) operator.
 // Trims redirection tokens from the token list.
+{
+	if (cmd->fd_in > 2 && cmd->fd_in != cmd->hdpipe[0])
+		close(cmd->fd_in);
+	cmd->fd_in = cmd->hdpipe[0];
+	ft_lstdel_next(prev, free);
+	*rd_token = NULL;
+}
+
+void	process_hdoc(t_cmd *cmd, t_list *rd_token, t_prog *term)
 {
 	char	*delim;
 	int		expand;
 
 	expand = 1;
-	delim = (char *)(*rd_token)->next->content;
+	delim = (char *)rd_token->next->content;
 	if (ft_strchr(delim, '\"') || ft_strchr(delim, '\''))
 	{
 		expand = 0;
@@ -188,7 +187,20 @@ void	redirect_hdoc(t_cmd *cmd, t_list **rd_token, t_list *prev, t_prog *term)
 		if (is_debug(term))
 			ft_printf("\e[31m### HDOC FAILED ###\e[m\n");
 	}
-	ft_lstdel_next(prev, free);
-	ft_lstdel_next(prev, free);
-	*rd_token = NULL;
+	ft_lstdel_next(rd_token, free);
+}
+
+void	handle_hdocs(t_cmd *cmd, t_prog *term)
+{
+	t_list	*current;
+	int		mode;
+
+	current = cmd->tokens;
+	while (current != NULL && term->parse_status == 0)
+	{
+		mode = *(char *)current->content;
+		if (mode == RD_HRD)
+			process_hdoc(cmd, current, term);
+		current = current->next;
+	}
 }

@@ -62,6 +62,7 @@ typedef struct s_cmd
 	int		hdpipe[2];
 	bool	rd_in;
 	bool	rd_out;
+	bool	rd_err;
 }	t_cmd;
 
 #endif

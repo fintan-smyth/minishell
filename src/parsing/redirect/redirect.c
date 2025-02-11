@@ -52,10 +52,11 @@ void	apply_redirection(t_cmd *cmd, t_prog *term)
 	t_list	*prev;
 	int		mode;
 
-	(void)term;
+	handle_hdocs(cmd, term);
+	print_tokens(cmd->tokens);
 	current = cmd->tokens;
 	prev = NULL;
-	while (current != NULL && term->parse_status == 0)
+	while (current != NULL && term->parse_status == 0 && cmd->rd_err == 0)
 	{
 		mode = *(char *)current->content;
 		if (mode == RD_IN)
@@ -63,7 +64,7 @@ void	apply_redirection(t_cmd *cmd, t_prog *term)
 		else if (mode == RD_OUT || mode == RD_APP)
 			redirect_out(cmd, &current, prev, mode);
 		else if (mode == RD_HRD)
-			redirect_hdoc(cmd, &current, prev, term);
+			redirect_hdoc(cmd, &current, prev);
 		if (current == NULL)
 			current = prev->next;
 		else
@@ -72,4 +73,6 @@ void	apply_redirection(t_cmd *cmd, t_prog *term)
 			current = current->next;
 		}
 	}
+	if (cmd->fd_in != cmd->hdpipe[0] && cmd->hdpipe[0] > 2)
+		close(cmd->hdpipe[0]);
 }
