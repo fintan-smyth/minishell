@@ -27,13 +27,17 @@ int	handle_brackets_syntax(t_list *token, t_list *prev, int *brackets)
 	if (*(char *)token->content == '(')
 	{
 		(*brackets)++;
-		if (token_is_op(token->next) > 1)
+		if (token_is_op(token->next) > 2)
+			return (print_syntax_err(token), 0);
+		if (token_is_op(prev) < 2)
 			return (print_syntax_err(token), 0);
 	}
 	else if (*(char *)token->content == ')')
 	{
 		(*brackets)--;
-		if (token_is_op(prev) > 1)
+		if (token_is_op(prev) > 2 || token_is_op(prev) == 1)
+			return (print_syntax_err(token), 0);
+		if (token_is_op(token->next) == 0)
 			return (print_syntax_err(token), 0);
 	}
 	if (*brackets < 0)

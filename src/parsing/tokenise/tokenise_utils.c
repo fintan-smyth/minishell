@@ -23,11 +23,13 @@ int	is_op(char c)
 int	token_is_op(t_list *token)
 {
 	if (token == NULL)
+		return (3);
+	else if (ft_strchr("()", *(char *)token->content))
 		return (2);
 	else if (ft_strchr("><", *(char *)token->content))
 		return (1);
 	else if (ft_strchr("|&", *(char *)token->content))
-		return (3);
+		return (4);
 	return (0);
 }
 
