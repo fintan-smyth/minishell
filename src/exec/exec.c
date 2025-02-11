@@ -157,29 +157,27 @@ pid_t	exec_cmd(t_prog *term, t_cmd *cmd, t_list *pipeline)
 	return (child);
 }
 
-void	execute_pipeline_alt(t_list *pipeline, t_prog *term)
+void	execute_pipeline_alt(t_ptree *treenode, t_prog *term)
 {
 	t_list	*current;
 	t_cmd	*cmd;
 	pid_t	*child;
-	t_list	*pids;
 	int		status;
 
-	pids = NULL;
-	current = pipeline;
+	current = treenode->pipeline;
 	while (current != NULL)
 	{
 		cmd = (t_cmd *)current->content;
 		child = ft_calloc(1, sizeof(pid_t));
+		ft_lstadd_back(&treenode->pids, ft_lstnew(child));
 		*child = exec_cmd(term, cmd, current);
 		free_cmd(current->content);
 		current->content = NULL;
 		if (*child == -1)
 			status = term->status;
-		ft_lstadd_back(&pids, ft_lstnew(child));
 		current = current->next;
 	}
-	current = pids;
+	current = treenode->pids;
 	signal(SIGINT, SIG_IGN);
 	while (current != NULL)
 	{
@@ -190,5 +188,5 @@ void	execute_pipeline_alt(t_list *pipeline, t_prog *term)
 		current = current->next;
 	}
 	setup_signals();
-	ft_lstclear(&pids, free);
+	ft_lstclear(&treenode->pids, free);
 }

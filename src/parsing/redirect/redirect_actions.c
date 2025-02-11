@@ -21,22 +21,19 @@ void	redirect_out(t_cmd *cmd, t_list **rd_token, t_list *prev, int mode)
 	int		fd;
 	int		fmode;
 
-	if ((*rd_token)->next == NULL || is_redirect((*rd_token)->next))
-	{
-		cmd->error = 1;
-		return ;
-	}
+	// if ((*rd_token)->next == NULL || is_redirect((*rd_token)->next))
+	// {
+	// 	cmd->error = 1;
+	// 	return ;
+	// }
 	fmode = O_WRONLY | O_CREAT;
 	if (mode == RD_APP)
 		fmode |= O_APPEND;
 	else
 		fmode |= O_TRUNC;
 	fd = open((char *)(*rd_token)->next->content, fmode, 0644);
-	if (fd < 0)
-	{
-		cmd->error = 2;
-		return ;
-	}
+	// if (fd < 0)
+	// 	return ;
 	if (cmd->fd_out > 2)
 		close(cmd->fd_out);
 	cmd->fd_out = fd;

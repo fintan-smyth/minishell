@@ -74,7 +74,7 @@ t_prog	*init_term(char *name, char **line, char **env)
 // 	}
 // }
 
-void	execute_pipeline_alt(t_list *pipeline, t_prog *term);
+void	execute_pipeline_alt(t_ptree *treenode, t_prog *term);
 
 void	execute_ptree(t_ptree *ptree, t_prog *term)
 {
@@ -88,7 +88,7 @@ void	execute_ptree(t_ptree *ptree, t_prog *term)
 		parse_pipeline(ptree, term);
 		if (term->parse_status == 0)
 		{
-			execute_pipeline_alt(ptree->pipeline, term);
+			execute_pipeline_alt(ptree, term);
 			if (WIFSIGNALED(term->status))
 			{
 				if (WTERMSIG(term->status) == SIGQUIT)

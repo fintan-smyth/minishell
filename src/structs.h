@@ -32,6 +32,7 @@ typedef struct s_entry
 typedef struct s_ptree
 {
 	t_list			*pipeline;
+	t_list			*pids;
 	int				op;
 	struct s_ptree	*left;
 	struct s_ptree	*right;
@@ -59,7 +60,6 @@ typedef struct s_cmd
 	int		fd_out;
 	int		pipe[2];
 	int		hdpipe[2];
-	int		error;
 	bool	rd_in;
 	bool	rd_out;
 }	t_cmd;

@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
 #include "parsing.h"
 
 void	print_parse_debug(t_list *tokens, t_list *cmd_node, char *msg)
@@ -24,10 +23,10 @@ void	print_parse_debug(t_list *tokens, t_list *cmd_node, char *msg)
 	print_tokens(tokens);
 	if (ft_strncmp(msg, "Redirected", 11) == 0)
 	{
-		ft_printf("fd_out\t%d\nfd_in:\t%d\nerr:\t%d\n",
+		ft_printf("fd_out\t%d\nfd_in:\t%d\n",
 			cmd->fd_out,
-			cmd->fd_in,
-			cmd->error);
+			cmd->fd_in);
+			// cmd->error);
 		if (cmd_node->next != NULL)
 			ft_printf("\e[1;32mvvvvvvvv\nPIPED TO\nvvvvvvvv\e[m\n");
 		else

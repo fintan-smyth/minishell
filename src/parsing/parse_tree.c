@@ -54,6 +54,7 @@ void	free_ptree_node(t_ptree *ptree, void *null)
 	(void)null;
 	if (ptree->op == 0)
 		free_pipeline(ptree->pipeline);
+	ft_lstclear(&ptree->pids, free);
 	free(ptree);
 }
 
