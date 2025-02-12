@@ -31,13 +31,14 @@ void	strip_quotes_token(char *token)
 	{
 		if (token[i] == '\'' && quoting == Q_NONE)
 			apply_quoting(&token[i], &quoting, Q_SINGLE);
-		if (token[i] == '\'' && quoting == Q_SINGLE)
+		else if (token[i] == '\'' && quoting == Q_SINGLE)
 			apply_quoting(&token[i], &quoting, Q_NONE);
-		if (token[i] == '\"' && quoting == Q_NONE)
+		else if (token[i] == '\"' && quoting == Q_NONE)
 			apply_quoting(&token[i], &quoting, Q_DOUBLE);
-		if (token[i] == '\"' && quoting == Q_DOUBLE)
+		else if (token[i] == '\"' && quoting == Q_DOUBLE)
 			apply_quoting(&token[i], &quoting, Q_NONE);
-		i++;
+		else
+			i++;
 	}
 }
 
