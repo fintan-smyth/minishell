@@ -12,11 +12,27 @@
 
 #include "../builtins/builtins.h"
 
+void	handle_echo_opts(char **argv, int *i, int *nl)
+{
+	int	j;
+
+	while (*argv[++(*i)] == '-')
+	{
+		j = 1;
+		while (argv[*i][j] == 'n')
+			j++;
+		if (argv[*i][j] != 0 || j == 1)
+			break ;
+		*nl = 0;
+	}
+}
+
 void	echo(t_prog *term, t_cmd *cmd)
 // Executes the 'echo' builtin command
 {
 	int		i;
 	int		nl;
+	int		first_arg;
 
 	if (cmd->argc < 2)
 		write(1, "\n", 1);
@@ -24,16 +40,13 @@ void	echo(t_prog *term, t_cmd *cmd)
 	{
 		i = 0;
 		nl = 1;
-		if (ft_strncmp((cmd->argv)[1], "-n", 3) == 0)
+		handle_echo_opts(cmd->argv, &i, &nl);
+		first_arg = i;
+		while ((cmd->argv)[i] != NULL)
 		{
-			nl = 0;
-			i++;
-		}
-		while ((cmd->argv)[++i] != NULL)
-		{
-			if (i != 2 - nl)
+			if (i != first_arg)
 				write(cmd->fd_out, " ", 1);
-			ft_putstr_fd((cmd->argv)[i], cmd->fd_out);
+			ft_putstr_fd((cmd->argv)[i++], cmd->fd_out);
 		}
 		if (nl == 1)
 			write(cmd->fd_out, "\n", 1);
