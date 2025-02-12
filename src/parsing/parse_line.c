@@ -78,7 +78,7 @@ void	parse_pipeline(t_ptree *ptree, void *term)
 			print_parse_debug(tokens, cur_cmd, "Stripped");
 		apply_redirection((t_cmd *)cur_cmd->content, (t_prog *)term);
 		if (is_debug((t_prog *)term))
-			print_parse_debug(tokens, cur_cmd, "Redirected");
+			print_parse_debug(((t_cmd *)cur_cmd->content)->tokens, cur_cmd, "Redirected");
 		prepare_args((t_cmd *)cur_cmd->content);
 		cur_cmd = cur_cmd->next;
 	}
@@ -103,6 +103,7 @@ t_ptree	*parse_line(char *line, t_prog *term)
 		ft_lstclear(&tokens, free);
 		return (NULL);
 	}
+	encode_line(tokens);
 	cmd_list = split_commands(tokens);
 	term->ptree = construct_parse_tree(&cmd_list);
 	// traverse_ptree(term->ptree, IN_ORD, parse_pipeline, term);

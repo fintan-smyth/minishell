@@ -79,9 +79,15 @@ void	write_hdoc(t_cmd *cmd, t_list *hdoc, t_prog *term, int expand)
 	current = hdoc;
 	while (current != NULL)
 	{
-		var = ft_strchr((char *)current->content, '$');
-		if (expand && var)
-			expand_var_inplace((char **)&current->content, var, term);
+		if (expand)
+		{
+			var = ft_strchr((char *)current->content, '$');
+			while (var != NULL)
+			{
+				expand_var_inplace((char **)&current->content, var, term);
+				var = ft_strchr((char *)current->content, '$');
+			}
+		}
 		ft_putendl_fd((char *)current->content, cmd->hdpipe[1]);
 		current = current->next;
 	}
@@ -134,9 +140,9 @@ void	read_hdoc(t_cmd *cmd, char *delim, t_prog *term, int expand)
 		if (line == NULL)
 		{
 			ft_putstr_fd("minishell: warning: here-document ", 2);
-			ft_putstr_fd("delimited by end-of-file (wanted ", 2);
+			ft_putstr_fd("delimited by end-of-file (wanted `", 2);
 			ft_putstr_fd(delim, 2);
-			ft_putendl_fd(")", 2);
+			ft_putendl_fd("')", 2);
 		}
 		else
 		{

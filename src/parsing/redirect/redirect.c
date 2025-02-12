@@ -40,22 +40,38 @@ void	encode_redirect(t_list *token)
 	int		mode;
 
 	mode = is_redirect(token);
+	if (mode == 0)
+		return ;
 	free(token->content);
 	token->content = ft_strdup(" ");
 	*(char *)token->content = mode;
+}
+
+void	encode_line(t_list *tokens)
+{
+	t_list	*current;
+
+	current = tokens;
+	while (current != NULL)
+	{
+		encode_redirect(current);
+		current = current->next;
+	}
 }
 
 void	apply_redirection(t_cmd *cmd, t_prog *term)
 // Executes all redirection for a command.
 {
 	t_list	*current;
+	t_list	*dummy_head;
 	t_list	*prev;
 	int		mode;
 
 	handle_hdocs(cmd, term);
-	print_tokens(cmd->tokens);
 	current = cmd->tokens;
-	prev = NULL;
+	dummy_head = ft_lstnew(NULL);
+	dummy_head->next = current;
+	prev = dummy_head;
 	while (current != NULL && term->parse_status == 0 && cmd->rd_err == 0)
 	{
 		mode = *(char *)current->content;
@@ -73,6 +89,8 @@ void	apply_redirection(t_cmd *cmd, t_prog *term)
 			current = current->next;
 		}
 	}
+	cmd->tokens = dummy_head->next;
+	ft_lstdelone(dummy_head, NULL);
 	if (cmd->fd_in != cmd->hdpipe[0] && cmd->hdpipe[0] > 2)
 		close(cmd->hdpipe[0]);
 }

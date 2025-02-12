@@ -131,8 +131,8 @@ t_list	*split_commands(t_list *tokens)
 			push_ptree_stack(&ptree_list, ptree_new(ft_lstnew(cmd), 0));
 			pipeline = ((t_ptree *)ft_lstlast(ptree_list)->content)->pipeline;
 		}
-		else if (is_redirect(current_tkn))
-			encode_redirect(current_tkn);
+		// else if (is_redirect(current_tkn))
+		// 	encode_redirect(current_tkn);
 		temp = current_tkn;
 		current_tkn = current_tkn->next;
 	}

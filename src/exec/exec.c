@@ -18,6 +18,8 @@ int	handle_builtins(t_prog *term, t_cmd *cmd)
 // Returns 1 if command was a builtin
 // Returns 0 if command was not a builtin
 {
+	if (cmd->argv[0] == NULL)
+		return (1);
 	if (!ft_strncmp((cmd->argv)[0], "cd", 3))
 		cd(term, cmd);
 	else if (!ft_strncmp((cmd->argv)[0], "pwd", 4))
@@ -136,7 +138,7 @@ pid_t	exec_cmd(t_prog *term, t_cmd *cmd, t_list *pipeline)
 	// term->status = 0;
 	child = -1;
 	if ((cmd->argv)[0] == NULL)
-		return (-1);
+		term->status = 0;
 	if (cmd->rd_in == 1 && cmd->fd_in < 0)
 		term->status = 1 << 8;
 	else if (!handle_builtins(term, cmd))
