@@ -59,7 +59,7 @@ void	free_cmd(void *cmdptr)
 	free(cmd->argv);
 	if (cmd->rd_in == 1 && cmd->fd_in > 0)
 		close(cmd->fd_in);
-	if (cmd->rd_out == 1)
+	if (cmd->rd_out == 1 && cmd->fd_out > 0)
 		close(cmd->fd_out);
 	if ((cmd->pipe)[0] > 0)
 	{

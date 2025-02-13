@@ -110,6 +110,8 @@ void	expand_token_var(char **token, t_prog *term)
 			if (!expand_var_inplace(token, varp, term))
 				*varp = '$';
 		}
+		if ((*token)[i] == 0)
+			break ;
 		else if ((*token)[i] == '\'' && quoting == Q_NONE)
 			quoting = Q_SINGLE;
 		else if ((*token)[i] == '\'' && quoting == Q_SINGLE)
