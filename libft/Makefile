@@ -57,6 +57,7 @@ SRC = ft_isalpha.c \
 	  ft_qsort.c \
 	  ft_strcmp.c \
 	  ft_lst_to_arr.c \
+	  ft_strtol.c \
 
 OBJ = $(SRC:.c=.o)
 

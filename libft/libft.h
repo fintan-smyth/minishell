@@ -6,7 +6,7 @@
 /*   By: fsmyth <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 12:19:13 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/07 16:17:13 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/13 17:11:09 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <unistd.h>
+# include <limits.h>
+# include <errno.h>
 
 typedef struct s_list
 {
@@ -99,5 +101,6 @@ void	ft_qsort(void **array, int left, int right,
 			int (*cmp)(void *, void *));
 int		ft_strcmp(char *s1, char *s2);
 int		ft_strnum(char *str);
+long	ft_strtol(char *nptr, char **endptr, int base);
 
 #endif

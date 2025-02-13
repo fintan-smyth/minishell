@@ -6,12 +6,29 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/07 15:24:45 by myiu              #+#    #+#             */
-/*   Updated: 2025/02/07 16:40:36 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/13 17:45:07 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 #include "../parsing/parsing.h"
+
+unsigned char	get_exit_code(char *arg)
+{
+	char	*endptr;
+	long	num;
+
+	num = ft_strtol(arg, &endptr, 10);
+	if (*arg != 0 && *endptr == 0)
+		return (num);
+	else
+	{
+		ft_putstr_fd("\e[32mminishell: \e[35mexit:\e[m ", 2);
+		ft_putstr_fd(arg, 2);
+		ft_putendl_fd(": numeric argument required", 2);
+		return (2);
+	}
+}
 
 void	exit_shell(t_prog *term, t_cmd *cmd)
 {
@@ -26,15 +43,8 @@ void	exit_shell(t_prog *term, t_cmd *cmd)
 	}
 	else if (cmd->argc == 1)
 		;
-	else if (!ft_strnum(cmd->argv[1]))
-	{
-		status = 2 << 8;
-		ft_putstr_fd("\e[32mminishell: \e[35mexit:\e[m ", 2);
-		ft_putstr_fd(cmd->argv[1], 2);
-		ft_putendl_fd(" numeric argument required", 2);
-	}
 	else
-		status = ft_atoi(cmd->argv[1]) << 8;
+		status = get_exit_code(cmd->argv[1]) << 8;
 	traverse_ptree(term->ptree, PST_ORD, free_ptree_node, NULL);
 	cleanup(term);
 	exit(WEXITSTATUS(status));
