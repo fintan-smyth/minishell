@@ -34,13 +34,14 @@ int	search_path(t_prog *term, char *cmd, char *cmd_path)
 	int			i;
 
 	i = 0;
-	statbuf = malloc(sizeof(*statbuf));
+	statbuf = ft_calloc(1, sizeof(*statbuf));
 	if (getenv_list(term->env_list, "PATH") == NULL)
 		paths = ft_split("", ':');
 	else
 		paths = ft_split(getenv_list(term->env_list, "PATH"), ':');
 	ft_bzero(cmd_path, PATH_MAX);
-	ft_strlcat(cmd_path, cmd, PATH_MAX);
+	if (ft_strchr(cmd, '/') != NULL)
+		ft_strlcat(cmd_path, cmd, PATH_MAX);
 	stat(cmd_path, statbuf);
 	while (access(cmd_path, X_OK) || !(statbuf->st_mode & S_IFREG))
 	{
