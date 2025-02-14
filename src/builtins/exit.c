@@ -18,8 +18,9 @@ unsigned char	get_exit_code(char *arg)
 	char	*endptr;
 	long	num;
 
+	errno = 0;
 	num = ft_strtol(arg, &endptr, 10);
-	if (*arg != 0 && *endptr == 0)
+	if (*arg != 0 && *endptr == 0 && errno != ERANGE)
 		return (num);
 	else
 	{
