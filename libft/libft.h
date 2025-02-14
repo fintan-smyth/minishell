@@ -6,7 +6,7 @@
 /*   By: fsmyth <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 12:19:13 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/14 14:43:36 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/14 18:51:29 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,5 +103,7 @@ void	ft_qsort(void **array, int left, int right,
 int		ft_strcmp(char *s1, char *s2);
 int		ft_strnum(char *str);
 long	ft_strtol(char *nptr, char **endptr, int base);
+int		ft_lst_exists(t_list *lst, void *match, int (*cmp)(void *, void *));
+char	*ft_extend_line(char *line, char *extra);
 
 #endif

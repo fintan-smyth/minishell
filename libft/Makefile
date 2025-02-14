@@ -58,6 +58,7 @@ SRC = ft_isalpha.c \
 	  ft_strcmp.c \
 	  ft_lst_to_arr.c \
 	  ft_strtol.c \
+	  ft_extend_line.c \
 
 OBJ = $(SRC:.c=.o)
 
@@ -70,7 +71,8 @@ BONUS_SRC = ft_lstnew.c \
 			ft_lstdel_next.c \
 			ft_lstclear.c \
 			ft_lstiter.c \
-			ft_lstmap.c
+			ft_lstmap.c \
+			ft_lst_exists.c \
 
 BONUS_OBJ = $(BONUS_SRC:.c=.o)
 
