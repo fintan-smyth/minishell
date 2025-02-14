@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:45:55 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/03 20:27:30 by myiu             ###   ########.fr       */
+/*   Updated: 2025/02/14 16:00:46 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,10 +79,9 @@ void	env_list_add(t_list **env_list, char *name, char *var)
 	ft_lstadd_back(env_list, ft_lstnew(env));
 }
 
-void	init_env_list(t_prog *term, char *name, char **env)
+void	init_env_list(t_prog *term, char **env)
 // Initialises the env_list with variables in the shell's enviromnent
 {
-	char	*shell;
 	int		i;
 	int		shlvl;
 	char	*shlvl_str;
@@ -90,9 +89,6 @@ void	init_env_list(t_prog *term, char *name, char **env)
 	i = 0;
 	while (env[i] != NULL)
 		envp_to_lst(term, env[i++]);
-	shell = get_shell(term, name);
-	env_change_or_add(term, "SHELL", shell);
-	free(shell);
 	shlvl = ft_atoi(getenv_list(term->env_list, "SHLVL")) + 1;
 	shlvl_str = ft_itoa(shlvl);
 	env_change_or_add(term, "SHLVL", shlvl_str);
