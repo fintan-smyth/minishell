@@ -76,7 +76,7 @@ BONUS_OBJ = $(BONUS_SRC:.c=.o)
 
 NAME = libft.a
 
-all: $(NAME)
+all: $(NAME) bonus
 
 # Link object files to create the executable
 $(NAME): $(OBJ)

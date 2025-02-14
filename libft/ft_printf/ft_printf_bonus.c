@@ -6,7 +6,7 @@
 /*   By: fsmyth <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 18:20:03 by fsmyth            #+#    #+#             */
-/*   Updated: 2024/12/08 20:06:36 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/14 14:43:11 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,30 @@ int	ft_printf(const char *format, ...)
 		put_arg_format(&args, &fmt, &output, &len);
 	}
 	ft_putstr_fd(output, 1);
+	len += ft_strlen(output);
+	free(output);
+	return (len);
+}
+
+int	ft_dprintf(int fd, const char *format, ...)
+{
+	va_list			args;
+	char			*output;
+	int				len;
+	t_format		fmt;
+
+	len = 0;
+	output = NULL;
+	va_start(args, format);
+	while (*format)
+	{
+		if (!extract_til_conv(&format, &output))
+			break ;
+		if (!extract_format(&format, &fmt))
+			return (-1);
+		put_arg_format(&args, &fmt, &output, &len);
+	}
+	ft_putstr_fd(output, fd);
 	len += ft_strlen(output);
 	free(output);
 	return (len);
