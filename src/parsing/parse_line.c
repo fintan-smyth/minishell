@@ -6,13 +6,13 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:10:22 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/09 17:15:06 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/14 15:44:24 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
-void	print_parse_debug(t_list *tokens, t_list *cmd_node, char *msg)
+void	print_dbg(t_list *tokens, t_list *cmd_node, char *msg)
 // Prints debugging output if MS_DEBUG environemnt variable is set to ON.
 {
 	t_cmd	*cmd;
@@ -26,7 +26,6 @@ void	print_parse_debug(t_list *tokens, t_list *cmd_node, char *msg)
 		ft_printf("fd_out\t%d\nfd_in:\t%d\n",
 			cmd->fd_out,
 			cmd->fd_in);
-			// cmd->error);
 		if (cmd_node->next != NULL)
 			ft_printf("\e[1;32mvvvvvvvv\nPIPED TO\nvvvvvvvv\e[m\n");
 		else
@@ -68,21 +67,21 @@ void	parse_pipeline(t_ptree *ptree, void *term)
 	{
 		tokens = ((t_cmd *)cur_cmd->content)->tokens;
 		if (is_debug((t_prog *)term))
-			print_parse_debug(tokens, cur_cmd, "Tokenised");
+			print_dbg(tokens, cur_cmd, "Tokenised");
 		expand_token_list(tokens, (t_prog *)term);
 		if (is_debug((t_prog *)term))
-			print_parse_debug(tokens, cur_cmd, "Expanded");
+			print_dbg(tokens, cur_cmd, "Expanded");
 		strip_quotes(&tokens);
 		((t_cmd *)cur_cmd->content)->tokens = tokens;
 		if (is_debug((t_prog *)term))
-			print_parse_debug(tokens, cur_cmd, "Stripped");
+			print_dbg(tokens, cur_cmd, "Stripped");
 		apply_redirection((t_cmd *)cur_cmd->content, (t_prog *)term);
 		if (is_debug((t_prog *)term))
-			print_parse_debug(((t_cmd *)cur_cmd->content)->tokens, cur_cmd, "Redirected");
+			print_dbg(((t_cmd *)cur_cmd->content)->tokens,
+				cur_cmd, "Redirected");
 		prepare_args((t_cmd *)cur_cmd->content);
 		cur_cmd = cur_cmd->next;
 	}
-	connect_pipes(ptree->pipeline);
 }
 
 t_ptree	*parse_line(char *line, t_prog *term)
@@ -95,7 +94,7 @@ t_ptree	*parse_line(char *line, t_prog *term)
 	term->parse_status = 0;
 	tokens = tokenise(line);
 	if (is_debug(term))
-		print_parse_debug(tokens, NULL, "Initial tokenisation");
+		print_dbg(tokens, NULL, "Initial tokenisation");
 	if (!verify_tkn_syntax(tokens, term))
 	{
 		term->status = 2 << 8;
@@ -106,7 +105,6 @@ t_ptree	*parse_line(char *line, t_prog *term)
 	encode_line(tokens);
 	cmd_list = split_commands(tokens);
 	term->ptree = construct_parse_tree(&cmd_list);
-	// traverse_ptree(term->ptree, IN_ORD, parse_pipeline, term);
 	if (is_debug(term))
 	{
 		ft_printf("\e[35m### POST ORDER ###\e[m\n");

@@ -6,11 +6,11 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 16:10:16 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/06 16:31:59 by myiu             ###   ########.fr       */
+/*   Updated: 2025/02/14 18:58:57 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parsing.h"
+#include "../parsing.h"
 
 t_ptree	*ptree_new(t_list *pipeline, int op)
 {
@@ -22,31 +22,6 @@ t_ptree	*ptree_new(t_list *pipeline, int op)
 	new->left = NULL;
 	new->right = NULL;
 	return (new);
-}
-
-void	push_ptree_stack(t_list	**stack, t_ptree *node)
-{
-	ft_lstadd_back(stack, ft_lstnew(node));
-}
-
-t_ptree	*pop_ptree_stack(t_list	**stack)
-{
-	t_list	*current;
-	t_ptree	*out;
-
-	current = *stack;
-	if (current->next == NULL)
-	{
-		out = (t_ptree *)current->content;
-		ft_lstclear(stack, NULL);
-		return (out);
-	}
-	while (current->next->next != NULL)
-		current = current->next;
-	out = (t_ptree *)current->next->content;
-	ft_lstdelone(current->next, NULL);
-	current->next = NULL;
-	return (out);
 }
 
 void	free_ptree_node(t_ptree *ptree, void *null)
@@ -90,4 +65,24 @@ void	print_ptree_node(t_ptree *ptree, void *null)
 	else
 		ft_printf("\e[1;34m%s\e[m ",
 			(char *)((t_cmd *)ptree->pipeline->content)->tokens->content);
+}
+
+void	print_ptree_lst(t_list *ptree_list)
+{
+	t_list	*current;
+	t_ptree	*node;
+
+	current = ptree_list;
+	while (current != NULL)
+	{
+		node = (t_ptree *)current->content;
+		if (node->op == 0)
+		{
+			ft_printf("cmd: %s\n", (char *)
+				((t_cmd *)node->pipeline->content)->tokens->content);
+		}
+		else
+			ft_printf("op: %d\n", node->op);
+		current = current->next;
+	}
 }

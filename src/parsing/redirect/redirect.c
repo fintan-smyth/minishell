@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 17:19:48 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/05 23:04:05 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/14 16:08:24 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,38 @@ void	encode_line(t_list *tokens)
 	}
 }
 
+void	redirect_loop(t_list **curptr, t_list **prevptr, t_cmd *cmd)
+{
+	int		mode;
+	t_list	*current;
+	t_list	*prev;
+
+	current = *curptr;
+	prev = *prevptr;
+	mode = *(char *)current->content;
+	if (mode == RD_IN)
+		redirect_in(cmd, &current, prev);
+	else if (mode == RD_OUT || mode == RD_APP)
+		redirect_out(cmd, &current, prev, mode);
+	else if (mode == RD_HRD)
+		redirect_hdoc(cmd, &current, prev);
+	if (current == NULL)
+		current = prev->next;
+	else
+	{
+		prev = current;
+		current = current->next;
+	}
+	*prevptr = prev;
+	*curptr = current;
+}
+
 void	apply_redirection(t_cmd *cmd, t_prog *term)
 // Executes all redirection for a command.
 {
 	t_list	*current;
 	t_list	*dummy_head;
 	t_list	*prev;
-	int		mode;
 
 	handle_hdocs(cmd, term);
 	current = cmd->tokens;
@@ -73,22 +98,7 @@ void	apply_redirection(t_cmd *cmd, t_prog *term)
 	dummy_head->next = current;
 	prev = dummy_head;
 	while (current != NULL && term->parse_status == 0 && cmd->rd_err == 0)
-	{
-		mode = *(char *)current->content;
-		if (mode == RD_IN)
-			redirect_in(cmd, &current, prev);
-		else if (mode == RD_OUT || mode == RD_APP)
-			redirect_out(cmd, &current, prev, mode);
-		else if (mode == RD_HRD)
-			redirect_hdoc(cmd, &current, prev);
-		if (current == NULL)
-			current = prev->next;
-		else
-		{
-			prev = current;
-			current = current->next;
-		}
-	}
+		redirect_loop(&current, &prev, cmd);
 	cmd->tokens = dummy_head->next;
 	ft_lstdelone(dummy_head, NULL);
 	if (cmd->fd_in != cmd->hdpipe[0] && cmd->hdpipe[0] > 2)

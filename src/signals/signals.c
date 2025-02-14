@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/05 23:24:55 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/07 17:44:56 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/14 18:42:41 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,14 @@ void	sig_handler(int sig)
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
+}
+
+void	hdoc_handler(int signum)
+{
+	(void)signum;
+	write(1, "^C\n", 3);
+	g_signal = SIGINT;
+	close(STDIN_FILENO);
 }
 
 void	setup_signals(void)

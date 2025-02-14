@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 17:57:45 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/03 20:27:30 by myiu             ###   ########.fr       */
+/*   Updated: 2025/02/14 18:51:23 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,23 +23,6 @@ int	valid_var_chr(char c)
 	return (0);
 }
 
-char	*extend_line(char *line, char *extra)
-// returns 'line' with 'extra' added to the end.
-// If replaced, the old 'line' is freed
-{
-	char	*out;
-
-	if (line == NULL && extra == NULL)
-		return (NULL);
-	if (line == NULL)
-		return (ft_strdup(extra));
-	if (extra == NULL)
-		return (line);
-	out = ft_strjoin(line, extra);
-	free(line);
-	return (out);
-}
-
 void	expand_exit_status(char **line, char *varp, t_prog *term)
 {
 	char	*status;
@@ -49,11 +32,24 @@ void	expand_exit_status(char **line, char *varp, t_prog *term)
 	*varp = 0;
 	varp++;
 	expanded = ft_strdup(*line);
-	expanded = extend_line(expanded, status);
-	expanded = extend_line(expanded, varp);
+	expanded = ft_extend_line(expanded, status);
+	expanded = ft_extend_line(expanded, varp);
 	free(status);
 	free(*line);
 	*line = expanded;
+}
+
+void	apply_var_expansion(char **expanded, t_prog *term, char *varp, int i)
+{
+	char	*env_name;
+	char	*env_var;
+
+	env_name = ft_strndup(varp, i);
+	env_var = getenv_list(term->env_list, env_name);
+	if (env_var != NULL)
+		*expanded = ft_extend_line(*expanded, env_var);
+	*expanded = ft_extend_line(*expanded, &varp[i]);
+	free(env_name);
 }
 
 int	expand_var_inplace(char **line, char *varp, t_prog *term)
@@ -62,8 +58,6 @@ int	expand_var_inplace(char **line, char *varp, t_prog *term)
 // Returns 0 if no expansion attempted, leaving the '$' in place
 {
 	char	*expanded;
-	char	*env_name;
-	char	*env_var;
 	int		i;
 
 	*varp = 0;
@@ -82,12 +76,7 @@ int	expand_var_inplace(char **line, char *varp, t_prog *term)
 		free(expanded);
 		return (0);
 	}
-	env_name = ft_strndup(varp, i);
-	env_var = getenv_list(term->env_list, env_name);
-	if (env_var != NULL)
-		expanded = extend_line(expanded, env_var);
-	expanded = extend_line(expanded, &varp[i]);
-	free(env_name);
+	apply_var_expansion(&expanded, term, varp, i);
 	free(*line);
 	*line = expanded;
 	return (1);
@@ -100,9 +89,9 @@ void	expand_token_var(char **token, t_prog *term)
 	int		i;
 	int		quoting;
 
-	i = 0;
+	i = -1;
 	quoting = 0;
-	while ((*token)[i])
+	while ((*token)[++i])
 	{
 		if ((*token)[i] == '$' && quoting != Q_SINGLE)
 		{
@@ -120,6 +109,5 @@ void	expand_token_var(char **token, t_prog *term)
 			quoting = Q_DOUBLE;
 		else if ((*token)[i] == '\"' && quoting == Q_DOUBLE)
 			quoting = Q_NONE;
-		i++;
 	}
 }

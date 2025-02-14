@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 14:32:29 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/08 17:15:37 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/14 18:44:03 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,12 +96,16 @@ void	traverse_ptree(t_ptree *ptree, int order, void (*f)(t_ptree *, void *),
 int		is_redirect(t_list *token);
 void	encode_redirect(t_list *token);
 void	encode_line(t_list *tokens);
-void	handle_hdocs(t_cmd *cmd, t_prog *term);
-void	redirect_hdoc(t_cmd *cmd, t_list **rd_token,
-			t_list *prev);
 void	redirect_out(t_cmd *cmd, t_list **rd_token, t_list *prev, int mode);
 void	redirect_in(t_cmd *cmd, t_list **rd_token, t_list *prev);
 void	apply_redirection(t_cmd *cmd, t_prog *term);
 void	connect_pipes(t_list *pipeline);
+	// Hdoc
+void	handle_hdocs(t_cmd *cmd, t_prog *term);
+void	redirect_hdoc(t_cmd *cmd, t_list **rd_token,
+			t_list *prev);
+void	cleanup_heredoc(t_list **hdoc, t_cmd *cmd, t_prog *term, char *line);
+void	hdoc_check_sig(t_cmd *cmd, t_prog *term, t_list **hdoc, char *line);
+void	collect_hdoc_line(t_list **hdoc, char **line, t_cmd *cmd, t_prog *term);
 
 #endif // PARSING_H

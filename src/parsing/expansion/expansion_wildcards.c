@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 18:00:10 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/03 20:27:30 by myiu             ###   ########.fr       */
+/*   Updated: 2025/02/14 19:01:31 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,8 @@ void	search_entries(char **expanded, t_prog *term, char *to_match)
 		else if (ft_match_wc(d_names[i], to_match, 5))
 		{
 			if (*expanded != NULL)
-				*expanded = extend_line(*expanded, " ");
-			*expanded = extend_line(*expanded, d_names[i]);
+				*expanded = ft_extend_line(*expanded, " ");
+			*expanded = ft_extend_line(*expanded, d_names[i]);
 		}
 	}
 	free(d_names);

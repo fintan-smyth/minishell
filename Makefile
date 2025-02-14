@@ -7,11 +7,13 @@ SRC_DIR := ./src
 BUILD_DIR:= ./build
 
 SRC = $(SRC_DIR)/main.c \
+	  $(SRC_DIR)/init.c \
 	  $(SRC_DIR)/entries.c \
 	  $(SRC_DIR)/prompt.c \
 	  $(SRC_DIR)/env/env_list.c \
 	  $(SRC_DIR)/env/envp.c \
 	  $(SRC_DIR)/exec/exec.c \
+	  $(SRC_DIR)/exec/exec_child.c \
 	  $(SRC_DIR)/exec/exec_utils.c \
 	  $(SRC_DIR)/builtins/cd.c \
 	  $(SRC_DIR)/builtins/env.c \
@@ -19,10 +21,12 @@ SRC = $(SRC_DIR)/main.c \
 	  $(SRC_DIR)/builtins/echo.c \
 	  $(SRC_DIR)/builtins/exit.c \
 	  $(SRC_DIR)/parsing/strip_quotes.c \
-	  $(SRC_DIR)/parsing/commands.c \
-	  $(SRC_DIR)/parsing/parse_line.c \
-	  $(SRC_DIR)/parsing/parse_tree.c \
 	  $(SRC_DIR)/parsing/pipes.c \
+	  $(SRC_DIR)/parsing/parse_line.c \
+	  $(SRC_DIR)/parsing/commands/commands.c \
+	  $(SRC_DIR)/parsing/commands/parse_tree.c \
+	  $(SRC_DIR)/parsing/commands/cmdlist_construct.c \
+	  $(SRC_DIR)/parsing/commands/ptree_construct.c \
 	  $(SRC_DIR)/parsing/tokenise/tokenise.c \
 	  $(SRC_DIR)/parsing/tokenise/tokenise_utils.c \
 	  $(SRC_DIR)/parsing/expansion/expansion.c \
@@ -30,6 +34,8 @@ SRC = $(SRC_DIR)/main.c \
 	  $(SRC_DIR)/parsing/expansion/expansion_wildcards.c \
 	  $(SRC_DIR)/parsing/redirect/redirect.c \
 	  $(SRC_DIR)/parsing/redirect/redirect_actions.c \
+	  $(SRC_DIR)/parsing/redirect/heredoc.c \
+	  $(SRC_DIR)/parsing/redirect/heredoc_utils.c \
 	  $(SRC_DIR)/signals/signals.c \
 	  $(SRC_DIR)/parsing/syntax.c \
 
@@ -57,6 +63,7 @@ $(BUILD_DIR):
 	mkdir -p $@/parsing/tokenise
 	mkdir -p $@/parsing/expansion
 	mkdir -p $@/parsing/redirect
+	mkdir -p $@/parsing/commands
 	mkdir -p $@/exec
 	mkdir -p $@/env
 	mkdir -p $@/signals

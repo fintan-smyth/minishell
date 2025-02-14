@@ -6,7 +6,7 @@
 /*   By: fsmyth <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 01:04:09 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/09 15:41:07 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/14 15:45:33 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,15 +61,14 @@ void	strip_excess_nodes(t_list **tokens)
 		{
 			next = current->next->next;
 			ft_lstdelone(current->next, free);
-			current->next = next;
 		}
 		else if (is_cmd_sep(current->next))
 		{
 			ft_lstdelone(current->next, free);
 			current->next = NULL;
+			continue ;
 		}
-		else
-			current = current->next;
+		current = current->next;
 	}
 }
 
