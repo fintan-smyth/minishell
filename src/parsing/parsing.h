@@ -64,7 +64,7 @@ int		verify_tkn_syntax(t_list *tokens, t_prog *term);
 //Expansion
 int		valid_var_chr(char c);
 char	*extend_line(char *line, char *extra);
-int		expand_var_inplace(char **line, char *varp, t_prog *term);
+int		expand_var_inplace(char **line, char *varp, t_prog *term, int quoting);
 void	expand_token_var(char **token, t_prog *term);
 void	expand_wildcards(char **line, t_prog *term);
 void	expand_token_list(t_list *tokens, t_prog *term);

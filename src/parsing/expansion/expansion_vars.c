@@ -52,7 +52,7 @@ void	apply_var_expansion(char **expanded, t_prog *term, char *varp, int i)
 	free(env_name);
 }
 
-int	expand_var_inplace(char **line, char *varp, t_prog *term)
+int	expand_var_inplace(char **line, char *varp, t_prog *term, int quoting)
 // Expands the environment variable at *varp in place.
 // Returns 1 if variable name is valid so expansion is attempted.
 // Returns 0 if no expansion attempted, leaving the '$' in place
@@ -73,8 +73,10 @@ int	expand_var_inplace(char **line, char *varp, t_prog *term)
 		i++;
 	if (i == 0)
 	{
-		free(expanded);
-		return (0);
+		if (*varp != '\'' && *varp != '\"')
+			return (free(expanded), 0);
+		if (quoting == Q_DOUBLE && *varp == '\"')
+			return (free(expanded), 0);
 	}
 	apply_var_expansion(&expanded, term, varp, i);
 	free(*line);
@@ -96,7 +98,7 @@ void	expand_token_var(char **token, t_prog *term)
 		if ((*token)[i] == '$' && quoting != Q_SINGLE)
 		{
 			varp = &(*token)[i];
-			if (!expand_var_inplace(token, varp, term))
+			if (!expand_var_inplace(token, varp, term, quoting))
 				*varp = '$';
 		}
 		if ((*token)[i] == 0)
