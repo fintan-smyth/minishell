@@ -12,7 +12,6 @@
 
 #include "../parsing.h"
 #include <fcntl.h>
-#include <readline/readline.h>
 
 int	is_redirect(t_list *token)
 // Checks if a token is an unencoded redirect operator.

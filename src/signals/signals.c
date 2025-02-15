@@ -57,7 +57,8 @@ void	handle_eof(t_prog *term)
 	int	status;
 
 	status = term->status;
-	printf("\nexit\n");
+	if (term->interactive)
+		printf("\nexit\n");
 	cleanup(term);
 	exit(WEXITSTATUS(status));
 }

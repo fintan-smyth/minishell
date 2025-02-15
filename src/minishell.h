@@ -25,7 +25,8 @@
 //Main
 void	cleanup(t_prog *term);
 char	*get_prompt(t_prog *term, char *home);
-t_prog	*start_program(int argc, char **argv, char *env[], char **line);
+char	*get_input_line(t_prog *term, int hdoc);
+t_prog	*start_program(int argc, char **argv, char *env[]);
 
 //Entries
 t_list	*get_entries(t_prog *term);

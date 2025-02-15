@@ -29,27 +29,24 @@ int	main(int argc, char **argv, char *env[])
 {
 	t_prog	*term;
 	t_ptree	*ptree;
-	char	*line;
 
-	term = start_program(argc, argv, env, &line);
-	while (line != NULL)
+	term = start_program(argc, argv, env);
+	while (term->line != NULL)
 	{
-		if (*line == 0 || ft_strwhitespace(line))
+		if (*term->line == 0 || ft_strwhitespace(term->line))
 		{
-			free(line);
-			line = readline(get_prompt(term,
-						getenv_list(term->env_list, "HOME")));
+			free(term->line);
+			term->line = get_input_line(term, 0);
 			continue ;
 		}
-		term->line = line;
-		ptree = parse_line(line, term);
+		ptree = parse_line(term->line, term);
 		if (term->parse_status == 0)
 			execute_ptree(ptree, term);
 		traverse_ptree(ptree, PST_ORD, free_ptree_node, NULL);
 		term->ptree = NULL;
-		add_history(line);
-		free(line);
-		line = readline(get_prompt(term, getenv_list(term->env_list, "HOME")));
+		add_history(term->line);
+		free(term->line);
+		term->line = get_input_line(term, 0);
 	}
 	handle_eof(term);
 }

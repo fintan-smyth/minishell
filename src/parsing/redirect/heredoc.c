@@ -43,7 +43,7 @@ void	handle_hdoc_child(t_cmd *cmd, t_prog *term, char *delim, int expand)
 
 	hdoc = NULL;
 	signal(SIGINT, hdoc_handler);
-	line = readline("> ");
+	line = get_input_line(term, 1);
 	hdoc_check_sig(cmd, term, &hdoc, line);
 	while (line != NULL && ft_strncmp(line, delim, ft_strlen(delim) + 1))
 		collect_hdoc_line(&hdoc, &line, cmd, term);

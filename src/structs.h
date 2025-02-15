@@ -43,6 +43,7 @@ typedef struct s_prog
 	char	cwd[PATH_MAX];
 	char	*prompt;
 	char	*line;
+	int		interactive;
 	t_list	*env_list;
 	int		status;
 	int		parse_status;

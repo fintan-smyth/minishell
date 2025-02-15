@@ -38,6 +38,6 @@ void	hdoc_check_sig(t_cmd *cmd, t_prog *term, t_list **hdoc, char *line)
 void	collect_hdoc_line(t_list **hdoc, char **line, t_cmd *cmd, t_prog *term)
 {
 	ft_lstadd_back(hdoc, ft_lstnew(*line));
-	*line = readline("> ");
+	*line = get_input_line(term, 1);
 	hdoc_check_sig(cmd, term, hdoc, *line);
 }
