@@ -27,7 +27,7 @@ void	write_hdoc(t_cmd *cmd, t_list *hdoc, t_prog *term, int expand)
 			var = ft_strchr((char *)current->content, '$');
 			while (var != NULL)
 			{
-				expand_var_inplace((char **)&current->content, var, term);
+				expand_var_inplace((char **)&current->content, var, term, 0);
 				var = ft_strchr((char *)current->content, '$');
 			}
 		}
