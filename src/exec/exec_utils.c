@@ -67,7 +67,7 @@ int	search_path(t_prog *term, char *cmd, char *cmd_path)
 	while (access(cmd_path, X_OK) || !(statbuf->st_mode & S_IFREG))
 	{
 		ft_bzero(cmd_path, PATH_MAX);
-		if (paths[i] == NULL)
+		if (paths[i] == NULL || ft_strchr(cmd, '/') != NULL)
 			break ;
 		ft_strlcpy(cmd_path, paths[i++], PATH_MAX);
 		ft_strlcat(cmd_path, "/", PATH_MAX);
