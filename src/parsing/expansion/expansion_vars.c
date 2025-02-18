@@ -91,15 +91,17 @@ void	expand_token_var(char **token, t_prog *term)
 	int		i;
 	int		quoting;
 
-	i = -1;
+	i = 0;
 	quoting = 0;
-	while ((*token)[++i])
+	while ((*token)[i])
 	{
 		if ((*token)[i] == '$' && quoting != Q_SINGLE)
 		{
 			varp = &(*token)[i];
 			if (!expand_var_inplace(token, varp, term, quoting))
 				*varp = '$';
+			else
+				continue ;
 		}
 		if ((*token)[i] == 0)
 			break ;
@@ -111,5 +113,6 @@ void	expand_token_var(char **token, t_prog *term)
 			quoting = Q_DOUBLE;
 		else if ((*token)[i] == '\"' && quoting == Q_DOUBLE)
 			quoting = Q_NONE;
+		i++;
 	}
 }

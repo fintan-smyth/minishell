@@ -18,8 +18,11 @@ int	handle_builtins(t_prog *term, t_cmd *cmd)
 // Returns 1 if command was a builtin
 // Returns 0 if command was not a builtin
 {
-	if (cmd->argv[0] == NULL)
+	if (cmd->argv[0] == NULL || *cmd->argv[0] == 0)
+	{
+		term->status = 0;
 		return (1);
+	}
 	if (!ft_strncmp((cmd->argv)[0], "cd", 3))
 		cd(term, cmd);
 	else if (!ft_strncmp((cmd->argv)[0], "pwd", 4))

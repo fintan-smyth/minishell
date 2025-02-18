@@ -21,7 +21,7 @@ void	redirect_out(t_cmd *cmd, t_list **rd_token, t_list *prev, int mode)
 	int		fd;
 	int		fmode;
 
-	fd = -1;
+	fd = -2;
 	fmode = O_WRONLY | O_CREAT;
 	if (mode == RD_APP)
 		fmode |= O_APPEND;
@@ -33,6 +33,13 @@ void	redirect_out(t_cmd *cmd, t_list **rd_token, t_list *prev, int mode)
 	{
 		ft_putstr_fd("minishell: ", 2);
 		ft_putendl_fd("ambiguous redirect", 2);
+		cmd->rd_err = 1;
+	}
+	if (fd == -1)
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd((char *)(*rd_token)->next->content, 2);
+		ft_putendl_fd(": No such file or directory", 2);
 		cmd->rd_err = 1;
 	}
 	if (cmd->fd_out > 2)

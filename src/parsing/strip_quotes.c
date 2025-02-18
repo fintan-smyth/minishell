@@ -48,6 +48,8 @@ void	strip_excess_nodes(t_list **tokens)
 	t_list	*current;
 
 	current = *tokens;
+	if (ft_lstsize(current) == 1)
+		return ;
 	while (ft_strwhitespace((char *)current->content))
 	{
 		*tokens = current->next;
@@ -60,8 +62,6 @@ void	strip_excess_nodes(t_list **tokens)
 			ft_lstdel_next(current, free);
 		else if (is_cmd_sep(current->next))
 		{
-			// ft_lstdelone(current->next, free);
-			// current->next = NULL;
 			ft_lstdel_next(current, free);
 			continue ;
 		}

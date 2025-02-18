@@ -18,8 +18,8 @@ pid_t	exec_cmd(t_prog *term, t_cmd *cmd, t_list *pipeline)
 	char	cmd_path[PATH_MAX];
 
 	child = -1;
-	if ((cmd->argv)[0] == NULL)
-		term->status = 0;
+	// if ((cmd->argv)[0] == NULL)
+	// 	term->status = 0;
 	if (cmd->rd_err > 0)
 		term->status = 1 << 8;
 	else if (!handle_builtins(term, cmd))

@@ -45,6 +45,7 @@ void	exit_shell(t_prog *term, t_cmd *cmd)
 	else if (cmd->argc != 1)
 		status = get_exit_code(cmd->argv[1]) << 8;
 	traverse_ptree(term->ptree, PST_ORD, free_ptree_node, NULL);
+	free(term->line);
 	cleanup(term);
 	exit(WEXITSTATUS(status));
 }

@@ -16,7 +16,9 @@ void	handle_echo_opts(char **argv, int *i, int *nl)
 {
 	int	j;
 
-	while (*argv[++(*i)] == '-')
+	if (argv[*i] == NULL)
+		return ;
+	while (*argv[(*i)] == '-')
 	{
 		j = 1;
 		while (argv[*i][j] == 'n')
@@ -24,6 +26,9 @@ void	handle_echo_opts(char **argv, int *i, int *nl)
 		if (argv[*i][j] != 0 || j == 1)
 			break ;
 		*nl = 0;
+		(*i)++;
+		if (argv[*i] == NULL)
+			return ;
 	}
 }
 
@@ -38,7 +43,7 @@ void	echo(t_prog *term, t_cmd *cmd)
 		write(1, "\n", 1);
 	else
 	{
-		i = 0;
+		i = 1;
 		nl = 1;
 		handle_echo_opts(cmd->argv, &i, &nl);
 		first_arg = i;
@@ -50,8 +55,8 @@ void	echo(t_prog *term, t_cmd *cmd)
 		}
 		if (nl == 1)
 			write(cmd->fd_out, "\n", 1);
-		else if (i != 2 && cmd->fd_out == 1)
-			ft_putstr_fd("\e[7m%\e[m\n", 1);
+		// else if (i != 2 && cmd->fd_out == 1)
+		// 	ft_putstr_fd("\e[7m%\e[m\n", 1);
 	}
 	term->status = 0;
 }

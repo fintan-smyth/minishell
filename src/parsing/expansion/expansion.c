@@ -40,7 +40,7 @@ void	retokenise(t_list *token)
 	{
 		if (apply_quoting_tokenise(&quoting, line[i], &q_char))
 			;
-		else if (line[i] == ' ')
+		else if (ft_iswhitespace(line[i]))
 		{
 			line[i] = 0;
 			if (line[i + 1] != 0)

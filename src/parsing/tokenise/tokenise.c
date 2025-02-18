@@ -72,10 +72,10 @@ int	handle_space_tokenise(t_list **tokens, char **line, char **lp, int *i)
 	int	out;
 
 	out = 0;
-	if ((*lp)[*i] == ' ')
+	if (ft_iswhitespace((*lp)[*i]))
 	{
 		out = 1;
-		if (&(*lp)[*i] != *line && *i != 0 && (*lp)[*i - 1] != ' ')
+		if (&(*lp)[*i] != *line && *i != 0 && !ft_iswhitespace((*lp)[*i - 1]))
 			delimit_token(tokens, lp, i);
 		else
 		{
