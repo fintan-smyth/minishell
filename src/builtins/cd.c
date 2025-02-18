@@ -64,6 +64,7 @@ void	cd(t_prog *term, t_cmd *cmd, t_list *pipeline)
 	char	*path;
 	int		revert;
 
+	// (void)pipeline;
 	path = get_path(term->env_list, cmd->argv, &revert);
 	if (path == NULL)
 		term->status = 1 << 8;
@@ -71,6 +72,11 @@ void	cd(t_prog *term, t_cmd *cmd, t_list *pipeline)
 	{
 		ft_putendl_fd("\e[32mminishell: \e[35mcd: \e[mtoo many arguments", 2);
 		term->status = 1 << 8;
+	}
+	else if (ft_lstsize(pipeline) > 1)
+	{
+		if (revert == 1)
+			ft_putendl_fd(getenv_list(term->env_list, "OLDPWD"), cmd->fd_out);
 	}
 	else if (chdir(path) != 0)
 	{

@@ -12,7 +12,7 @@
 
 #include "../parsing/parsing.h"
 
-pid_t	exec_cmd(t_prog *term, t_cmd *cmd, t_list *pipeline)
+pid_t	exec_cmd(t_prog *term, t_cmd *cmd, t_list *pipeline, t_list *cur_cmd)
 {
 	pid_t	child;
 	char	cmd_path[PATH_MAX];
@@ -28,7 +28,7 @@ pid_t	exec_cmd(t_prog *term, t_cmd *cmd, t_list *pipeline)
 		{
 			child = fork();
 			if (child == 0)
-				handle_child(cmd, term, pipeline, cmd_path);
+				handle_child(cmd, term, cur_cmd, cmd_path);
 		}
 		else if (search == 1)
 		{
@@ -77,7 +77,7 @@ void	execute_pipeline(t_ptree *treenode, t_prog *term)
 		cmd = (t_cmd *)current->content;
 		child = ft_calloc(1, sizeof(pid_t));
 		ft_lstadd_back(&treenode->pids, ft_lstnew(child));
-		*child = exec_cmd(term, cmd, current);
+		*child = exec_cmd(term, cmd, treenode->pipeline, current);
 		free_cmd(current->content);
 		current->content = NULL;
 		if (*child == -1)

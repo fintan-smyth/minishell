@@ -91,7 +91,6 @@ void	handle_child(t_cmd *cmd, t_prog *term, t_list *pipeline, char *cmd_path)
 // Branch of commands to be executed by child after fork.
 // dups the appropriate file descriptors and executes the passed in command.
 {
-	(void)pipeline;
 	dup2(cmd->fd_in, 0);
 	dup2(cmd->fd_out, 1);
 	close_fds_child(pipeline);

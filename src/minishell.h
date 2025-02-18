@@ -35,7 +35,7 @@ void	print_entries(t_list *entries);
 //Exec
 int		count_args(char **args);
 int		search_path(t_prog *term, char *cmd, char *cmd_path);
-int		exec_cmd(t_prog *term, t_cmd *cmd, t_list *pipeline);
+int		exec_cmd(t_prog *term, t_cmd *cmd, t_list *pipeline, t_list *cur_cmd);
 void	execute_pipeline(t_ptree *treenode, t_prog *term);
 void	execute_ptree(t_ptree *ptree, t_prog *term);
 int		handle_builtins(t_prog *term, t_cmd *cmd, t_list *pipeline);
