@@ -54,6 +54,7 @@ void	encode_line(t_list *tokens)
 	while (current != NULL)
 	{
 		encode_redirect(current);
+		encode_pipes(current);
 		current = current->next;
 	}
 }

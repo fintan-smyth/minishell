@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 13:39:32 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/14 18:48:55 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/18 19:25:30 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int		search_path(t_prog *term, char *cmd, char *cmd_path);
 int		exec_cmd(t_prog *term, t_cmd *cmd, t_list *pipeline);
 void	execute_pipeline(t_ptree *treenode, t_prog *term);
 void	execute_ptree(t_ptree *ptree, t_prog *term);
-int		handle_builtins(t_prog *term, t_cmd *cmd);
+int		handle_builtins(t_prog *term, t_cmd *cmd, t_list *pipeline);
 void	handle_child(t_cmd *cmd, t_prog *term,
 			t_list *pipeline, char *cmd_path);
 

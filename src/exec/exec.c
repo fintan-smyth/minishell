@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 16:39:24 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/14 18:37:36 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/18 19:25:42 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,25 +16,31 @@ pid_t	exec_cmd(t_prog *term, t_cmd *cmd, t_list *pipeline)
 {
 	pid_t	child;
 	char	cmd_path[PATH_MAX];
+	int		search;
 
 	child = -1;
-	// if ((cmd->argv)[0] == NULL)
-	// 	term->status = 0;
 	if (cmd->rd_err > 0)
 		term->status = 1 << 8;
-	else if (!handle_builtins(term, cmd))
+	else if (!handle_builtins(term, cmd, pipeline))
 	{
-		if (search_path(term, (cmd->argv)[0], cmd_path) != 0)
+		search = search_path(term, (cmd->argv)[0], cmd_path);
+		if (search == 0)
 		{
 			child = fork();
 			if (child == 0)
 				handle_child(cmd, term, pipeline, cmd_path);
 		}
-		else
+		else if (search == 1)
 		{
 			term->status = 127 << 8;
 			ft_putstr_fd(cmd->argv[0], 2);
 			ft_putendl_fd(": command not found", 2);
+		}
+		else if (search == 2)
+		{
+			term->status = 126 << 8;
+			ft_putstr_fd(cmd->argv[0], 2);
+			ft_putendl_fd(": Permission denied", 2);
 		}
 	}
 	return (child);

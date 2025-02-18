@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 14:10:22 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/14 15:44:24 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/18 18:32:36 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,8 @@ t_ptree	*parse_line(char *line, t_prog *term)
 	t_list	*cmd_list;
 
 	term->parse_status = 0;
-	tokens = tokenise(line);
+	tokens = NULL;
+	tokenise(line, &tokens);
 	if (is_debug(term))
 		print_dbg(tokens, NULL, "Initial tokenisation");
 	if (!verify_tkn_syntax(tokens, term))

@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 14:32:29 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/14 18:44:03 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/18 18:32:51 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,10 @@ enum
 
 enum
 {
-	RD_IN = 1,
-	RD_OUT = 2,
-	RD_APP = 3,
-	RD_HRD = 4,
+	RD_IN = 17,
+	RD_OUT = 18,
+	RD_APP = 19,
+	RD_HRD = 20,
 };
 
 enum
@@ -54,9 +54,9 @@ enum
 int		is_op(char c);
 int		token_is_op(t_list *token);
 int		matches_prev_op(char c, char prev);
-int		apply_quoting_tokenise(int *quoting, char c, char *q_char);
+int		apply_quoting_tokenise(int *quoting, char **lp, int *i, char *q_char);
 void	print_tokens(t_list *tokens);
-t_list	*tokenise(char *line);
+void	tokenise(char *line, t_list **tokens);
 
 //Syntax
 int		verify_tkn_syntax(t_list *tokens, t_prog *term);
@@ -65,6 +65,7 @@ int		verify_tkn_syntax(t_list *tokens, t_prog *term);
 int		valid_var_chr(char c);
 char	*extend_line(char *line, char *extra);
 int		expand_var_inplace(char **line, char *varp, t_prog *term, int quoting);
+void	expand_token_tilde(char **token, t_prog *term);
 void	expand_token_var(char **token, t_prog *term);
 void	expand_wildcards(char **line, t_prog *term);
 void	expand_token_list(t_list *tokens, t_prog *term);
@@ -95,6 +96,7 @@ void	traverse_ptree(t_ptree *ptree, int order, void (*f)(t_ptree *, void *),
 //Redirection
 int		is_redirect(t_list *token);
 void	encode_redirect(t_list *token);
+void	encode_pipes(t_list *token);
 void	encode_line(t_list *tokens);
 void	redirect_out(t_cmd *cmd, t_list **rd_token, t_list *prev, int mode);
 void	redirect_in(t_cmd *cmd, t_list **rd_token, t_list *prev);

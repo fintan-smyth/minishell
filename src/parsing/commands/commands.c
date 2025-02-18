@@ -34,7 +34,7 @@ int	is_cmd_sep(t_list *token)
 	char	*text;
 
 	text = (char *)token->content;
-	if (ft_strncmp(text, "|", 2) == 0)
+	if (*text == OP_PIPE)
 		return (OP_PIPE);
 	if (ft_strncmp(text, "||", 3) == 0)
 		return (OP_OR);

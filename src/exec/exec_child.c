@@ -6,14 +6,14 @@
 /*   By: fsmyth <fsmyth@student.42london.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 18:31:19 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/14 18:35:42 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/18 19:44:46 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 #include "../builtins/builtins.h"
 
-int	handle_builtins(t_prog *term, t_cmd *cmd)
+int	handle_builtins(t_prog *term, t_cmd *cmd, t_list *pipeline)
 // Checks if a given command is a builtin, and if so executes it.
 // Returns 1 if command was a builtin
 // Returns 0 if command was not a builtin
@@ -24,13 +24,13 @@ int	handle_builtins(t_prog *term, t_cmd *cmd)
 		return (1);
 	}
 	if (!ft_strncmp((cmd->argv)[0], "cd", 3))
-		cd(term, cmd);
+		cd(term, cmd, pipeline);
 	else if (!ft_strncmp((cmd->argv)[0], "pwd", 4))
 		pwd(term, cmd);
 	else if (!ft_strncmp((cmd->argv)[0], "env", 4))
 		env(term, cmd, construct_envp(term->env_list));
 	else if (!ft_strncmp((cmd->argv)[0], "export", 7))
-		export_env(term, cmd);
+		export_env(term, cmd, pipeline);
 	else if (!ft_strncmp((cmd->argv)[0], "unset", 6))
 		unset_env(term, cmd);
 	else if (!ft_strncmp((cmd->argv)[0], "echo", 5))

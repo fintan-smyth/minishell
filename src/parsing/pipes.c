@@ -12,6 +12,18 @@
 
 #include "parsing.h"
 
+void	encode_pipes(t_list *token)
+{
+	char	*text;
+
+	text = (char *)token->content;
+	if (ft_strncmp(text, "|", 2) != 0)
+		return ;
+	free(token->content);
+	token->content = ft_strdup(" ");
+	*(char *)token->content = OP_PIPE;
+}
+
 void	connect_pipes(t_list *pipeline)
 // Loops over a list of pipelines. For each pieline loops over 
 // each command and connects any necessary pipes.

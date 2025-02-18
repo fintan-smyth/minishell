@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 16:24:38 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/07 17:33:42 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/18 19:27:39 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,15 +42,31 @@ int	validate_export(char *arg, char **equals)
 	return (1);
 }
 
-void	export_env(t_prog *term, t_cmd *cmd)
+void	print_export(t_prog *term, t_cmd *cmd)
+{
+	t_list	*current;
+	t_env	*env;
+
+	current = term->env_list;
+	while (current != NULL)
+	{
+		env = (t_env *)current->content;
+		ft_dprintf(cmd->fd_out, "declare -x %s=\"%s\"\n", env->name, env->var);
+		current = current->next;
+	}
+}
+
+void	export_env(t_prog *term, t_cmd *cmd, t_list *pipeline)
 // Executes the 'export' builtin command
 {
 	int		i;
 
 	if (cmd->argc < 2)
-		env(term, cmd, construct_envp(term->env_list));
+		print_export(term, cmd);
 	else
 	{
+		if (ft_lstsize(pipeline) > 1)
+			return ;
 		i = 0;
 		while (cmd->argv[++i] != NULL)
 			envp_to_lst(term, cmd->argv[i]);

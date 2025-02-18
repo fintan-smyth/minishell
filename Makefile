@@ -31,6 +31,7 @@ SRC = $(SRC_DIR)/main.c \
 	  $(SRC_DIR)/parsing/tokenise/tokenise_utils.c \
 	  $(SRC_DIR)/parsing/expansion/expansion.c \
 	  $(SRC_DIR)/parsing/expansion/expansion_vars.c \
+	  $(SRC_DIR)/parsing/expansion/expansion_tilde.c \
 	  $(SRC_DIR)/parsing/expansion/expansion_wildcards.c \
 	  $(SRC_DIR)/parsing/redirect/redirect.c \
 	  $(SRC_DIR)/parsing/redirect/redirect_actions.c \

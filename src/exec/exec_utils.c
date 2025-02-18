@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/02 17:46:00 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/14 18:37:36 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/18 19:14:44 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,18 @@ static char	**init_search(t_prog *term, char *cmd,
 						char *cmd_path, struct stat *statbuf)
 {
 	char		**paths;
+	int			path_exists;
 
+	path_exists = 1;
 	if (getenv_list(term->env_list, "PATH") == NULL)
+	{
 		paths = ft_split("", ':');
+		path_exists = 0;
+	}
 	else
 		paths = ft_split(getenv_list(term->env_list, "PATH"), ':');
 	ft_bzero(cmd_path, PATH_MAX);
-	if (ft_strchr(cmd, '/') != NULL)
+	if (ft_strchr(cmd, '/') != NULL || path_exists == 0)
 		ft_strlcat(cmd_path, cmd, PATH_MAX);
 	stat(cmd_path, statbuf);
 	return (paths);
@@ -60,12 +65,14 @@ int	search_path(t_prog *term, char *cmd, char *cmd_path)
 	struct stat	*statbuf;
 	char		**paths;
 	int			i;
+	int			exists;
 
 	statbuf = ft_calloc(1, sizeof(*statbuf));
 	paths = init_search(term, cmd, cmd_path, statbuf);
 	i = 0;
 	while (access(cmd_path, X_OK) || !(statbuf->st_mode & S_IFREG))
 	{
+		exists = !access(cmd_path, F_OK);
 		ft_bzero(cmd_path, PATH_MAX);
 		if (paths[i] == NULL || ft_strchr(cmd, '/') != NULL)
 			break ;
@@ -77,8 +84,13 @@ int	search_path(t_prog *term, char *cmd, char *cmd_path)
 	free_split(&paths);
 	free(statbuf);
 	if (cmd_path[0] == 0)
-		return (0);
-	return (1);
+	{
+		if (!exists)
+			return (1);
+		else
+			return (2);
+	}
+	return (0);
 }
 
 void	handle_exit_sig(t_prog *term)

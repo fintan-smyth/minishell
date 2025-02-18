@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 18:45:57 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/07 17:41:50 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/18 18:01:19 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	retokenise(t_list *token)
 	q_char = 0;
 	while (--i >= 0)
 	{
-		if (apply_quoting_tokenise(&quoting, line[i], &q_char))
+		if (apply_quoting_tokenise(&quoting, &line, &i, &q_char))
 			;
 		else if (ft_iswhitespace(line[i]))
 		{
@@ -64,6 +64,7 @@ void	expand_token_list(t_list *tokens, t_prog *term)
 			current = current->next->next;
 			continue ;
 		}
+		expand_token_tilde((char **)&current->content, term);
 		expand_token_var((char **)&current->content, term);
 		retokenise(current);
 		expand_wildcards((char **)&current->content, term);

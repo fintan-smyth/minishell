@@ -6,7 +6,7 @@
 /*   By: myiu <myiu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 15:20:50 by fsmyth            #+#    #+#             */
-/*   Updated: 2025/02/08 18:53:12 by fsmyth           ###   ########.fr       */
+/*   Updated: 2025/02/18 19:45:25 by fsmyth           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static char	*get_path(t_list *env_list, char **argv, int *revert)
 	return (path);
 }
 
-void	cd(t_prog *term, t_cmd *cmd)
+void	cd(t_prog *term, t_cmd *cmd, t_list *pipeline)
 // Executes the 'cd' builtin command
 {
 	char	*path;
