@@ -43,28 +43,41 @@ char	*construct_envp_line(char *name, char *env)
 void	env_change_or_add(t_prog *term, char *name, char *var)
 {
 	t_list	*existing;
+	char	*tmp;
 
 	existing = getenv_node(term->env_list, name);
 	if (existing == NULL)
 		env_list_add(&term->env_list, name, var);
 	else
 	{
-		free(((t_env *)existing->content)->var);
-		((t_env *)existing->content)->var = ft_strdup(var);
+		if (*(var - 2) != '+')
+		{
+			free(((t_env *)existing->content)->var);
+			((t_env *)existing->content)->var = ft_strdup(var);
+		}
+		else
+		{
+			tmp = ft_extend_line(((t_env *)existing->content)->var, var);
+			((t_env *)existing->content)->var = tmp;
+		}
 	}
 }
 
-void	envp_to_lst(t_prog *term, char *envp)
+void	envp_to_lst(t_prog *term, char *envp, int init)
 {
 	char	*equals;
 
 	if (!validate_export(envp, &equals))
 	{
-		term->status = 1 << 8;
+		if (!init)
+		{
+			term->status = 1 << 8;
+			ft_dprintf(2, "minishell: export: `%s\': not a valid identifier\n", envp);
+		}
 		return ;
 	}
-	*equals = 0;
-	env_change_or_add(term, envp, equals + 1);
+	// *equals = 0;
+	env_change_or_add(term, envp, equals);
 	term->status = 0;
 }
 

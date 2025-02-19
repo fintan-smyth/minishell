@@ -37,7 +37,7 @@ static char	*get_path(t_list *env_list, char **argv, int *revert)
 	char	*path;
 
 	*revert = 0;
-	if (argv[1] == NULL)
+	if (argv[1] == NULL || ft_strncmp(argv[1], "--", 3) == 0)
 		path = getenv_list(env_list, "HOME");
 	else if (ft_strncmp(argv[1], "-", 2) == 0)
 	{

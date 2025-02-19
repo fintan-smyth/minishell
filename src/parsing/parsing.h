@@ -71,8 +71,8 @@ void	expand_wildcards(char **line, t_prog *term);
 void	expand_token_list(t_list *tokens, t_prog *term);
 
 //Stripping
-void	strip_quotes_token(char *token);
-void	strip_quotes(t_list **tokens);
+int		strip_quotes_token(char *token);
+void	strip_quotes(t_cmd *cmd, t_list **tokens);
 
 //Commands
 int		is_debug(t_prog *term);

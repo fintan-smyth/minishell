@@ -56,6 +56,7 @@ typedef struct s_cmd
 	char	**argv;
 	int		argc;
 	int		sep;
+	int		stripped;
 	int		condition;
 	int		fd_in;
 	int		fd_out;

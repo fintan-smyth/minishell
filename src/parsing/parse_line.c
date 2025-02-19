@@ -71,7 +71,7 @@ void	parse_pipeline(t_ptree *ptree, void *term)
 		expand_token_list(tokens, (t_prog *)term);
 		if (is_debug((t_prog *)term))
 			print_dbg(tokens, cur_cmd, "Expanded");
-		strip_quotes(&tokens);
+		strip_quotes((t_cmd *)cur_cmd->content, &tokens);
 		((t_cmd *)cur_cmd->content)->tokens = tokens;
 		if (is_debug((t_prog *)term))
 			print_dbg(tokens, cur_cmd, "Stripped");

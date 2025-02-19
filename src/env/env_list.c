@@ -88,7 +88,7 @@ void	init_env_list(t_prog *term, char **env)
 
 	i = 0;
 	while (env[i] != NULL)
-		envp_to_lst(term, env[i++]);
+		envp_to_lst(term, env[i++], 1);
 	shlvl = ft_atoi(getenv_list(term->env_list, "SHLVL")) + 1;
 	shlvl_str = ft_itoa(shlvl);
 	env_change_or_add(term, "SHLVL", shlvl_str);

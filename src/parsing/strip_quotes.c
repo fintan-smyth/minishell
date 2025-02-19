@@ -12,34 +12,38 @@
 
 #include "parsing.h"
 
-void	apply_quoting(char *quote, int *quoting, int mode)
+void	apply_quoting(char *quote, int *quoting, int mode, int *applied)
 // Sets the quoting mode and strips quote character from string.
 {
+	*applied = 1;
 	*quoting = mode;
 	ft_memmove(quote, quote + 1, ft_strlen(quote));
 }
 
-void	strip_quotes_token(char *token)
+int	strip_quotes_token(char *token)
 // Strips unquoted quoting characters from a token.
 {
 	int	i;
 	int	quoting;
+	int	applied;
 
 	i = 0;
 	quoting = 0;
+	applied = 0;
 	while (token[i])
 	{
 		if (token[i] == '\'' && quoting == Q_NONE)
-			apply_quoting(&token[i], &quoting, Q_SINGLE);
+			apply_quoting(&token[i], &quoting, Q_SINGLE, &applied);
 		else if (token[i] == '\'' && quoting == Q_SINGLE)
-			apply_quoting(&token[i], &quoting, Q_NONE);
+			apply_quoting(&token[i], &quoting, Q_NONE, &applied);
 		else if (token[i] == '\"' && quoting == Q_NONE)
-			apply_quoting(&token[i], &quoting, Q_DOUBLE);
+			apply_quoting(&token[i], &quoting, Q_DOUBLE, &applied);
 		else if (token[i] == '\"' && quoting == Q_DOUBLE)
-			apply_quoting(&token[i], &quoting, Q_NONE);
+			apply_quoting(&token[i], &quoting, Q_NONE, &applied);
 		else
 			i++;
 	}
+	return (applied);
 }
 
 void	strip_excess_nodes(t_list **tokens)
@@ -69,7 +73,7 @@ void	strip_excess_nodes(t_list **tokens)
 	}
 }
 
-void	strip_quotes(t_list **tokens)
+void	strip_quotes(t_cmd *cmd, t_list **tokens)
 // Strips unquoted quotes from a list of tokens.
 {
 	t_list	*current;
@@ -85,7 +89,8 @@ void	strip_quotes(t_list **tokens)
 			current = current->next->next;
 			continue ;
 		}
-		strip_quotes_token((char *)current->content);
+		if (strip_quotes_token((char *)current->content) == 1)
+			cmd->stripped = 1;
 		current = current->next;
 	}
 }

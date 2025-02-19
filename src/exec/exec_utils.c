@@ -85,7 +85,7 @@ int	search_path(t_prog *term, char *cmd, char *cmd_path)
 	free(statbuf);
 	if (cmd_path[0] == 0)
 	{
-		if (!exists)
+		if (!exists || *cmd == 0 || ft_strncmp(cmd, ".", 2) == 0 || ft_strncmp(cmd, "..", 3) == 0)
 			return (1);
 		else
 			return (2);

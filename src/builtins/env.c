@@ -19,6 +19,12 @@ void	env(t_prog *term, t_cmd *cmd, char **envp)
 	int	i;
 
 	i = 0;
+	if (cmd->argc > 1)
+	{
+		ft_dprintf(2, "env: \'%s\': No such file or directory\n", cmd->argv[1]);
+		term->status = 127 << 8;
+		return ;
+	}
 	while (envp[i] != NULL)
 		ft_putendl_fd(envp[i++], cmd->fd_out);
 	free_split(&envp);
@@ -29,15 +35,22 @@ int	validate_export(char *arg, char **equals)
 // Validates syntax for an 'export' command
 {
 	*equals = ft_strchr(arg, '=');
-	if (*equals == NULL)
+	if (!ft_isalpha(*arg) && *arg != '_')
 		return (0);
-	if (*equals == arg)
-		return (0);
-	while (arg < *equals)
+	while (*arg != 0 && *arg != '=' && *arg != '+')
 	{
 		if (!valid_var_chr(*arg))
 			return (0);
 		arg++;
+	}
+	if (*arg == '+' && *(arg + 1) != '=')
+		return (0);
+	if (*equals != NULL)
+	{
+		**equals = 0;
+		(*equals)++;
+		if (*arg == '+')
+			*arg = 0;
 	}
 	return (1);
 }
@@ -69,7 +82,7 @@ void	export_env(t_prog *term, t_cmd *cmd, t_list *pipeline)
 			return ;
 		i = 0;
 		while (cmd->argv[++i] != NULL)
-			envp_to_lst(term, cmd->argv[i]);
+			envp_to_lst(term, cmd->argv[i], 0);
 	}
 }
 

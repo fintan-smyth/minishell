@@ -13,14 +13,13 @@
 #include "../minishell.h"
 #include "../parsing/parsing.h"
 
-unsigned char	get_exit_code(char *arg)
+unsigned char	get_exit_code(char *arg, char **endptr)
 {
-	char	*endptr;
 	long	num;
 
 	errno = 0;
-	num = ft_strtol(arg, &endptr, 10);
-	if (*arg != 0 && *endptr == 0 && errno != ERANGE)
+	num = ft_strtol(arg, endptr, 10);
+	if (*arg != 0 && **endptr == 0 && errno != ERANGE)
 		return (num);
 	else
 	{
@@ -33,17 +32,18 @@ unsigned char	get_exit_code(char *arg)
 
 void	exit_shell(t_prog *term, t_cmd *cmd)
 {
-	int	status;
+	int		status;
+	char	*endptr;
 
 	status = term->status;
-	if (cmd->argc > 2)
+	if (cmd->argc != 1)
+		status = get_exit_code(cmd->argv[1], &endptr) << 8;
+	if (cmd->argc > 2 && *endptr == 0)
 	{
 		ft_putendl_fd("\e[32mminishell: \e[35mexit: \e[mtoo many arguments", 2);
 		term->status = 1 << 8;
 		return ;
 	}
-	else if (cmd->argc != 1)
-		status = get_exit_code(cmd->argv[1]) << 8;
 	traverse_ptree(term->ptree, PST_ORD, free_ptree_node, NULL);
 	free(term->line);
 	cleanup(term);
