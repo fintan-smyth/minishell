@@ -18,7 +18,8 @@ int	handle_builtins(t_prog *term, t_cmd *cmd, t_list *pipeline)
 // Returns 1 if command was a builtin
 // Returns 0 if command was not a builtin
 {
-	if (cmd->argv[0] == NULL || *cmd->argv[0] == 0)
+	if ((cmd->argv[0] == NULL || *cmd->argv[0] == 0) && ft_lstsize(cmd->tokens) < 2)
+	// if (cmd->argv[0] == NULL)
 	{
 		term->status = 0;
 		return (1);
