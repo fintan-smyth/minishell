@@ -31,7 +31,7 @@ void	env(t_prog *term, t_cmd *cmd, char **envp)
 	term->status = 0;
 }
 
-int	validate_export(char *arg, char **equals)
+int	validate_export(char *arg, char **equals, int *plus)
 // Validates syntax for an 'export' command
 {
 	*equals = ft_strchr(arg, '=');
@@ -50,7 +50,10 @@ int	validate_export(char *arg, char **equals)
 		**equals = 0;
 		(*equals)++;
 		if (*arg == '+')
+		{
 			*arg = 0;
+			*plus = 1;
+		}
 	}
 	return (1);
 }

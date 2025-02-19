@@ -12,7 +12,7 @@
 
 #include "../minishell.h"
 
-int	validate_export(char *arg, char **equals);
+int	validate_export(char *arg, char **equals, int *plus);
 
 void	free_env(void *data)
 // Frees a t_env struct
@@ -40,7 +40,7 @@ char	*construct_envp_line(char *name, char *env)
 	return (line);
 }
 
-void	env_change_or_add(t_prog *term, char *name, char *var)
+void	env_change_or_add(t_prog *term, char *name, char *var, int plus)
 {
 	t_list	*existing;
 	char	*tmp;
@@ -50,7 +50,7 @@ void	env_change_or_add(t_prog *term, char *name, char *var)
 		env_list_add(&term->env_list, name, var);
 	else
 	{
-		if (*(var - 2) != '+')
+		if (!plus)
 		{
 			free(((t_env *)existing->content)->var);
 			((t_env *)existing->content)->var = ft_strdup(var);
@@ -58,6 +58,7 @@ void	env_change_or_add(t_prog *term, char *name, char *var)
 		else
 		{
 			tmp = ft_extend_line(((t_env *)existing->content)->var, var);
+			ft_printf("tmp: %s\n", tmp);
 			((t_env *)existing->content)->var = tmp;
 		}
 	}
@@ -66,8 +67,10 @@ void	env_change_or_add(t_prog *term, char *name, char *var)
 void	envp_to_lst(t_prog *term, char *envp, int init)
 {
 	char	*equals;
+	int		plus;
 
-	if (!validate_export(envp, &equals))
+	plus = 0;
+	if (!validate_export(envp, &equals, &plus))
 	{
 		if (!init)
 		{
@@ -77,7 +80,7 @@ void	envp_to_lst(t_prog *term, char *envp, int init)
 		return ;
 	}
 	// *equals = 0;
-	env_change_or_add(term, envp, equals);
+	env_change_or_add(term, envp, equals, plus);
 	term->status = 0;
 }
 

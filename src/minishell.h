@@ -51,7 +51,7 @@ void	env_list_add(t_list **lst, char *name, char *var);
 char	*construct_envp_line(char *name, char *env);
 char	**construct_envp(t_list *list);
 void	envp_to_lst(t_prog *term, char *envp, int init);
-void	env_change_or_add(t_prog *term, char *name, char *var);
+void	env_change_or_add(t_prog *term, char *name, char *var, int plus);
 
 //Signals
 void	sig_handler(int sig);
