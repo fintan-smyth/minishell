@@ -73,6 +73,18 @@ void	strip_excess_nodes(t_list **tokens)
 	}
 }
 
+void	apply_quoting_expand(char *token, int *quoting, int i)
+{
+	if (token[i] == '\'' && *quoting == Q_NONE)
+		*quoting = Q_SINGLE;
+	else if (token[i] == '\'' && *quoting == Q_SINGLE)
+		*quoting = Q_NONE;
+	else if (token[i] == '\"' && *quoting == Q_NONE)
+		*quoting = Q_DOUBLE;
+	else if (token[i] == '\"' && *quoting == Q_DOUBLE)
+		*quoting = Q_NONE;
+}
+
 void	strip_quotes(t_cmd *cmd, t_list **tokens)
 // Strips unquoted quotes from a list of tokens.
 {

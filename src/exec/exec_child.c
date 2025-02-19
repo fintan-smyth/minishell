@@ -43,7 +43,17 @@ int	handle_builtins(t_prog *term, t_cmd *cmd, t_list *pipeline)
 	return (1);
 }
 
-int	int_cmp(void *num1, void *num2);
+int	int_cmp(void *num1, void *num2)
+{
+	int	diff;
+	int	nbr1;
+	int	nbr2;
+
+	nbr1 = *(int *)num1;
+	nbr2 = *(int *)num2;
+	diff = nbr1 - nbr2;
+	return (diff);
+}
 
 t_list	*get_fds_child(t_list *pipeline)
 {

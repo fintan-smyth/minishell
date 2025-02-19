@@ -14,6 +14,16 @@
 
 extern sig_atomic_t	g_signal;
 
+void	init_rd_out(int *fd, int *fmode, int mode)
+{
+	*fd = -2;
+	*fmode = O_WRONLY | O_CREAT;
+	if (mode == RD_APP)
+		*fmode |= O_APPEND;
+	else
+		*fmode |= O_TRUNC;
+}
+
 void	redirect_out(t_cmd *cmd, t_list **rd_token, t_list *prev, int mode)
 // Applies file redirection for the redirect out (>) or append (>>) operator.
 // Trims redirection tokens from the token list.
@@ -21,25 +31,18 @@ void	redirect_out(t_cmd *cmd, t_list **rd_token, t_list *prev, int mode)
 	int		fd;
 	int		fmode;
 
-	fd = -2;
-	fmode = O_WRONLY | O_CREAT;
-	if (mode == RD_APP)
-		fmode |= O_APPEND;
-	else
-		fmode |= O_TRUNC;
+	init_rd_out(&fd, &fmode, mode);
 	if ((*rd_token)->next != NULL)
 		fd = open((char *)(*rd_token)->next->content, fmode, 0644);
 	else
 	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putendl_fd("ambiguous redirect", 2);
+		ft_dprintf(2, "minishell: ambiguous redirect");
 		cmd->rd_err = 1;
 	}
 	if (fd == -1)
 	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd((char *)(*rd_token)->next->content, 2);
-		ft_putendl_fd(": No such file or directory", 2);
+		ft_dprintf(2, "minishell: %s: No such file or directory",
+			(char *)(*rd_token)->next->content);
 		cmd->rd_err = 1;
 	}
 	if (cmd->fd_out > 2)

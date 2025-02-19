@@ -22,7 +22,8 @@ char	*get_input_line(t_prog *term, int hdoc)
 		if (hdoc)
 			line = readline("> ");
 		else
-			line = readline(get_prompt(term, getenv_list(term->env_list, "HOME")));
+			line = readline(get_prompt(term,
+						getenv_list(term->env_list, "HOME")));
 	}
 	else
 	{

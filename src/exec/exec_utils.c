@@ -24,24 +24,13 @@ int	count_args(char **argv)
 	return (i);
 }
 
-int	int_cmp(void *num1, void *num2)
-{
-	int	diff;
-	int	nbr1;
-	int	nbr2;
-
-	nbr1 = *(int *)num1;
-	nbr2 = *(int *)num2;
-	diff = nbr1 - nbr2;
-	return (diff);
-}
-
 static char	**init_search(t_prog *term, char *cmd,
-						char *cmd_path, struct stat *statbuf)
+						char *cmd_path, struct stat **statbuf)
 {
 	char		**paths;
 	int			path_exists;
 
+	*statbuf = ft_calloc(1, sizeof(**statbuf));
 	path_exists = 1;
 	if (getenv_list(term->env_list, "PATH") == NULL)
 	{
@@ -53,8 +42,17 @@ static char	**init_search(t_prog *term, char *cmd,
 	ft_bzero(cmd_path, PATH_MAX);
 	if (ft_strchr(cmd, '/') != NULL || path_exists == 0)
 		ft_strlcat(cmd_path, cmd, PATH_MAX);
-	stat(cmd_path, statbuf);
+	stat(cmd_path, *statbuf);
 	return (paths);
+}
+
+void	prepare_path(char *cmd_path, char *paths, char *cmd,
+			struct stat *statbuf)
+{
+	ft_strlcpy(cmd_path, paths, PATH_MAX);
+	ft_strlcat(cmd_path, "/", PATH_MAX);
+	ft_strlcat(cmd_path, cmd, PATH_MAX);
+	stat(cmd_path, statbuf);
 }
 
 int	search_path(t_prog *term, char *cmd, char *cmd_path)
@@ -67,8 +65,7 @@ int	search_path(t_prog *term, char *cmd, char *cmd_path)
 	int			i;
 	int			exists;
 
-	statbuf = ft_calloc(1, sizeof(*statbuf));
-	paths = init_search(term, cmd, cmd_path, statbuf);
+	paths = init_search(term, cmd, cmd_path, &statbuf);
 	i = 0;
 	while (access(cmd_path, X_OK) || !(statbuf->st_mode & S_IFREG))
 	{
@@ -76,19 +73,16 @@ int	search_path(t_prog *term, char *cmd, char *cmd_path)
 		ft_bzero(cmd_path, PATH_MAX);
 		if (paths[i] == NULL || ft_strchr(cmd, '/') != NULL)
 			break ;
-		ft_strlcpy(cmd_path, paths[i++], PATH_MAX);
-		ft_strlcat(cmd_path, "/", PATH_MAX);
-		ft_strlcat(cmd_path, cmd, PATH_MAX);
-		stat(cmd_path, statbuf);
+		prepare_path(cmd_path, paths[i++], cmd, statbuf);
 	}
 	free_split(&paths);
 	free(statbuf);
 	if (cmd_path[0] == 0)
 	{
-		if (!exists || *cmd == 0 || ft_strncmp(cmd, ".", 2) == 0 || ft_strncmp(cmd, "..", 3) == 0)
+		if (!exists || *cmd == 0 || ft_strncmp(cmd, ".", 2) == 0
+			|| ft_strncmp(cmd, "..", 3) == 0)
 			return (1);
-		else
-			return (2);
+		return (2);
 	}
 	return (0);
 }

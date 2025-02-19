@@ -35,17 +35,13 @@ int	apply_quoting_tokenise(int *quoting, char **lp, int *i, char *q_char)
 	{
 		out = 1;
 		if ((*lp)[*i] == *q_char)
-		{
 			*quoting = 0;
-			// ft_printf("qchar end: %s\n", &(*lp)[*i]);
-		}
 	}
 	else if ((*lp)[*i] == '\'' || (*lp)[*i] == '\"')
 	{
 		out = 1;
 		*quoting = 1;
 		*q_char = (*lp)[*i];
-		// ft_printf("qchar start: %s\n", &(*lp)[*i]);
 		if (*i != 0 && is_op((*lp)[*i - 1]))
 			out = 2;
 	}
@@ -66,7 +62,6 @@ int	handle_ops_tokenise(t_list **tokens, char **lp, int *i)
 	}
 	else if (is_op((*lp)[*i]) && *i != 0)
 	{
-		// ft_printf("op: %s\n", &(*lp)[*i]);
 		out = 1;
 		delimit_token(tokens, lp, i);
 	}

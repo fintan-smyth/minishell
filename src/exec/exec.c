@@ -12,6 +12,22 @@
 
 #include "../parsing/parsing.h"
 
+void	handle_search_fail(int search, t_cmd *cmd, t_prog *term)
+{
+	if (search == 1)
+	{
+		term->status = 127 << 8;
+		ft_putstr_fd(cmd->argv[0], 2);
+		ft_putendl_fd(": command not found", 2);
+	}
+	else if (search == 2)
+	{
+		term->status = 126 << 8;
+		ft_putstr_fd(cmd->argv[0], 2);
+		ft_putendl_fd(": Permission denied", 2);
+	}
+}
+
 pid_t	exec_cmd(t_prog *term, t_cmd *cmd, t_list *pipeline, t_list *cur_cmd)
 {
 	pid_t	child;
@@ -30,18 +46,8 @@ pid_t	exec_cmd(t_prog *term, t_cmd *cmd, t_list *pipeline, t_list *cur_cmd)
 			if (child == 0)
 				handle_child(cmd, term, cur_cmd, cmd_path);
 		}
-		else if (search == 1)
-		{
-			term->status = 127 << 8;
-			ft_putstr_fd(cmd->argv[0], 2);
-			ft_putendl_fd(": command not found", 2);
-		}
-		else if (search == 2)
-		{
-			term->status = 126 << 8;
-			ft_putstr_fd(cmd->argv[0], 2);
-			ft_putendl_fd(": Permission denied", 2);
-		}
+		else
+			handle_search_fail(search, cmd, term);
 	}
 	return (child);
 }

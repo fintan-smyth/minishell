@@ -84,6 +84,8 @@ int	expand_var_inplace(char **line, char *varp, t_prog *term, int quoting)
 	return (1);
 }
 
+void	apply_quoting_expand(char *token, int *quoting, int i);
+
 void	expand_token_var(char **token, t_prog *term)
 // Expands all environment variables in a token not blocked by quoting
 {
@@ -105,14 +107,7 @@ void	expand_token_var(char **token, t_prog *term)
 		}
 		if ((*token)[i] == 0)
 			break ;
-		else if ((*token)[i] == '\'' && quoting == Q_NONE)
-			quoting = Q_SINGLE;
-		else if ((*token)[i] == '\'' && quoting == Q_SINGLE)
-			quoting = Q_NONE;
-		else if ((*token)[i] == '\"' && quoting == Q_NONE)
-			quoting = Q_DOUBLE;
-		else if ((*token)[i] == '\"' && quoting == Q_DOUBLE)
-			quoting = Q_NONE;
+		apply_quoting_expand(*token, &quoting, i);
 		i++;
 	}
 }

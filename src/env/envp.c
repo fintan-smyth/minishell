@@ -75,11 +75,11 @@ void	envp_to_lst(t_prog *term, char *envp, int init)
 		if (!init)
 		{
 			term->status = 1 << 8;
-			ft_dprintf(2, "minishell: export: `%s\': not a valid identifier\n", envp);
+			ft_dprintf(2, "minishell: export: `%s\'", envp);
+			ft_dprintf(2, ": not a valid identifier\n", envp);
 		}
 		return ;
 	}
-	// *equals = 0;
 	env_change_or_add(term, envp, equals, plus);
 	term->status = 0;
 }

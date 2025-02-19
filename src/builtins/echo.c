@@ -55,8 +55,6 @@ void	echo(t_prog *term, t_cmd *cmd)
 		}
 		if (nl == 1)
 			write(cmd->fd_out, "\n", 1);
-		// else if (i != 2 && cmd->fd_out == 1)
-		// 	ft_putstr_fd("\e[7m%\e[m\n", 1);
 	}
 	term->status = 0;
 }

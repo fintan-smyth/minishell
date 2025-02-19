@@ -12,7 +12,7 @@
 
 #include "../minishell.h"
 
-void	update_wd(t_prog *term)
+void	update_wd(t_prog *term, t_cmd *cmd, int revert)
 // Updates data about the current working directory
 // - the $PWD and $OLDPWD environment variables
 // - the cwd field of the t_prog struct
@@ -28,9 +28,12 @@ void	update_wd(t_prog *term)
 	oldpwd->var = pwd->var;
 	getcwd(term->cwd, PATH_MAX);
 	pwd->var = ft_strdup(term->cwd);
+	if (revert == 1)
+		ft_putendl_fd(term->cwd, cmd->fd_out);
+	term->status = 0;
 }
 
-static char	*get_path(t_list *env_list, char **argv, int *revert)
+static char	*get_path(t_prog *term, char **argv, int *revert)
 // Gets the path used to change directory.
 // Sets the 'revert' variable used to determine printing directory for "cd -"
 {
@@ -38,11 +41,11 @@ static char	*get_path(t_list *env_list, char **argv, int *revert)
 
 	*revert = 0;
 	if (argv[1] == NULL || ft_strncmp(argv[1], "--", 3) == 0)
-		path = getenv_list(env_list, "HOME");
+		path = getenv_list(term->env_list, "HOME");
 	else if (ft_strncmp(argv[1], "-", 2) == 0)
 	{
 		*revert = 1;
-		path = getenv_list(env_list, "OLDPWD");
+		path = getenv_list(term->env_list, "OLDPWD");
 	}
 	else
 		path = argv[1];
@@ -64,8 +67,7 @@ void	cd(t_prog *term, t_cmd *cmd, t_list *pipeline)
 	char	*path;
 	int		revert;
 
-	// (void)pipeline;
-	path = get_path(term->env_list, cmd->argv, &revert);
+	path = get_path(term, cmd->argv, &revert);
 	if (path == NULL)
 		term->status = 1 << 8;
 	else if (cmd->argc > 2)
@@ -85,10 +87,5 @@ void	cd(t_prog *term, t_cmd *cmd, t_list *pipeline)
 		term->status = 1 << 8;
 	}
 	else
-	{
-		update_wd(term);
-		if (revert == 1)
-			ft_putendl_fd(term->cwd, cmd->fd_out);
-		term->status = 0;
-	}
+		update_wd(term, cmd, revert);
 }
