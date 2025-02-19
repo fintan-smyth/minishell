@@ -12,8 +12,6 @@
 
 #include "../parsing.h"
 
-extern sig_atomic_t	g_signal;
-
 void	init_rd_out(int *fd, int *fmode, int mode)
 {
 	*fd = -2;

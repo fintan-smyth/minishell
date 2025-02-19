@@ -23,6 +23,7 @@ void	env(t_prog *term, t_cmd *cmd, char **envp)
 	{
 		ft_dprintf(2, "env: \'%s\': No such file or directory\n", cmd->argv[1]);
 		term->status = 127 << 8;
+		free_split(&envp);
 		return ;
 	}
 	while (envp[i] != NULL)
