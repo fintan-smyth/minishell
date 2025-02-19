@@ -39,6 +39,7 @@ SRC = $(SRC_DIR)/main.c \
 	  $(SRC_DIR)/parsing/redirect/heredoc_utils.c \
 	  $(SRC_DIR)/signals/signals.c \
 	  $(SRC_DIR)/parsing/syntax.c \
+	  $(SRC_DIR)/parsing/syntax_utils.c \
 
 OBJ = $(patsubst $(SRC_DIR)/%,$(BUILD_DIR)/%,$(SRC:.c=.o))
 
